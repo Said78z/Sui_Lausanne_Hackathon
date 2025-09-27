@@ -1,19 +1,28 @@
+import { authRepository } from '@/repositories/authRepository';
 import { tokenRepository } from '@/repositories/tokenRepository';
 import { jsonResponse } from '@/utils/jsonResponse';
 import { getLocationFromIp } from '@/utils/locationFromIp';
+import { logger } from '@/utils/logger';
 import { parseUserAgent } from '@/utils/userAgentParser';
 
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { sign, verify } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Token, User } from '@/config/client';
 
-const JWT_SECRET = process.env.JWT_SECRET!;
-const RESET_TOKEN_EXPIRATION_HOURS = 2;
+interface GoogleProfile {
+    id: string;
+    emails: Array<{ value: string; verified: boolean }>;
+    name: { givenName: string; familyName: string };
+    photos: Array<{ value: string }>;
+}
 
 class AuthService {
-    constructor() {}
+    private logger = logger.child({
+        module: '[App][AuthService]',
+    });
+
+    constructor() { }
 
     /**
      * Génère un token d'accès pour un utilisateur
@@ -165,77 +174,72 @@ class AuthService {
         return tokenRepository.delete(id);
     }
 
+
+
     /**
-     * Génère un token de réinitialisation de mot de passe pour un utilisateur
-     * @param userId - L'id de l'utilisateur
-     * @param ip - L'ip de l'utilisateur
-     * @returns Le token de réinitialisation de mot de passe
+     * Authenticate user with Google OAuth
+     * @param profile - Google profile data
+     * @returns User (existing or newly created)
      */
-    async generatePasswordResetToken(userId: string, ip: string): Promise<string> {
-        // Supprime les anciens tokens de reset
-        await tokenRepository.deleteByUserAndType(userId, 'reset_password');
+    async authenticateGoogleUser(profile: GoogleProfile): Promise<User> {
+        try {
+            this.logger.info('Authenticating Google user', { googleId: profile.id });
 
-        const expiresIn = RESET_TOKEN_EXPIRATION_HOURS * 60 * 60; // en secondes
-
-        // Génère le token JWT
-        const token = sign(
-            {
-                sub: userId,
-                scope: 'reset',
-            },
-            JWT_SECRET,
-            {
-                expiresIn,
+            const email = profile.emails[0]?.value;
+            if (!email) {
+                throw new Error('No email found in Google profile');
             }
-        );
 
-        const expiresAt = new Date(Date.now() + expiresIn * 1000);
+            // Check if user exists by Google ID
+            let user = await authRepository.findByGoogleId(profile.id);
 
-        // Stocke les métadonnées (et potentiellement pour invalidation)
-        await tokenRepository.create({
-            token: token,
-            owner: {
-                connect: {
-                    id: userId,
-                },
-            },
-            type: 'reset_password',
-            scopes: 'reset',
-            deviceName: 'Password Reset',
-            deviceIp: ip,
-            expiresAt,
-        });
+            if (user) {
+                // Update user info in case it changed
+                user = await authRepository.updateGoogleUser(user.id, {
+                    email,
+                    firstName: profile.name.givenName,
+                    lastName: profile.name.familyName,
+                    avatar: profile.photos[0]?.value,
+                });
 
-        return token;
+                this.logger.info('Existing Google user authenticated', { userId: user.id });
+                return user;
+            }
+
+
+            // Create new user with Google OAuth
+            user = await authRepository.createGoogleUser({
+                googleId: profile.id,
+                email,
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                avatar: profile.photos[0]?.value,
+            });
+
+            this.logger.info('New Google user created', { userId: user.id });
+            return user;
+        } catch (error) {
+            this.logger.error('Error authenticating Google user:', error);
+            throw error;
+        }
     }
 
-    async generateInvitationToken(
-        email: string,
-        deviceIp: string,
-        senderId: string,
-        deviceName: string
-    ): Promise<Token> {
-        await tokenRepository.deleteByUserAndType(senderId, 'invitation');
 
-        const tempToken = uuidv4();
-        const expiresAt = new Date();
-        expiresAt.setFullYear(expiresAt.getFullYear() + 100); // Never expires (set to 100 years in the future)
-        const token = await tokenRepository.create({
-            token: tempToken,
-            owner: {
-                connect: {
-                    id: senderId,
-                },
-            },
-            type: 'invitation',
-            scopes: 'invitation',
-            deviceName,
-            deviceIp,
-            expiresAt,
-        });
 
-        return token;
+    /**
+     * Get user by ID
+     * @param userId - User ID
+     * @returns User or null
+     */
+    async getUserById(userId: string): Promise<User | null> {
+        try {
+            return await authRepository.findById(userId);
+        } catch (error) {
+            this.logger.error('Error getting user by ID:', error);
+            return null;
+        }
     }
+
 }
 
 export const authService = new AuthService();
