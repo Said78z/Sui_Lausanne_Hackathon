@@ -160,7 +160,10 @@ export default function Dashboard() {
                                     <Calendar className="h-4 w-4" />
                                     <span className="font-medium">Events</span>
                                 </button>
-                                <button className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+                                <button 
+                                    onClick={() => navigate('/dashboard/calendar')}
+                                    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+                                >
                                     <BarChart3 className="h-4 w-4" />
                                     <span className="font-medium">Calendars</span>
                                 </button>
