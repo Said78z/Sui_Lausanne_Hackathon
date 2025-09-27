@@ -67,13 +67,12 @@ const AppRoutes = () => {
                     </Route>
 
                     {/* Routes privées */}
-                    <Route element={<PrivateRoutes />}></Route>
+                    <Route path="/dashboard/*" element={<PrivateRoutes />} />
 
                     {/* Route par défaut */}
                     {isAuthenticated && (
                         <>
-                            <Route path="/dashboard" element={<Navigate to="/folders" replace />} />
-                            <Route path="*" element={<Navigate to="/folders" replace />} />
+                            <Route path="*" element={<Navigate to="/dashboard" replace />} />
                             <Route path="/error" element={<Error />} />
                         </>
                     )}
