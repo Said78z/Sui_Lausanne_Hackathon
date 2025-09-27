@@ -9,7 +9,10 @@ import {
   MapPin,
   Users,
   Filter,
-  Search
+  Search,
+  Sparkles,
+  Bell,
+  BarChart3
 } from 'lucide-react';
 
 interface Event {
@@ -238,62 +241,105 @@ const Calendar = () => {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
       <div className="absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-900/30 via-cyan-900/20 to-transparent pointer-events-none" />
       
-      {/* Header */}
-      <div className="relative z-50 border-b border-white/10 bg-white/5 backdrop-blur-sm">
+      {/* Top Navigation - Dashboard Style */}
+      <nav className="relative z-50 border-b border-white/10 bg-white/5 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
+            {/* Left side - Navigation */}
             <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400">
-                  <CalendarIcon className="h-6 w-6 text-white" />
+              <div className="flex items-center space-x-2 animate-fade-in">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-110 transition-transform duration-300 hover:rotate-12">
+                  <Sparkles className="h-6 w-6 text-white animate-pulse" />
                 </div>
-                <h1 className="text-xl font-semibold text-white">Calendar</h1>
+                <span className="text-2xl font-bold text-white bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                  Hack'n'Sui
+                </span>
               </div>
               
-              {/* View Mode Selector */}
-              <div className="flex items-center space-x-1 bg-white/5 rounded-lg p-1">
-                {(['month', 'week', 'day'] as const).map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setViewMode(mode)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                      viewMode === mode
-                        ? 'bg-blue-500 text-white'
-                        : 'text-white/70 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                  </button>
-                ))}
+              <div className="hidden md:flex items-center space-x-6">
+                <button 
+                  onClick={() => navigate('/dashboard')}
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  <span className="font-medium">Dashboard</span>
+                </button>
+                <button className="flex items-center space-x-2 text-white hover:text-blue-300 transition-colors">
+                  <CalendarIcon className="h-4 w-4" />
+                  <span className="font-medium">Calendar</span>
+                </button>
+                <button className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+                  <Search className="h-4 w-4" />
+                  <span className="font-medium">Discover</span>
+                </button>
               </div>
             </div>
 
+            {/* Right side - Actions */}
             <div className="flex items-center space-x-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/50" />
-                <input
-                  type="text"
-                  placeholder="Search events..."
-                  className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              {/* Filter */}
-              <button className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/70 hover:text-white hover:bg-white/10 transition-colors">
-                <Filter className="h-4 w-4" />
-                <span>Filter</span>
-              </button>
-
-              {/* Create Event Button */}
-              <button
+              <span className="text-gray-400 text-sm hidden sm:block">17:43 CEST</span>
+              
+              <button 
                 onClick={() => navigate('/dashboard/create-event')}
-                className="flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-cyan-400 text-white px-4 py-2 rounded-lg font-medium hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 transform hover:scale-105"
+                className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white hover:from-blue-600 hover:to-cyan-500 font-medium px-4 py-1.5 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25 text-sm"
               >
-                <Plus className="h-4 w-4" />
-                <span>Create Event</span>
+                <Plus className="h-4 w-4 mr-1.5" />
+                Create Event
+              </button>
+              
+              <button className="p-2 text-gray-300 hover:text-white transition-colors">
+                <Search className="h-5 w-5" />
+              </button>
+              
+              <button className="p-2 text-gray-300 hover:text-white transition-colors relative">
+                <Bell className="h-5 w-5" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></div>
               </button>
             </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Calendar Controls */}
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* View Mode Selector */}
+          <div className="inline-flex bg-white/10 backdrop-blur-sm rounded-lg p-1 border border-white/20">
+            {(['month', 'week', 'day'] as const).map((mode) => (
+              <div
+                key={mode}
+                onClick={() => {
+                  console.log(`${mode} clicked!`);
+                  setViewMode(mode);
+                }}
+                className={`
+                  px-4 py-2 rounded-md text-sm font-medium cursor-pointer transition-all duration-200
+                  ${viewMode === mode 
+                    ? 'bg-blue-500 text-white shadow-lg' 
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                  }
+                `}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </div>
+            ))}
+          </div>
+
+          {/* Search and Filter */}
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/50" />
+              <input
+                type="text"
+                placeholder="Search events..."
+                className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <button className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/70 hover:text-white hover:bg-white/10 transition-colors">
+              <Filter className="h-4 w-4" />
+              <span>Filter</span>
+            </button>
           </div>
         </div>
       </div>
