@@ -11,7 +11,7 @@ class TokenService {
 
     constructor() {
         this.logger = logger.child({
-            module: '[AppCFP][TokenService]',
+            module: '[SUI][TokenService]',
         });
     }
 

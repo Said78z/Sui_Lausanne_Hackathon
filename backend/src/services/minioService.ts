@@ -15,7 +15,7 @@ class MinioService {
     private minioClient: Minio.Client;
     private bucketName: string;
     private logger = logger.child({
-        module: '[AppCFP][MinioService]',
+        module: '[SUI][MinioService]',
     });
 
     constructor() {

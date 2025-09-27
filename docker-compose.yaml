@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
     db:
-        container_name: template_db
+        container_name: SUI
         image: mysql:8.0
         restart: always
         environment:
             - MYSQL_ROOT_PASSWORD=password
-            - MYSQL_DATABASE=template_db
+            - MYSQL_DATABASE=SUI
         ports:
             - '3306:3306'
         volumes:
@@ -16,7 +16,7 @@ services:
             - app_network
 
     phpmyadmin:
-        container_name: template_phpmyadmin
+        container_name: SUI_phpmyadmin
         image: phpmyadmin/phpmyadmin
         ports:
             - '8080:80'
@@ -30,7 +30,7 @@ services:
             - app_network
 
     mailhog:
-        container_name: template_mailhog
+        container_name: SUI_mailhog
         image: mailhog/mailhog
         ports:
             - '1025:1025' # Port SMTP
@@ -39,7 +39,7 @@ services:
             - app_network
 
     minio:
-        container_name: template_minio
+        container_name: SUI_minio
         image: minio/minio
         ports:
             - '9000:9000' # API
@@ -54,7 +54,7 @@ services:
             - app_network
 
     loki:
-        container_name: template_loki
+        container_name: SUI_loki
         image: grafana/loki:latest
         ports:
             - '3100:3100'
@@ -65,7 +65,7 @@ services:
             - app_network
 
     grafana:
-        container_name: template_grafana
+        container_name: SUI_grafana
         image: grafana/grafana:latest
         ports:
             - '3001:3000' # Grafana sur le port 3001 pour éviter un conflit avec l'API

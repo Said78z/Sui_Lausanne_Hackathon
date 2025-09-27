@@ -36,7 +36,7 @@ beforeAll(async () => {
     }
 
     // Vérifier que nous utilisons bien la base de données de test
-    if (!process.env.DATABASE_URL?.includes('appcfp_test')) {
+    if (!process.env.DATABASE_URL?.includes('SUI_test')) {
         throw new Error('Les tests doivent utiliser la base de données de test');
     }
 

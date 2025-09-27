@@ -9,7 +9,7 @@ class UserService {
 
     constructor() {
         this.logger = logger.child({
-            module: '[AppCFP][UserService]',
+            module: '[SUI][UserService]',
         });
     }
 
