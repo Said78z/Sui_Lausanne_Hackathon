@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { useAuthStore } from '@/stores/authStore';
-import Dashboard from '@/features/Dashboard';
-import CreateEvent from '@/features/CreateEvent';
 import Calendar from '@/features/Calendar';
+import CreateEvent from '@/features/CreateEvent';
+import Dashboard from '@/features/Dashboard';
+import ProfilePage from '@/features/ProfilePage';
 
 const PrivateRoutes = () => {
     // const { isAuthenticated } = useAuthStore();
@@ -18,6 +18,7 @@ const PrivateRoutes = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/create-event" element={<CreateEvent />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/*" element={<Dashboard />} />
             {/* Add other private routes here as they're developed */}
         </Routes>
