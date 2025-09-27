@@ -29,30 +29,6 @@ services:
         networks:
             - app_network
 
-    mailhog:
-        container_name: SUI_mailhog
-        image: mailhog/mailhog
-        ports:
-            - '1025:1025' # Port SMTP
-            - '8025:8025' # Interface Web
-        networks:
-            - app_network
-
-    minio:
-        container_name: SUI_minio
-        image: minio/minio
-        ports:
-            - '9000:9000' # API
-            - '9001:9001' # Console
-        environment:
-            MINIO_ROOT_USER: minioadmin
-            MINIO_ROOT_PASSWORD: minioadmin
-        volumes:
-            - minio_data:/data
-        command: server --console-address ":9001" /data
-        networks:
-            - app_network
-
     loki:
         container_name: SUI_loki
         image: grafana/loki:latest
