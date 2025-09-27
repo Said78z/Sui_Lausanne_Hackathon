@@ -4,7 +4,6 @@ import { configureRateLimiter, errorHandlerMiddleware, httpLoggerMiddleware } fr
 import dotenv from 'dotenv';
 import Fastify, { FastifyInstance } from 'fastify';
 
-import { minioService } from '@/services/minioService';
 
 import { multipartPlugin } from '@/plugins/multipart';
 
@@ -43,9 +42,6 @@ export const buildApp = async (): Promise<FastifyInstance> => {
     app.get('/', async () => {
         return { message: "Bienvenue sur l'API Fastify avec Prisma et MySQL." };
     });
-
-    // Initialisation de Minio
-    await minioService.initializeMinio();
 
     // Initialisation des paramètres de l'application
     await initializeApplication(prisma);
