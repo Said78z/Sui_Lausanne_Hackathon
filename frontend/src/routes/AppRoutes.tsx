@@ -1,5 +1,3 @@
-import { useAllApplicationParameters } from '@/api/queries/applicationParameterQueries';
-import { useAutoLogin } from '@/api/queries/authQueries';
 import PrivateRoutes from '@/routes/PrivateRoutes';
 import PublicRoutes from '@/routes/PublicRoutes';
 
@@ -20,19 +18,7 @@ const AppRoutes = () => {
     // Only load application parameters after login
     const { setParameters } = useSettingsStore();
     const { user, isAuthenticated } = useAuthStore();
-    const {
-        data: parametersResponse,
-        isLoading: isParamsLoading,
-        error: paramsError,
-    } = useAllApplicationParameters({ enabled: isAuthenticated });
 
-    // Only set parameters after login
-    useEffect(() => {
-        if (isAuthenticated && parametersResponse?.data) {
-            setParameters(parametersResponse.data);
-        }
-    }, [isAuthenticated, parametersResponse?.data, setParameters]);
-    const { refetch: autoLogin, isPending } = useAutoLogin();
     const { isOpen: isExpanded } = useSidebarStore();
 
     useEffect(() => {
@@ -41,11 +27,7 @@ const AppRoutes = () => {
         }
     }, [user]);
 
-    useEffect(() => {
-        autoLogin();
-    }, [autoLogin]);
-
-    if (isAuthenticated && paramsError) {
+    if (isAuthenticated) {
         return (
             <div className="flex items-center justify-center py-8 text-red-600">
                 Erreur lors du chargement des paramètres
