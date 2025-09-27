@@ -11,7 +11,7 @@ import {
 
 class EnokiController {
     private logger = logger.child({
-        module: '[CFR][ENOKI][CONTROLLER]',
+        module: '[SUI][ENOKI][CONTROLLER]',
     });
 
     constructor() { }
