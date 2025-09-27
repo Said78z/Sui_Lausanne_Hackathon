@@ -1,0 +1,37 @@
+{
+  "1": {
+    "id": "1",
+    "type": "VIEW_OPPORT",
+    "prixGlobale": 320000,
+    "apportMin": 64000,
+    "description": "Investissement locatif - Appartement T3"
+  },
+  "2": {
+    "id": "2",
+    "type": "VIEW_CITY",
+    "prixGlobale": 250000,
+    "apportMin": 50000,
+    "description": "Investissement locatif - Appartement T2"
+  },
+  "3": {
+    "id": "3",
+    "type": "LIKE",
+    "prixGlobale": 180000,
+    "apportMin": 36000,
+    "description": "Investissement locatif - Studio"
+  },
+  "4": {
+    "id": "4",
+    "type": "VIEW_OPPORT",
+    "prixGlobale": 450000,
+    "apportMin": 90000,
+    "description": "Investissement locatif - Appartement T4"
+  },
+  "5": {
+    "id": "5",
+    "type": "VIEW_CITY",
+    "prixGlobale": 195000,
+    "apportMin": 39000,
+    "description": "Investissement locatif - T2 rénové"
+  }
+}

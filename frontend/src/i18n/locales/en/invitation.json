@@ -1,0 +1,50 @@
+{
+  "title": "Invitation Management",
+  "notFound": "Invitation not found",
+  "notRegistered": "User is not registered yet",
+  "noInvitations": "No invitations found",
+  "new": "Send new invitation",
+  "sections": {
+    "email": "Email",
+    "type": "Type",
+    "status": "Status",
+    "invitedBy": "Invited by",
+    "invitedOn": "Invited on",
+    "registeredOn": "Registered on",
+    "actions": "Actions"
+  },
+  "filters": {
+    "all": "All",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
+    "pending": "Pending"
+  },
+  "deleteDialog": {
+    "title": "Delete invitation",
+    "message": "Are you sure you want to delete this invitation?",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "showDialog": {
+    "title": "Invitation of",
+    "email": "Email",
+    "type": "Type",
+    "status": "Status",
+    "invitedBy": "Invited by",
+    "invitedOn": "Invited on",
+    "registeredOn": "Registered on"
+  },
+  "sendNewInvitation": {
+    "title": "Send New Invitation",
+    "label": "Label",
+    "email": "Email",
+    "send": "Send",
+    "cancel": "Cancel",
+    "type": "Type",
+    "typeUser": "User",
+    "typeAdmin": "Admin",
+    "typeCGP": "CGP",
+    "typeAgent": "Agent",
+    "typeEmployee": "Employee"
+  }
+}

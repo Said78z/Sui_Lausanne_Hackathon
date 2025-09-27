@@ -1,0 +1,51 @@
+{
+    "notFound": "Dossier introuvable",
+    "buttons": {
+        "status": "Status",
+        "checklist": "Checklist",
+        "documents": "Documents",
+        "sendSearchMandate": "Envoyer le mandat",
+        "sendManagementMandate": "Envoyer le mandat",
+        "viewSearchCriteria": "Voir les critères de recherche",
+        "scheduleMeeting": "Prendre rendez-vous"
+    },
+    "sections": {
+        "identity": {
+            "title": "Identité",
+            "consultant": "Consultant"
+        },
+        "location": {
+            "title": "Localisation",
+            "perimeter": "Périmètre",
+            "cityType": "Type de ville"
+        },
+        "status": {
+            "title": "Statut",
+            "folderStatus": "Statut du dossier",
+            "lastUpdate": "Dernière mise à jour"
+        },
+        "mandates": {
+            "searchMandate": "Mandat de recherche",
+            "managementMandate": "Mandat de gestion",
+            "searchCriteria": "Critères de recherche"
+        },
+        "finances": {
+            "title": "Finances",
+            "budget": "Budget",
+            "max": "max.",
+            "downPayment": "Apport",
+            "repaymentCapacity": "Capacité de remboursement",
+            "perYear": "par an",
+            "investmentCapacity": "Capacité d'investissement"
+        },
+        "investmentCriteria": {
+            "title": "Critères d'investissement",
+            "budget": "Budget",
+            "minimumYield": "Rendement minimum",
+            "propertyType": "Type de bien",
+            "renovation": "Travaux",
+            "searchType": "Type de recherche",
+            "occupancyRate": "Taux d'occupation"
+        }
+    }
+}

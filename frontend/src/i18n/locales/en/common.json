@@ -1,0 +1,14 @@
+{
+    "cashFlowPositive": "Cash Flow Positif",
+    "fileList": "File List",
+    "profile": "Profile",
+    "profileMenu": {
+        "settings": "Settings",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "logout": "Logout"
+    },
+    "selectCountry": "Select a country",
+    "countryList": "Country list",
+    "retry": "Retry"
+}

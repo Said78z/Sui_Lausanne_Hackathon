@@ -1,0 +1,132 @@
+{
+    "FR-IDF": {
+        "habitants": "12 271 794",
+        "rechercheLocataire": "15 jours",
+        "rechercheAcquereur": "1,5 mois",
+        "tensionLocative": "Forte",
+        "tensionTransactionnelle": "Forte",
+        "plusValue": "+4,2%/an",
+        "tauxChomage": "7,1%",
+        "creationEntreprise": "120 000/an"
+    },
+    "FR-CVL": {
+        "habitants": "2 577 435",
+        "rechercheLocataire": "22 jours",
+        "rechercheAcquereur": "2,1 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Faible",
+        "plusValue": "+2,1%/an",
+        "tauxChomage": "8,2%",
+        "creationEntreprise": "18 000/an"
+    },
+    "FR-NOR": {
+        "habitants": "3 330 478",
+        "rechercheLocataire": "18 jours",
+        "rechercheAcquereur": "1,8 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Modérée",
+        "plusValue": "+2,5%/an",
+        "tauxChomage": "8,0%",
+        "creationEntreprise": "20 000/an"
+    },
+    "FR-HDF": {
+        "habitants": "6 004 947",
+        "rechercheLocataire": "20 jours",
+        "rechercheAcquereur": "2,0 mois",
+        "tensionLocative": "Forte",
+        "tensionTransactionnelle": "Modérée",
+        "plusValue": "+2,8%/an",
+        "tauxChomage": "9,5%",
+        "creationEntreprise": "30 000/an"
+    },
+    "FR-PDL": {
+        "habitants": "3 832 120",
+        "rechercheLocataire": "17 jours",
+        "rechercheAcquereur": "1,7 mois",
+        "tensionLocative": "Forte",
+        "tensionTransactionnelle": "Forte",
+        "plusValue": "+3,1%/an",
+        "tauxChomage": "7,8%",
+        "creationEntreprise": "22 000/an"
+    },
+    "FR-BRE": {
+        "habitants": "3 374 530",
+        "rechercheLocataire": "19 jours",
+        "rechercheAcquereur": "1,9 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Faible",
+        "plusValue": "+2,3%/an",
+        "tauxChomage": "7,5%",
+        "creationEntreprise": "19 000/an"
+    },
+    "FR-NAQ": {
+        "habitants": "6 032 615",
+        "rechercheLocataire": "21 jours",
+        "rechercheAcquereur": "2,2 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Modérée",
+        "plusValue": "+2,7%/an",
+        "tauxChomage": "8,3%",
+        "creationEntreprise": "28 000/an"
+    },
+    "FR-COR": {
+        "habitants": "344 679",
+        "rechercheLocataire": "25 jours",
+        "rechercheAcquereur": "2,5 mois",
+        "tensionLocative": "Faible",
+        "tensionTransactionnelle": "Faible",
+        "plusValue": "+1,8%/an",
+        "tauxChomage": "10,2%",
+        "creationEntreprise": "2 000/an"
+    },
+    "FR-BFC": {
+        "habitants": "2 811 423",
+        "rechercheLocataire": "23 jours",
+        "rechercheAcquereur": "2,3 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Faible",
+        "plusValue": "+2,0%/an",
+        "tauxChomage": "7,9%",
+        "creationEntreprise": "15 000/an"
+    },
+    "FR-PAC": {
+        "habitants": "5 055 651",
+        "rechercheLocataire": "16 jours",
+        "rechercheAcquereur": "1,6 mois",
+        "tensionLocative": "Forte",
+        "tensionTransactionnelle": "Forte",
+        "plusValue": "+3,8%/an",
+        "tauxChomage": "8,7%",
+        "creationEntreprise": "35 000/an"
+    },
+    "FR-ARA": {
+        "habitants": "8 032 377",
+        "rechercheLocataire": "18 jours",
+        "rechercheAcquereur": "1,8 mois",
+        "tensionLocative": "Forte",
+        "tensionTransactionnelle": "Forte",
+        "plusValue": "+3,0%/an",
+        "tauxChomage": "7,6%",
+        "creationEntreprise": "40 000/an"
+    },
+    "FR-OCC": {
+        "habitants": "5 973 969",
+        "rechercheLocataire": "20 jours",
+        "rechercheAcquereur": "2,0 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Modérée",
+        "plusValue": "+2,6%/an",
+        "tauxChomage": "9,0%",
+        "creationEntreprise": "27 000/an"
+    },
+    "FR-GES": {
+        "habitants": "5 549 586",
+        "rechercheLocataire": "21 jours",
+        "rechercheAcquereur": "2,1 mois",
+        "tensionLocative": "Modérée",
+        "tensionTransactionnelle": "Modérée",
+        "plusValue": "+2,4%/an",
+        "tauxChomage": "8,4%",
+        "creationEntreprise": "24 000/an"
+    }
+}

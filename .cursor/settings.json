@@ -1,0 +1,64 @@
+{
+    "rules": [
+        {
+            "name": "global",
+            "file": ".cursor/rules/global.mdc",
+            "globs": ["**/*.ts"]
+        },
+        {
+            "name": "models",
+            "file": ".cursor/rules/models.mdc",
+            "globs": ["src/models/**/*.ts"]
+        },
+        {
+            "name": "validators",
+            "file": ".cursor/rules/validators.mdc",
+            "globs": ["src/validators/**/*.ts"]
+        },
+        {
+            "name": "repositories",
+            "file": ".cursor/rules/repositories.mdc",
+            "globs": ["src/repositories/**/*.ts"]
+        },
+        {
+            "name": "services",
+            "file": ".cursor/rules/services.mdc",
+            "globs": ["src/services/**/*.ts"]
+        },
+        {
+            "name": "controllers",
+            "file": ".cursor/rules/controllers.mdc",
+            "globs": ["src/controllers/**/*.ts"]
+        },
+        {
+            "name": "routes",
+            "file": ".cursor/rules/routes.mdc",
+            "globs": ["src/routes/**/*.ts"]
+        },
+        {
+            "name": "commands",
+            "file": ".cursor/rules/commands.mdc",
+            "globs": ["src/commands/**/*.ts"]
+        },
+        {
+            "name": "middleware",
+            "file": ".cursor/rules/middleware.mdc",
+            "globs": ["src/middleware/**/*.ts"]
+        },
+        {
+            "name": "utils",
+            "file": ".cursor/rules/utils.mdc",
+            "globs": ["src/utils/**/*.ts"]
+        },
+        {
+            "name": "prisma",
+            "file": ".cursor/rules/prisma.mdc",
+            "globs": ["prisma/**/*.prisma", "src/config/prisma.ts"]
+        },
+        {
+            "name": "fastify",
+            "file": ".cursor/rules/fastify.mdc",
+            "globs": ["src/app.ts", "src/server.ts", "src/plugins/**/*.ts"]
+        }
+    ]
+}

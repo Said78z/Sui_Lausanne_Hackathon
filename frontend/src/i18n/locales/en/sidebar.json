@@ -1,0 +1,37 @@
+{
+    "sections": {
+        "index": {
+            "title": "Index",
+            "items": {
+                "folders": "Folders",
+                "addressBook": "Address Book",
+                "opportunities": "Opportunities"
+            }
+        },
+        "tools": {
+            "title": "Tools",
+            "items": {
+                "dashboard": "Dashboard",
+                "users": "Users",
+                "powerdialer": "Powerdialer",
+                "cities": "Cities"
+            }
+        },
+        "management": {
+            "title": "Management",
+            "items": {
+                "settings": "Profile",
+                "invitations": "Invitations",
+                "messages": "Messages"
+            }
+        },
+        "administration": {
+            "title": "Administration",
+            "items": {
+                "admin": "Admin",
+                "settings": "Settings"
+            }
+        }
+    },
+    "logout": "Logout"
+}

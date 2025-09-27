@@ -1,0 +1,183 @@
+version: '3.8'
+
+services:
+    database:
+        image: mysql:8.0
+        container_name: template_mysql-dev
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
+            MYSQL_USER: ${MYSQL_USER:-template}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+        ports:
+            - '3306:3306'
+        volumes:
+            - mysql_data:/var/lib/mysql
+            - ./scripts:/docker-entrypoint-initdb.d
+        networks:
+            - template_network
+        healthcheck:
+            test:
+                [
+                    'CMD',
+                    'mysqladmin',
+                    'ping',
+                    '-h',
+                    'localhost',
+                    '-u',
+                    'root',
+                    '-p${MYSQL_ROOT_PASSWORD:-password}',
+                ]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile.dev
+        container_name: template_backend-dev
+        restart: unless-stopped
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./backend:/app/backend
+            - ./shared:/app/shared
+            - backend_node_modules:/app/backend/node_modules
+            - shared_node_modules:/app/shared/node_modules
+        env_file:
+            - ./backend/.env.dev.docker
+        depends_on:
+            database:
+                condition: service_healthy
+        command: >
+            sh -c "
+              cd /app/backend &&
+              pnpm dev
+            "
+        networks:
+            - template_network
+
+    frontend:
+        build:
+            context: .
+            dockerfile: ./frontend/Dockerfile.dev
+        container_name: template_frontend-dev
+        restart: unless-stopped
+        ports:
+            - '5173:5173'
+        volumes:
+            - ./frontend:/app/frontend
+            - ./shared:/app/shared
+            - frontend_node_modules:/app/frontend/node_modules
+            - shared_node_modules:/app/shared/node_modules
+        environment:
+            - VITE_API_URL=http://localhost:3000
+            - NODE_ENV=development
+        command: >
+            sh -c "
+              cd /app/frontend &&
+              pnpm dev -- --host 0.0.0.0
+            "
+        networks:
+            - template_network
+        depends_on:
+            - backend
+
+    minio:
+        image: minio/minio
+        container_name: template_minio-dev
+        restart: unless-stopped
+        ports:
+            - '9000:9000'
+            - '9001:9001'
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+        volumes:
+            - minio_data:/data
+        command: server --console-address ":9001" /data
+        networks:
+            - template_network
+        healthcheck:
+            test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+            interval: 5s
+            timeout: 5s
+            retries: 3
+
+    minio-setup:
+        image: minio/mc
+        depends_on:
+            minio:
+                condition: service_started
+        entrypoint: >
+            /bin/sh -c "
+            sleep 5;
+            /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+            /usr/bin/mc mb myminio/template --ignore-existing;
+            /usr/bin/mc policy set public myminio/template;
+            exit 0;
+            "
+        networks:
+            - template_network
+
+    mailhog:
+        image: mailhog/mailhog
+        container_name: template_mailhog-dev
+        ports:
+            - '1025:1025' # Port SMTP
+            - '8025:8025' # Interface Web
+        networks:
+            - template_network
+
+    grafana:
+        image: grafana/grafana:latest
+        container_name: template_grafana-dev
+        ports:
+            - '3001:3000'
+        volumes:
+            - grafana_data:/var/lib/grafana
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+        networks:
+            - template_network
+
+    loki:
+        image: grafana/loki:latest
+        container_name: template_loki-dev
+        ports:
+            - '3100:3100'
+        command: -config.file=/etc/loki/local-config.yaml
+        networks:
+            - template_network
+        volumes:
+            - loki_data:/loki
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: template_phpmyadmin-dev
+        ports:
+            - '8080:80'
+        environment:
+            - PMA_HOST=database
+            - PMA_USER=root
+            - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
+        depends_on:
+            - database
+        networks:
+            - template_network
+
+networks:
+    template_network:
+        driver: bridge
+
+volumes:
+    mysql_data:
+    minio_data:
+    backend_node_modules:
+    frontend_node_modules:
+    template_node_modules:
+    shared_node_modules:
+    grafana_data:
+    loki_data:

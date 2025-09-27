@@ -1,0 +1,62 @@
+{
+    "title": "Folders",
+    "add": "Add",
+    "list": "List",
+    "cards": "Cards",
+    "filters": {
+        "all": "All",
+        "allFolders": "All folders",
+        "status": {
+            "new": "New",
+            "searching": "Searching",
+            "opportunityFound": "Opportunity found",
+            "inProgress": "In progress",
+            "draftingAgreement": "Drafting agreement",
+            "agreementSigned": "Agreement signed",
+            "financingFound": "Financing found",
+            "acquisitionCompleted": "Acquisition completed",
+            "paused": "Paused",
+            "cancelled": "Cancelled"
+        }
+    },
+    "components": {
+        "addFolder": {
+            "title": "Add folder",
+            "name": "Folder name",
+            "clients": "Clients",
+            "selectClients": "Select one or more clients",
+            "consultant": "Consultant",
+            "partner": "Partner",
+            "country": "Country",
+            "cancel": "Cancel",
+            "create": "Create"
+        },
+        "editFolder": {
+            "title": "Edit folder",
+            "name": "Folder name",
+            "clients": "Clients",
+            "selectClients": "Select one or more clients",
+            "consultant": "Consultant",
+            "partner": "Partner",
+            "country": "Country",
+            "cancel": "Cancel",
+            "edit": "Edit"
+        },
+        "list": {
+            "name": "Name",
+            "client": "Client",
+            "consultant": "Consultant",
+            "status": "Status",
+            "citySize": "City size",
+            "actions": "Actions",
+            "unknownClient": "Unknown client",
+            "unknownConsultant": "Unknown consultant"
+        },
+        "cards": {
+            "clients": "Clients",
+            "consultant": "Consultant",
+            "unknownClient": "Unknown client",
+            "unknownConsultant": "Unknown consultant"
+        }
+    }
+}

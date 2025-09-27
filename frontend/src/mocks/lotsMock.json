@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "type": "Appartement",
+        "surface": 75.5,
+        "charges": 150,
+        "annualRent": 12000,
+        "isRented": true,
+        "floor": 3,
+        "agentId": 1
+    },
+    {
+        "id": 2,
+        "type": "Bureau",
+        "surface": 120,
+        "charges": 250,
+        "annualRent": 24000,
+        "isRented": false,
+        "floor": 2,
+        "agentId": 2
+    },
+    {
+        "id": 3,
+        "type": "Local commercial",
+        "surface": 200,
+        "charges": 400,
+        "annualRent": 36000,
+        "isRented": true,
+        "floor": 1,
+        "agentId": 1
+    },
+    {
+        "id": 4,
+        "type": "Appartement",
+        "surface": 45,
+        "charges": 100,
+        "annualRent": 9000,
+        "isRented": false,
+        "floor": 4,
+        "agentId": 2
+    },
+    {
+        "id": 5,
+        "type": "Studio",
+        "surface": 30,
+        "charges": 80,
+        "annualRent": 7200,
+        "isRented": true,
+        "floor": 5,
+        "agentId": 1
+    }
+]

@@ -1,0 +1,53 @@
+{
+    "title": "Messages",
+    "centerTitle": "Centre de messages",
+    "empty": "Vous n'avez aucune conversation",
+    "noContacts": "Vous n'avez aucun contact",
+    "noSearchResults": "Aucun résultat trouvé",
+    "noContactsFound": "Aucun contact trouvé",
+    "placeholder": "Écrivez votre message...",
+    "searchPlaceholder": {
+        "conversation": "Rechercher une conversation...",
+        "contact": "Rechercher un contact..."
+    },
+    "tabs": {
+        "conversations": "Conversations",
+        "contacts": "Contacts"
+    },
+    "actions": {
+        "markAllAsRead": "Marquer tout comme lu",
+        "viewAll": "Voir tous les messages",
+        "newMessage": "Nouveau message",
+        "directMessage": "Message direct",
+        "newGroup": "Nouveau groupe",
+        "createGroup": "Créer le groupe",
+        "cancel": "Annuler",
+        "add": "Ajouter",
+        "added": "Ajouté"
+    },
+    "userTypes": {
+        "all": "Tous les contacts",
+        "groups": "Groupes",
+        "clients": "Clients",
+        "agents": "Agents",
+        "leads": "Leads",
+        "cgp": "CGP"
+    },
+    "group": {
+        "createTitle": "Créer un nouveau groupe",
+        "nameLabel": "Nom du groupe",
+        "namePlaceholder": "Ex: Équipe commerciale, Projet Paris 17...",
+        "addMembers": "Ajouter des membres",
+        "searchMembers": "Rechercher un contact...",
+        "members": "membres"
+    },
+    "modal": {
+        "newMessageTitle": "Nouveau message",
+        "selectContact": "Sélectionner un contact",
+        "searchContact": "Rechercher un contact..."
+    },
+    "status": {
+        "noMessage": "(Aucun message)",
+        "user": "Utilisateur"
+    }
+}

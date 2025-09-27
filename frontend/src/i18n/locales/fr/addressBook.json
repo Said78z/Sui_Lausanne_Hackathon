@@ -1,0 +1,56 @@
+{
+    "title": "Carnet d'adresses",
+    "search": {
+        "placeholder": "Rechercher un utilisateur..."
+    },
+    "invite": "Inviter",
+    "roles": {
+        "agents": "Agents",
+        "clients": "Clients",
+        "leads": "Leads",
+        "cgp": "CGP"
+    },
+    "table": {
+        "noUsers": "Aucun utilisateur trouvé",
+        "actions": "Actions",
+        "agent": {
+            "name": "Nom",
+            "proposedProperties": "Biens proposés",
+            "acceptedProperties": "Biens acceptés",
+            "registrationDate": "Date d'inscription",
+            "region": "Région"
+        },
+        "client": {
+            "name": "Nom",
+            "consultant": "Consultant associé",
+            "investmentCapacity": "Capacité d'investissement",
+            "status": "Statut",
+            "registrationDate": "Date d'inscription",
+            "lastProposedProperty": "Dernier bien proposé"
+        },
+        "lead": {
+            "name": "Nom",
+            "type": "Type",
+            "source": "Source",
+            "lastCall": "Dernier appel le",
+            "calledBy": "Appelé par",
+            "doNotCallBefore": "Ne pas appeler avant le",
+            "registrationDate": "Date d'inscription"
+        },
+        "cgp": {
+            "name": "Nom",
+            "broughtClients": "Clients apportés",
+            "investedClients": "Client ayant investi",
+            "lastClientBrought": "Dernier client apporté",
+            "totalEarnings": "Somme gagnée",
+            "registrationDate": "Date d'inscription"
+        }
+    },
+    "common": {
+        "none": "Aucun",
+        "noRestriction": "Aucune restriction",
+        "unspecified": "Non spécifiée",
+        "unassigned": "Non assigné",
+        "unknown": "Inconnu"
+    }
+}

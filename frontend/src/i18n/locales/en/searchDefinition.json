@@ -1,0 +1,211 @@
+{
+    "title": "Your search criteria",
+    "validateCriteria": "Validate my criteria",
+    "budget": {
+        "title": "Budget",
+        "flexible": "Flexible budget",
+        "strict": "Strict budget",
+        "veryStrict": "Very strict budget",
+        "description": "Set up a flexible budget to benefit from bank financing. Your budget will be adjusted based on the real estate market situation. The budget can be flexible, strict, or very strict but remains your reference budget.",
+        "professionalNote": "A real estate investment search beyond €1,000,000 is very difficult as you will be competing with professionals in the field (property developers and institutional investors) who are looking for this type of property. Finding bank financing will also be complicated.",
+        "summary": {
+            "budget": "Budget",
+            "downPayment": "Down Payment",
+            "lots": "Lots"
+        }
+    },
+    "construction": {
+        "title": "Renovation",
+        "flexible": "Flexible budget",
+        "strict": "Strict budget",
+        "veryStrict": "Very strict budget",
+        "description": "Set up a flexible budget to benefit from bank financing. Your budget will be adjusted based on the real estate market situation. The budget can be flexible, strict, or very strict but remains your reference budget."
+    },
+    "perimeter": {
+        "title": "Perimeter",
+        "flexible": "Flexible",
+        "strict": "Strict",
+        "veryStrict": "Very strict",
+        "description": "These small towns attract tenants looking for the best price as well as primary residence owners.",
+        "citySize": {
+            "title": "City size",
+            "options": {
+                "hamlet": "Hamlet",
+                "smallVillage": "Small village",
+                "village": "Village",
+                "smallTown": "Small town",
+                "mediumTown": "Medium town",
+                "smallCity": "Small city",
+                "mediumCity": "Medium city",
+                "largeCity": "Large city",
+                "agglomeration": "Agglomeration",
+                "largeAgglomeration": "Large agglomeration",
+                "urbanPole": "Urban pole",
+                "metropolitanArea": "Metropolitan area",
+                "metropolis": "Metropolis"
+            },
+            "inhabitants": "inhabitants"
+        },
+        "periphery": {
+            "title": "Periphery",
+            "description": "Define the geographical area around your property to target potential buyers based on their location and distance preferences.",
+            "zones": {
+                "cityCenter": "City center",
+                "adjacentCity": "Adjacent city",
+                "urbanArea": "Urban area",
+                "influenceArea": "Influence area"
+            },
+            "radius": "km radius"
+        }
+    },
+    "localisation": {
+        "title": "Location",
+        "flexible": "Flexible location",
+        "strict": "Strict location",
+        "veryStrict": "Very strict location",
+        "description": "Choose your investment geographical area. You can select multiple countries and regions, and exclude certain areas if needed.",
+        "addCountry": "Add a country",
+        "removeCountry": "Remove",
+        "excludeRegion": "Exclude",
+        "includeRegion": "Include",
+        "regions": {
+            "FR-IDF": "Île de France",
+            "FR-CVL": "Centre Val De Loire",
+            "FR-NOR": "Normandy",
+            "FR-HDF": "Hauts De France",
+            "FR-PDL": "Pays de la Loire",
+            "FR-BRE": "Brittany",
+            "FR-NAQ": "Nouvelle Aquitaine",
+            "FR-COR": "Corsica",
+            "FR-BFC": "Bourgogne-Franche-Comté",
+            "FR-PAC": "Provence-Alpes-Côte d'Azur",
+            "FR-ARA": "Auvergne-Rhône-Alpes",
+            "FR-OCC": "Occitanie",
+            "FR-GES": "Grand Est",
+            "CZ-10": "Prague",
+            "CZ-64": "Moravie du Sud",
+            "CZ-31": "Bohême du Sud",
+            "CZ-20": "Bohême du Centrale",
+            "CZ-32": "Plzeň",
+            "CZ-41": "Karlovy Vary",
+            "CZ-42": "Ústí nad Labem",
+            "CZ-51": "Liberec",
+            "CZ-52": "Hradec Králové",
+            "CZ-53": "Pardubice",
+            "CZ-63": "Vysočina",
+            "CZ-71": "Olomouc",
+            "CZ-72": "Zlín",
+            "CZ-80": "Moravie-Silésie"
+        },
+        "countries": {
+            "FR": "France",
+            "CZ": "Czech Republic"
+        },
+        "cards": {
+            "inhabitants": "Inhabitants",
+            "tenantSearch": "Tenant search",
+            "buyerSearch": "Buyer search",
+            "rentalTension": "Rental tension",
+            "transactionTension": "Transaction tension",
+            "capitalGain": "Capital gain",
+            "unemploymentRate": "Unemployment rate",
+            "businessCreation": "Business creation",
+            "trends": {
+                "up": "{{value}}%",
+                "down": "{{value}}%"
+            }
+        }
+    },
+    "rentalStatus": {
+        "title": "Rental status at purchase",
+        "flexible": "Flexible",
+        "strict": "Strict",
+        "veryStrict": "Very strict",
+        "description": "Adjust the desired rental tension level for your search. The higher the tension, the stronger the rental demand in the targeted area.",
+        "slider": {
+            "title": "Slider 3 steps",
+            "noCriteria": "No criteria",
+            "fiftyPercent": "50%",
+            "seventyFivePercent": "75%"
+        }
+    },
+    "lotType": {
+        "title": "Lot Type",
+        "flexible": "Flexible",
+        "strict": "Strict",
+        "veryStrict": "Very strict",
+        "description": "Choose the lot type that matches your investment strategy. A simple lot offers simpler management, while a multiple lot allows for risk and income diversification.",
+        "types": {
+            "simple": {
+                "title": "Simple Lot",
+                "description": "A single plot of land with one buildable parcel."
+            },
+            "multiple": {
+                "title": "Multiple Lot",
+                "description": "A plot of land divided into several buildable parcels."
+            }
+        }
+    },
+    "bauxType": {
+        "title": "Lease Type",
+        "flexible": "Flexible",
+        "strict": "Strict",
+        "veryStrict": "Very strict",
+        "description": "Select the lease types that match your investment strategy. Each lease type has specific characteristics in terms of yield and management.",
+        "types": {
+            "residentiel": {
+                "title": "Residential",
+                "description": "Housing leases for individuals, with significant rental stability."
+            },
+            "commercial": {
+                "title": "Commercial",
+                "description": "Commercial leases for businesses, with generally higher rents."
+            },
+            "mixte": {
+                "title": "Mixed",
+                "description": "Combination of residential and commercial leases to diversify income."
+            },
+            "colocation": {
+                "title": "Co-living",
+                "description": "Multiple leases for several tenants, optimizing rental yield."
+            }
+        }
+    },
+    "remarkDetail": {
+        "title": "Remarks",
+        "description": "You can add here all your specific remarks regarding your property search. For example: preference for a particular type of neighborhood, specific accessibility constraints, or any other information that could help us refine your search.",
+        "placeholder": "Add your remarks here..."
+    },
+    "minimumYield": {
+        "title": "Minimum yield",
+        "flexible": "Flexible yield",
+        "strict": "Strict yield",
+        "veryStrict": "Very strict yield",
+        "description": "Define your expected minimum rental yield. A higher yield may mean a riskier investment or one requiring more work.",
+        "error": "Cash Flow Positive does not offer properties with a rental yield below 8%.",
+        "descriptions": {
+            "8": {
+                "location": "This type of property is found in medium-sized cities.",
+                "condition": "The property is reassuring and in case of work to be done, it will correspond to small refreshment works."
+            },
+            "9": {
+                "location": "This type of property is found in the immediate outskirts of medium-sized cities or in the city center of cities with less than 100,000 inhabitants.",
+                "condition": "The property is reassuring and in case of work to be done, it will correspond to small refreshment works."
+            },
+            "10": {
+                "location": "This type of property is found in the outskirts of small towns and medium-sized cities. They are also found in medium-sized urban areas not attached to any particular large city.",
+                "condition": "The property often requires refreshment works."
+            },
+            "11": {
+                "location": "This type of property is found in rural areas in small urban areas.",
+                "condition": "The property often requires refreshment works."
+            }
+        },
+        "summary": {
+            "averagePrice": "Average price",
+            "yield": "Rental yield",
+            "annualIncome": "Annual income",
+            "perYear": "K€/year"
+        }
+    }
+}

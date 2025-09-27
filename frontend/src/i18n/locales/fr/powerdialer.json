@@ -1,0 +1,103 @@
+{
+    "title": "Powerdialer",
+    "description": {
+        "title": "Description du bien",
+        "placeholder": "Description du bien...",
+        "notes": "Notes",
+        "showAllNotes": "Voir toutes les notes"
+    },
+    "lots": {
+        "title": "Lots",
+        "add": "Ajouter un lot",
+        "delete": "Supprimer le lot",
+        "name": "Lot {{number}}",
+        "generalInfo": "Informations générales",
+        "type": "Type",
+        "rentExcludingCharges": "Loyer HC",
+        "provisions": "Provisions",
+        "floor": "Étage",
+        "work": "Travaux",
+        "tenant": "Locataire",
+        "leaseStart": "Début du bail",
+        "area": "Surface",
+        "housingBenefit": "CAF",
+        "energyRating": "DPE",
+        "seasonal": "Saisonnier",
+        "rented": "Loué",
+        "furnished": "Meublé",
+        "wishToFurnish": "Souhaite meubler",
+        "notes": "Notes",
+        "confirmDelete": "Confirmer la suppression",
+        "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer ce lot ?",
+        "cancel": "Annuler",
+        "dpe": "DPE",
+        "caf": "CAF",
+        "surface": "Surface m²"
+    },
+    "basis": {
+        "title": "Informations de base",
+        "propertyType": "Type de bien",
+        "city": "Ville",
+        "price": "Prix",
+        "preQualified": "Pré-qualifié",
+        "notRelevant": "Non pertinent",
+        "relevant": "Pertinent"
+    },
+    "buildingDetails": {
+        "title": "Détails du bâtiment",
+        "doubleGlazing": "Double vitrage",
+        "coOwnership": "Copropriété",
+        "electricMeters": "Compteurs électriques",
+        "waterMeters": "Compteurs d'eau",
+        "area": "Surface",
+        "roofCondition": "État de la toiture",
+        "facadeCondition": "État de la façade",
+        "furnished": "Meublé"
+    },
+    "rental": {
+        "title": "Informations locatives",
+        "propertyTax": "Taxe foncière",
+        "numberOfLots": "Nombre de lots",
+        "annualRentExcludingCharges": "Loyer annuel HC",
+        "monthlyRentExcludingCharges": "Loyer mensuel HC",
+        "rentalVacancies": "Vacances locatives",
+        "rentType": "Type de loyer",
+        "annualChargesProvisions": "Provisions charges annuelles",
+        "annualCharges": "Charges annuelles",
+        "annualHousingBenefit": "CAF annuelle",
+        "totalWorkAmount": "Montant total des travaux",
+        "managementFees": "Frais de syndic"
+    },
+    "finalQuestions": {
+        "title": "Questions finales",
+        "saleReason": "Raison de la vente",
+        "negotiatedAmount": {
+            "amount": "Montant négocié",
+            "date": "Date de négociation"
+        },
+        "address": "Adresse",
+        "phone": "Téléphone",
+        "email": "Email",
+        "permitToRent": "Permis de louer",
+        "visitDistance": "Visite à distance",
+        "yes": "Oui",
+        "no": "Non"
+    },
+    "progress": {
+        "title": "Progression de votre dossier",
+        "gallery": "Galerie photos",
+        "documents": "Documents",
+        "ai": "Traiter avec IA",
+        "call": "Appeler"
+    },
+    "notes": {
+        "title": "Notes",
+        "showAll": "Voir toutes les notes",
+        "hideAll": "Masquer les notes"
+    },
+    "header": {
+        "sendEmail": "Envoyer un mail",
+        "inviteAgent": "Inviter un agent",
+        "viewOpportunity": "Voir l'opportunité"
+    }
+}

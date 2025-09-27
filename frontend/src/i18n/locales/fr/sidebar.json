@@ -1,0 +1,37 @@
+{
+    "sections": {
+        "index": {
+            "title": "Index",
+            "items": {
+                "folders": "Dossiers",
+                "addressBook": "Carnet d'adresses",
+                "opportunities": "Opportunités"
+            }
+        },
+        "tools": {
+            "title": "Outils",
+            "items": {
+                "dashboard": "Dashboard",
+                "users": "Utilisateurs",
+                "powerdialer": "Powerdialer",
+                "cities": "Villes"
+            }
+        },
+        "management": {
+            "title": "Gestion",
+            "items": {
+                "settings": "Profile",
+                "invitations": "Invitations",
+                "messages": "Messages"
+            }
+        },
+        "administration": {
+            "title": "Administration",
+            "items": {
+                "admin": "Admin",
+                "settings": "Paramètres"
+            }
+        }
+    },
+    "logout": "Déconnexion"
+}

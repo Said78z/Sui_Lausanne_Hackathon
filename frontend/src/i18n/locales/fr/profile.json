@@ -1,0 +1,49 @@
+{
+    "title": "Mon compte",
+    "personalInfo": {
+        "title": "Informations personnelles",
+        "description": "Mettez à jour vos informations personnelles",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Adresse email",
+        "emailVerified": "Vérifié",
+        "emailDescription": "Cette adresse email sera utilisée pour vous contacter et recevoir des notifications.",
+        "phone": "Numéro de téléphone",
+        "phoneDescription": "Facultatif. Utilisé uniquement pour vous contacter en cas de besoin.",
+        "saveChanges": "Enregistrer les modifications"
+    },
+    "security": {
+        "title": "Sécurité",
+        "changePassword": "Modifier le mot de passe",
+        "currentPassword": "Mot de passe actuel",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer le nouveau mot de passe",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "twoFactor": {
+            "title": "Authentification à deux facteurs",
+            "description": "Renforcez la sécurité de votre compte en activant l'authentification à deux facteurs.",
+            "configure": "Configurer l'authentification"
+        }
+    },
+    "profile": {
+        "title": "Votre profil",
+        "memberSince": "Membre depuis",
+        "verified": "Vérifié",
+        "changePhoto": "Modifier la photo"
+    },
+    "statistics": {
+        "title": "Statistiques",
+        "signedContracts": "Contrats signés",
+        "totalClients": "Total de clients apportés",
+        "clientProcessRate": "% de clients entrés en process"
+    },
+    "loading": "Chargement...",
+    "toast": {
+        "profileUpdated": "Profil mis à jour avec succès",
+        "profileUpdateError": "Erreur lors de la mise à jour du profil",
+        "passwordUpdated": "Mot de passe mis à jour avec succès",
+        "passwordUpdateError": "Erreur lors du changement de mot de passe",
+        "currentPasswordError": "Mot de passe actuel incorrect"
+    }
+}

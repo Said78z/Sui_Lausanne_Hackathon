@@ -1,0 +1,66 @@
+{
+    "title": "Gestion des invitations",
+    "notFound": "Invitation introuvable",
+    "noInvitations": "Aucune invitation trouvée",
+    "notRegistered": "L'utilisateur n'est pas encore inscrit",
+    "new": "Envoyer une nouvelle invitation",
+    "resend": "Renvoyer l'invitation",
+    "delete": "Supprimer l'invitation",
+    "alreadyAccepted": "Cette invitation a déjà été acceptée",
+    "alreadyRejected": "Cette invitation a été rejetée",
+    "resendSuccess": "L'invitation a été renvoyée avec succès",
+    "deleteSuccess": "L'invitation a été supprimée avec succès",
+    "sections": {
+        "email": "Email",
+        "type": "Type",
+        "status": "Statut",
+        "invitedBy": "Invité par",
+        "invitedOn": "Date d'invitation",
+        "registeredOn": "Date d'inscription",
+        "actions": "Actions"
+    },
+    "filters": {
+        "all": "Tous les statuts",
+        "allTypes": "Tous les types",
+        "accepted": "Acceptées",
+        "rejected": "Refusées",
+        "pending": "En attente",
+        "employee": "Employé",
+        "cgp": "CGP",
+        "agent": "Agent",
+        "client": "Client",
+        "prospect": "Prospect",
+        "user": "Utilisateur",
+        "admin": "Administrateur"
+    },
+    "deleteDialog": {
+        "title": "Supprimer l'invitation",
+        "message": "Êtes-vous sûr de vouloir supprimer cette invitation ?",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+    },
+    "showDialog": {
+        "title": "Invitation de",
+        "email": "Email",
+        "type": "Type",
+        "status": "Statut",
+        "invitedBy": "Invité par",
+        "invitedOn": "Date d'invitation",
+        "registeredOn": "Date d'inscription"
+    },
+    "sendNewInvitation": {
+        "title": "Envoyer une nouvelle invitation",
+        "label": "Label",
+        "email": "Email",
+        "send": "Envoyer",
+        "cancel": "Annuler",
+        "type": "Type",
+        "typeUser": "Utilisateur",
+        "typeAdmin": "Administrateur",
+        "typeCGP": "CGP",
+        "typeAgent": "Agent",
+        "typeEmployee": "Employé",
+        "typeClient": "Client",
+        "typeProspect": "Prospect"
+    }
+}

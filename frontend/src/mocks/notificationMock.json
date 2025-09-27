@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "userId": 4,
+    "type": "document",
+    "title": "Document manquant : Bail signé",
+    "content": "Bail signé manquant. Ajoutez-le dans la section Documents.",
+    "createdDate": "2023-10-15T09:30:22Z",
+    "status": "unread"
+  },
+  {
+    "id": 2,
+    "userId": 4,
+    "type": "payment",
+    "title": "Paiement reçu",
+    "content": "Le loyer de mars a été payé par Jean Dupont",
+    "createdDate": "2023-10-14T14:45:00Z",
+    "status": "unread"
+  },
+  {
+    "id": 3,
+    "userId": 4,
+    "type": "event",
+    "title": "Rappel",
+    "content": "Visite programmée demain à 14h30",
+    "createdDate": "2023-10-12T08:15:10Z",
+    "status": "read"
+  },
+  {
+    "id": 4,
+    "userId": 4,
+    "type": "repair",
+    "title": "Nouvelle demande de réparation",
+    "content": "Une nouvelle demande de réparation a été créée pour le logement situé au 15 rue des Lilas.",
+    "createdDate": "2023-10-10T11:20:45Z",
+    "status": "read"
+  },
+  {
+    "id": 5,
+    "userId": 5,
+    "type": "document",
+    "title": "Expiration de contrat",
+    "content": "Le contrat de location de l'appartement situé au 8 avenue Victor Hugo expire dans 30 jours.",
+    "createdDate": "2023-10-05T16:00:30Z",
+    "status": "read"
+  },
+  {
+    "id": 6,
+    "userId": 5,
+    "type": "document",
+    "title": "Document ajouté",
+    "content": "Un nouveau document a été ajouté à votre espace Documents.",
+    "createdDate": "2023-10-01T10:12:35Z",
+    "status": "read"
+  },
+  {
+    "id": 7,
+    "userId": 5,
+    "type": "event",
+    "title": "Modification de rendez-vous",
+    "content": "Le rendez-vous du 22 octobre a été déplacé au 25 octobre à 10h00.",
+    "createdDate": "2023-09-28T13:25:18Z",
+    "status": "read"
+  }
+]

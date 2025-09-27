@@ -1,0 +1,103 @@
+{
+    "title": "Powerdialer",
+    "description": {
+        "title": "Property Description",
+        "placeholder": "Property description...",
+        "notes": "Notes",
+        "showAllNotes": "Show all notes"
+    },
+    "lots": {
+        "title": "Lots",
+        "add": "Add lot",
+        "delete": "Delete lot",
+        "name": "Lot {{number}}",
+        "generalInfo": "General information",
+        "type": "Type",
+        "rentExcludingCharges": "Rent excluding charges",
+        "provisions": "Provisions",
+        "floor": "Floor",
+        "work": "Work",
+        "tenant": "Tenant",
+        "leaseStart": "Lease start",
+        "area": "Area",
+        "housingBenefit": "Housing benefit",
+        "energyRating": "Energy rating",
+        "seasonal": "Seasonal",
+        "rented": "Rented",
+        "furnished": "Furnished",
+        "wishToFurnish": "Wish to furnish",
+        "notes": "Notes",
+        "confirmDelete": "Confirm delete",
+        "confirmDeleteMessage": "Are you sure you want to delete this lot?",
+        "cancel": "Cancel",
+        "dpe": "DPE",
+        "caf": "CAF",
+        "surface": "Area m²"
+    },
+    "basis": {
+        "title": "Basic Information",
+        "propertyType": "Property type",
+        "city": "City",
+        "price": "Price",
+        "preQualified": "Pre-qualified",
+        "notRelevant": "Not relevant",
+        "relevant": "Relevant"
+    },
+    "buildingDetails": {
+        "title": "Building Details",
+        "doubleGlazing": "Double glazing",
+        "coOwnership": "Co-ownership",
+        "electricMeters": "Electric meters",
+        "waterMeters": "Water meters",
+        "area": "Area",
+        "roofCondition": "Roof condition",
+        "facadeCondition": "Facade condition",
+        "furnished": "Furnished"
+    },
+    "rental": {
+        "title": "Rental Information",
+        "propertyTax": "Property tax",
+        "numberOfLots": "Number of lots",
+        "annualRentExcludingCharges": "Annual rent excluding charges",
+        "monthlyRentExcludingCharges": "Monthly rent excluding charges",
+        "rentalVacancies": "Rental vacancies",
+        "rentType": "Rent type",
+        "annualChargesProvisions": "Annual charges provisions",
+        "annualCharges": "Annual charges",
+        "annualHousingBenefit": "Annual housing benefit",
+        "totalWorkAmount": "Total work amount",
+        "managementFees": "Management fees"
+    },
+    "finalQuestions": {
+        "title": "Final Questions",
+        "saleReason": "Sale reason",
+        "negotiatedAmount": {
+            "amount": "Negotiated amount",
+            "date": "Negotiation date"
+        },
+        "address": "Address",
+        "phone": "Phone",
+        "email": "Email",
+        "permitToRent": "Permit to rent",
+        "visitDistance": "Visit distance",
+        "yes": "Yes",
+        "no": "No"
+    },
+    "progress": {
+        "title": "File progress",
+        "gallery": "Photo gallery",
+        "documents": "Documents",
+        "ai": "Process with AI",
+        "call": "Call"
+    },
+    "notes": {
+        "title": "Notes",
+        "showAll": "Show all notes",
+        "hideAll": "Hide notes"
+    },
+    "header": {
+        "sendEmail": "Send email",
+        "inviteAgent": "Invite agent",
+        "viewOpportunity": "View opportunity"
+    }
+}

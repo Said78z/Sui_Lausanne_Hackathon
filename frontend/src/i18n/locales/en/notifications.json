@@ -1,0 +1,12 @@
+{
+    "title": "Notifications",
+    "tabs": {
+        "unread": "Unread",
+        "all": "All"
+    },
+    "empty": "You have no new notifications",
+    "actions": {
+        "markAllAsRead": "Mark all as read",
+        "viewAll": "View all notifications"
+    }
+}

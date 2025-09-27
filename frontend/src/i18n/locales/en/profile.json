@@ -1,0 +1,49 @@
+{
+    "title": "My Account",
+    "personalInfo": {
+        "title": "Personal Information",
+        "description": "Update your personal information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "emailVerified": "Verified",
+        "emailDescription": "This email address will be used to contact you and receive notifications.",
+        "phone": "Phone Number",
+        "phoneDescription": "Optional. Used only to contact you if needed.",
+        "saveChanges": "Save Changes"
+    },
+    "security": {
+        "title": "Security",
+        "changePassword": "Change Password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "cancel": "Cancel",
+        "save": "Save",
+        "twoFactor": {
+            "title": "Two-Factor Authentication",
+            "description": "Enhance your account security by enabling two-factor authentication.",
+            "configure": "Configure Authentication"
+        }
+    },
+    "profile": {
+        "title": "Your Profile",
+        "memberSince": "Member since",
+        "verified": "Verified",
+        "changePhoto": "Change Photo"
+    },
+    "statistics": {
+        "title": "Statistics",
+        "signedContracts": "Signed Contracts",
+        "totalClients": "Total Clients Brought",
+        "clientProcessRate": "% of Clients in Process"
+    },
+    "loading": "Loading...",
+    "toast": {
+        "profileUpdated": "Profile updated successfully",
+        "profileUpdateError": "Error updating profile",
+        "passwordUpdated": "Password updated successfully",
+        "passwordUpdateError": "Error changing password",
+        "currentPasswordError": "Current password is incorrect"
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "invitations": [
+        {
+            "id": "1",
+            "email": "test1@example.com",
+            "type": "agent",
+            "status": "pending",
+            "invitedBy": {
+                "id": "1",
+                "firstName": "Test",
+                "lastName": "Test",
+                "email": "test1@example.com"
+            },
+            "invitedAt": "2023-09-28T13:25:18Z",
+            "registeredAt": null,
+            "expiresAt": "2023-10-28T13:25:18Z"
+        },
+        {
+            "id": "2",
+            "email": "test2@example.com",
+            "type": "agent",
+            "status": "accepted",
+            "invitedBy": {
+                "id": "1",
+                "firstName": "Test",
+                "lastName": "Test",
+                "email": "test1@example.com"
+            },
+            "invitedAt": "2023-09-28T13:25:18Z",
+            "registeredAt": "2023-09-29T13:25:18Z",
+            "expiresAt": "2023-10-28T13:25:18Z"
+        },
+        {
+            "id": "3",
+            "email": "test3@example.com",
+            "type": "agent",
+            "status": "rejected",
+            "invitedBy": {
+                "id": "1",
+                "firstName": "Test",
+                "lastName": "Test",
+                "email": "test1@example.com"
+            },
+            "invitedAt": "2023-09-28T13:25:18Z",
+            "registeredAt": null,
+            "expiresAt": "2023-10-28T13:25:18Z"
+        }
+    ]
+}

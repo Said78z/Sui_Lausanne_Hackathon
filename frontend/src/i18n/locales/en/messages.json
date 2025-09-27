@@ -1,0 +1,53 @@
+{
+    "title": "Messages",
+    "centerTitle": "Message Center",
+    "empty": "You have no conversations",
+    "noContacts": "You have no contacts",
+    "noSearchResults": "No results found",
+    "noContactsFound": "No contacts found",
+    "placeholder": "Write your message...",
+    "searchPlaceholder": {
+        "conversation": "Search for a conversation...",
+        "contact": "Search for a contact..."
+    },
+    "tabs": {
+        "conversations": "Conversations",
+        "contacts": "Contacts"
+    },
+    "actions": {
+        "markAllAsRead": "Mark all as read",
+        "viewAll": "View all messages",
+        "newMessage": "New message",
+        "directMessage": "Direct message",
+        "newGroup": "New group",
+        "createGroup": "Create group",
+        "cancel": "Cancel",
+        "add": "Add",
+        "added": "Added"
+    },
+    "userTypes": {
+        "all": "All contacts",
+        "groups": "Groups",
+        "clients": "Clients",
+        "agents": "Agents",
+        "leads": "Leads",
+        "cgp": "CGP"
+    },
+    "group": {
+        "createTitle": "Create a new group",
+        "nameLabel": "Group name",
+        "namePlaceholder": "Ex: Sales team, Paris 17 project...",
+        "addMembers": "Add members",
+        "searchMembers": "Search for a contact...",
+        "members": "members"
+    },
+    "modal": {
+        "newMessageTitle": "New message",
+        "selectContact": "Select a contact",
+        "searchContact": "Search for a contact..."
+    },
+    "status": {
+        "noMessage": "(No message)",
+        "user": "User"
+    }
+}

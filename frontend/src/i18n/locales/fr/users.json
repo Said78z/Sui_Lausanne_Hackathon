@@ -1,0 +1,28 @@
+{
+    "title": "Utilisateurs",
+    "add": "Ajouter un utilisateur",
+    "filters": {
+        "all": "Tous",
+        "verified": "Vérifié",
+        "notVerified": "Non vérifié"
+    },
+    "table": {
+        "name": "Nom",
+        "email": "Email",
+        "phone": "Téléphone",
+        "role": "Rôle",
+        "status": "Statut",
+        "actions": "Actions"
+    },
+    "form": {
+        "civility": "Civilité",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Email",
+        "phone": "Téléphone",
+        "birthDate": "Date de naissance",
+        "role": "Rôle",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+    }
+}

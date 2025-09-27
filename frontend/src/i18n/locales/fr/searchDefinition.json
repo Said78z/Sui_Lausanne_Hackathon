@@ -1,0 +1,211 @@
+{
+    "title": "Vos critères de recherche",
+    "validateCriteria": "Valider mes critères",
+    "budget": {
+        "title": "Budget",
+        "flexible": "Budget flexible",
+        "strict": "Budget ferme",
+        "veryStrict": "Budget très ferme",
+        "description": "Mettez en place un budget flexible pour vous permettre de bénéficier d'un financement bancaire. Votre budget sera adapté en fonction de la situation du marché immobilier. Le budget peut etre un budget flexible, ferme ou très ferme mais reste votre budget de référence.",
+        "professionalNote": "Une recherche d'investissement immobilier au-delà de 1 000 000 € est très difficile car vous serez en compétition avec les professionnels du milieu (marchands de biens et institutionnels) qui recherchent ce type de biens. La recherche d'un financement bancaire sera également compliquée.",
+        "summary": {
+            "budget": "Budget",
+            "downPayment": "Apport",
+            "lots": "Lots"
+        }
+    },
+    "construction": {
+        "title": "Travaux",
+        "flexible": "Budget flexible",
+        "strict": "Budget ferme",
+        "veryStrict": "Budget très ferme",
+        "description": "Mettez en place un budget flexible pour vous permettre de bénéficier d'un financement bancaire. Votre budget sera adapté en fonction de la situation du marché immobilier. Le budget peut etre un budget flexible, ferme ou très ferme mais reste votre budget de référence."
+    },
+    "perimeter": {
+        "title": "Périmètre",
+        "flexible": "Flexible",
+        "strict": "Strict",
+        "veryStrict": "Très strict",
+        "description": "Ces petites villes attirent des locataires souhaitant se loger au meilleur prix ainsi que des propriétaires de résidences principales.",
+        "citySize": {
+            "title": "Taille de l'agglomération",
+            "options": {
+                "hamlet": "Hameau",
+                "smallVillage": "Petit village",
+                "village": "Village",
+                "smallTown": "Petite commune",
+                "mediumTown": "Commune moyenne",
+                "smallCity": "Petite ville",
+                "mediumCity": "Ville moyenne",
+                "largeCity": "Grande ville",
+                "agglomeration": "Agglomération",
+                "largeAgglomeration": "Grande agglomération",
+                "urbanPole": "Pôle urbain",
+                "metropolitanArea": "Aire métropolitaine",
+                "metropolis": "Métropole"
+            },
+            "inhabitants": "habitants"
+        },
+        "periphery": {
+            "title": "Périphérie",
+            "description": "Définissez la zone géographique autour de votre bien immobilier pour cibler les acheteurs potentiels selon leur localisation et leurs préférences de distance.",
+            "zones": {
+                "cityCenter": "Centre-ville",
+                "adjacentCity": "Ville limitrophe",
+                "urbanArea": "Aire urbaine",
+                "influenceArea": "Aire d'influence"
+            },
+            "radius": "km de rayon"
+        }
+    },
+    "localisation": {
+        "title": "Localisation",
+        "flexible": "Localisation flexible",
+        "strict": "Localisation strict",
+        "veryStrict": "Localisation très strict",
+        "description": "Choisissez la zone géographique de votre investissement. Vous pouvez sélectionner plusieurs pays et régions, et exclure certaines zones si nécessaire.",
+        "addCountry": "Ajouter un pays",
+        "removeCountry": "Supprimer",
+        "excludeRegion": "Exclure",
+        "includeRegion": "Inclure",
+        "regions": {
+            "FR-IDF": "Île de France",
+            "FR-CVL": "Centre Val De Loire",
+            "FR-NOR": "Normandy",
+            "FR-HDF": "Hauts De France",
+            "FR-PDL": "Pays de la Loire",
+            "FR-BRE": "Brittany",
+            "FR-NAQ": "Nouvelle Aquitaine",
+            "FR-COR": "Corsica",
+            "FR-BFC": "Bourgogne-Franche-Comté",
+            "FR-PAC": "Provence-Alpes-Côte d'Azur",
+            "FR-ARA": "Auvergne-Rhône-Alpes",
+            "FR-OCC": "Occitanie",
+            "FR-GES": "Grand Est",
+            "CZ-10": "Prague",
+            "CZ-64": "Moravie du Sud",
+            "CZ-31": "Bohême du Sud",
+            "CZ-20": "Bohême du Centrale",
+            "CZ-32": "Plzeň",
+            "CZ-41": "Karlovy Vary",
+            "CZ-42": "Ústí nad Labem",
+            "CZ-51": "Liberec",
+            "CZ-52": "Hradec Králové",
+            "CZ-53": "Pardubice",
+            "CZ-63": "Vysočina",
+            "CZ-71": "Olomouc",
+            "CZ-72": "Zlín",
+            "CZ-80": "Moravie-Silésie"
+        },
+        "countries": {
+            "FR": "France",
+            "CZ": "République Tchèque"
+        },
+        "cards": {
+            "inhabitants": "Habitants",
+            "tenantSearch": "Recherche locataire",
+            "buyerSearch": "Recherche acquéreur",
+            "rentalTension": "Tension locative",
+            "transactionTension": "Tension transactionnelle",
+            "capitalGain": "Plus-value",
+            "unemploymentRate": "Taux de chômage",
+            "businessCreation": "Création d'entreprise",
+            "trends": {
+                "up": "{{value}}%",
+                "down": "{{value}}%"
+            }
+        }
+    },
+    "rentalStatus": {
+        "title": "Etat locatif à l'achat",
+        "flexible": "Flexible",
+        "strict": "Ferme",
+        "veryStrict": "Très ferme",
+        "description": "Ajustez le niveau de tension locative souhaité pour votre recherche. Plus la tension est élevée, plus la demande locative est forte sur le secteur ciblé.",
+        "slider": {
+            "title": "Slider 3 steps",
+            "noCriteria": "Pas de critères",
+            "fiftyPercent": "50%",
+            "seventyFivePercent": "75%"
+        }
+    },
+    "lotType": {
+        "title": "Type de lot",
+        "flexible": "Flexible",
+        "strict": "Ferme",
+        "veryStrict": "Très ferme",
+        "description": "Choisissez le type de lot qui correspond à votre stratégie d'investissement. Un lot simple offre une gestion plus simple, tandis qu'un lot multiple permet une diversification du risque et des revenus.",
+        "types": {
+            "simple": {
+                "title": "Lot Simple",
+                "description": "Un terrain unique avec une seule parcelle constructible."
+            },
+            "multiple": {
+                "title": "Lot Multiple",
+                "description": "Un terrain divisé en plusieurs parcelles constructibles."
+            }
+        }
+    },
+    "bauxType": {
+        "title": "Type de baux",
+        "flexible": "Flexible",
+        "strict": "Ferme",
+        "veryStrict": "Très ferme",
+        "description": "Sélectionnez les types de baux qui correspondent à votre stratégie d'investissement. Chaque type de bail présente des caractéristiques spécifiques en termes de rendement et de gestion.",
+        "types": {
+            "residentiel": {
+                "title": "Résidentiel",
+                "description": "Baux d'habitation pour particuliers, avec une stabilité locative importante."
+            },
+            "commercial": {
+                "title": "Commercial",
+                "description": "Baux commerciaux pour entreprises, avec des loyers généralement plus élevés."
+            },
+            "mixte": {
+                "title": "Mixte",
+                "description": "Combinaison de baux résidentiels et commerciaux pour diversifier les revenus."
+            },
+            "colocation": {
+                "title": "Colocation",
+                "description": "Baux multiples pour plusieurs locataires, optimisant le rendement locatif."
+            }
+        }
+    },
+    "remarkDetail": {
+        "title": "Remarques",
+        "description": "Vous pouvez ajouter ici toutes vos remarques spécifiques concernant votre recherche de bien. Par exemple : préférence pour un type de quartier particulier, contraintes spécifiques d'accessibilité, ou toute autre information qui pourrait nous aider à affiner votre recherche.",
+        "placeholder": "Ajoutez vos remarques ici..."
+    },
+    "minimumYield": {
+        "title": "Rendement minimum",
+        "flexible": "Rendement flexible",
+        "strict": "Rendement ferme",
+        "veryStrict": "Rendement très ferme",
+        "description": "Définissez votre rendement locatif minimum attendu. Un rendement plus élevé peut signifier un investissement plus risqué ou nécessitant plus de travaux.",
+        "error": "Cash Flow Positif ne propose pas de biens avec un rendement locatif inférieur à 8%.",
+        "descriptions": {
+            "8": {
+                "location": "Ce type de bien se trouve dans des villes de taille moyenne.",
+                "condition": "Le bien est rassurant et dans le cas de travaux à réaliser, ceux-ci correspondront à de petits travaux de rafraichissement."
+            },
+            "9": {
+                "location": "Ce type de bien se trouve en proche périphérie de villes de taille moyenne voire en centre-ville de villes de moins de 100 000 habitants.",
+                "condition": "Le bien est rassurant et dans le cas de travaux à réaliser, ceux-ci correspondront à de petits travaux de rafraichissement."
+            },
+            "10": {
+                "location": "Ce type de bien se trouve en périphérie de petites villes ainsi que de villes de taille moyenne. Ils se trouvent également dans des aires urbaines de taille moyenne non rattachées à une grande ville particulière.",
+                "condition": "Le bien nécéssite souvent de réaliser des travaux de rafraichissement."
+            },
+            "11": {
+                "location": "Ce type de bien se trouve en zone rurale dans des aires urbaines de petite taille.",
+                "condition": "Le bien nécéssite souvent de réaliser des travaux de rafraichissement."
+            }
+        },
+        "summary": {
+            "averagePrice": "Prix moyen",
+            "yield": "Rendement locatif",
+            "annualIncome": "Revenus locatifs",
+            "perYear": "K€/an"
+        }
+    }
+}

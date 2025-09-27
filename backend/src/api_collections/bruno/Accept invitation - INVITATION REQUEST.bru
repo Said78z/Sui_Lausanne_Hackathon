@@ -1,0 +1,33 @@
+meta {
+  name: Accept invitation - INVITATION REQUEST
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:3000/api/invitation-requests/accept
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJmMDU5NmEyLTE0OWUtNDJiNy05NGRlLTBhMTA3NzQyODBlYiIsImVtYWlsIjoiY29udGFjdEBhcHAuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkZDVldENoYWtJT2gwd21HeTNVRnRBT2ZkOE5MZ2ovcWVXL3Z1WlhvLllkb3RVTDFXdk9LamEiLCJmaXJzdE5hbWUiOiJDb250YWN0IiwibGFzdE5hbWUiOiJBcHAiLCJwaG9uZSI6IjczNS43OTMuNzU3NiB4MjE3NTQiLCJjaXZpbGl0eSI6Ik0iLCJiaXJ0aERhdGUiOiIyMDI1LTAxLTA2VDIwOjAxOjU0Ljg2MloiLCJhY2NlcHROZXdzbGV0dGVyIjp0cnVlLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImNyZWF0ZWRBdCI6IjIwMjMtMDEtMDJUMTA6MDA6MDAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDYtMDZUMDk6NTI6NDkuMTE3WiIsImFkZHJlc3NJZCI6bnVsbCwibGFzdExvZ2luQXQiOm51bGwsImlhdCI6MTc0OTIwNDAzOCwiZXhwIjoxNzQ5MjkwNDM4fQ.8jg8S84Wi6q3BPYGn2REjojTMP3fday0SB_QZx_oaNU
+}
+
+body:json {
+  {
+    "token": "bacf1e10-52f1-4b54-baa9-c92d70b73359",
+    "email": "test@test.test",
+    "password": "test",
+    "confirmPassword": "test",
+    "firstName": "Test",
+    "lastName": "Test",
+    "terms": true,
+    "privacy": true,
+    "acceptNewsletter": true,
+    "rememberMe": false,
+    "phone": "+33641960496",
+    "civility": "mr",
+    "birthDate": "2002/04/15"
+  }
+}

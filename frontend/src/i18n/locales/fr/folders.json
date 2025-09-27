@@ -1,0 +1,62 @@
+{
+    "title": "Dossiers",
+    "add": "Ajouter",
+    "list": "Liste",
+    "cards": "Cartes",
+    "filters": {
+        "all": "Tous",
+        "allFolders": "Tous les dossiers",
+        "status": {
+            "new": "Nouveau",
+            "searching": "En recherche",
+            "opportunityFound": "Opportunité trouvée",
+            "inProgress": "En cours",
+            "draftingAgreement": "Redaction compromis",
+            "agreementSigned": "Compromis signé",
+            "financingFound": "Financement trouvé",
+            "acquisitionCompleted": "Acquisition réalisée",
+            "paused": "En pause",
+            "cancelled": "Annulé"
+        }
+    },
+    "components": {
+        "addFolder": {
+            "title": "Ajouter un dossier",
+            "name": "Nom du dossier",
+            "clients": "Clients",
+            "selectClients": "Sélectionner un ou plusieurs clients",
+            "consultant": "Consultant",
+            "partner": "Partenaire",
+            "country": "Pays",
+            "cancel": "Annuler",
+            "create": "Créer"
+        },
+        "editFolder": {
+            "title": "Modifier le dossier",
+            "name": "Nom du dossier",
+            "clients": "Clients",
+            "selectClients": "Sélectionner un ou plusieurs clients",
+            "consultant": "Consultant",
+            "partner": "Partenaire",
+            "country": "Pays",
+            "cancel": "Annuler",
+            "edit": "Modifier"
+        },
+        "list": {
+            "name": "Nom",
+            "client": "Client",
+            "consultant": "Consultant",
+            "status": "Statut",
+            "citySize": "Taille ville",
+            "actions": "Actions",
+            "unknownClient": "Client inconnu",
+            "unknownConsultant": "Consultant inconnu"
+        },
+        "cards": {
+            "clients": "Clients",
+            "consultant": "Consultant",
+            "unknownClient": "Client inconnu",
+            "unknownConsultant": "Consultant inconnu"
+        }
+    }
+}

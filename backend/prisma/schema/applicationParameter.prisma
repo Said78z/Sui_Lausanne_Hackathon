@@ -1,0 +1,8 @@
+model ApplicationParameter {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("application_parameters")
+}

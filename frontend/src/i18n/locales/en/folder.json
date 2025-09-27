@@ -1,0 +1,51 @@
+{
+    "notFound": "Folder not found",
+    "buttons": {
+        "status": "Status",
+        "checklist": "Checklist",
+        "documents": "Documents",
+        "sendSearchMandate": "Send mandate",
+        "sendManagementMandate": "Send mandate",
+        "viewSearchCriteria": "View search criteria",
+        "scheduleMeeting": "Schedule a meeting"
+    },
+    "sections": {
+        "identity": {
+            "title": "Identity",
+            "consultant": "Consultant"
+        },
+        "location": {
+            "title": "Location",
+            "perimeter": "Perimeter",
+            "cityType": "City type"
+        },
+        "status": {
+            "title": "Status",
+            "folderStatus": "Folder status",
+            "lastUpdate": "Last update"
+        },
+        "mandates": {
+            "searchMandate": "Search mandate",
+            "managementMandate": "Management mandate",
+            "searchCriteria": "Search criteria"
+        },
+        "finances": {
+            "title": "Finances",
+            "budget": "Budget",
+            "max": "max.",
+            "downPayment": "Down payment",
+            "repaymentCapacity": "Repayment capacity",
+            "perYear": "per year",
+            "investmentCapacity": "Investment capacity"
+        },
+        "investmentCriteria": {
+            "title": "Investment criteria",
+            "budget": "Budget",
+            "minimumYield": "Minimum yield",
+            "propertyType": "Property type",
+            "renovation": "Renovation",
+            "searchType": "Search type",
+            "occupancyRate": "Occupancy rate"
+        }
+    }
+}

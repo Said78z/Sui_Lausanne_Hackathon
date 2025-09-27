@@ -1,0 +1,18 @@
+{
+    "title": "French Cities",
+    "filters": {
+        "allRegions": "All regions",
+        "allDepartments": "All departments"
+    },
+    "table": {
+        "name": "Name",
+        "department": "Department",
+        "region": "Region",
+        "population": "Population"
+    },
+    "map": {
+        "title": "Cities Map",
+        "search": "Search",
+        "placeholder": "Map loading..."
+    }
+}

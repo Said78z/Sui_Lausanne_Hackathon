@@ -1,0 +1,28 @@
+{
+    "title": "Users",
+    "add": "Add user",
+    "filters": {
+        "all": "All",
+        "verified": "Verified",
+        "notVerified": "Not verified"
+    },
+    "table": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "role": "Role",
+        "status": "Status",
+        "actions": "Actions"
+    },
+    "form": {
+        "civility": "Civility",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "birthDate": "Birth date",
+        "role": "Role",
+        "save": "Save",
+        "cancel": "Cancel"
+    }
+}

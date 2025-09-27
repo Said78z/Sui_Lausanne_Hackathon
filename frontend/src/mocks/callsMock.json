@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "prospectId": "5",
+        "status": "answered",
+        "callResult": "booked_r1_meeting",
+        "calledAt": "2024-03-15T14:30:00Z",
+        "calledBy": "3"
+    },
+    {
+        "id": 2,
+        "prospectId": "6",
+        "status": "absent",
+        "callResult": "absent",
+        "calledAt": "2024-03-15T15:00:00Z",
+        "calledBy": "3"
+    },
+    {
+        "id": 3,
+        "prospectId": "8",
+        "status": "answered",
+        "callResult": "callback",
+        "calledAt": "2024-03-15T15:30:00Z",
+        "calledBy": "7"
+    },
+    {
+        "id": 4,
+        "prospectId": "5",
+        "status": "canceled",
+        "callResult": "give_up",
+        "calledAt": "2024-03-15T16:00:00Z",
+        "calledBy": "4"
+    },
+    {
+        "id": 5,
+        "prospectId": "6",
+        "status": "answered",
+        "callResult": "booked_r2_meeting",
+        "calledAt": "2024-03-15T16:30:00Z",
+        "calledBy": "7"
+    },
+    {
+        "id": 6,
+        "prospectId": "8",
+        "status": "answered",
+        "callResult": "callback",
+        "calledAt": "2024-03-14T10:00:00Z",
+        "calledBy": "3"
+    },
+    {
+        "id": 7,
+        "prospectId": "5",
+        "status": "absent",
+        "callResult": "absent",
+        "calledAt": "2024-03-14T11:00:00Z",
+        "calledBy": "4"
+    },
+    {
+        "id": 8,
+        "prospectId": "6",
+        "status": "answered",
+        "callResult": "booked_r1_meeting",
+        "calledAt": "2024-03-14T14:00:00Z",
+        "calledBy": "7"
+    }
+]

@@ -1,0 +1,18 @@
+{
+    "title": "Villes de France",
+    "filters": {
+        "allRegions": "Toutes les régions",
+        "allDepartments": "Tous les départements"
+    },
+    "table": {
+        "name": "Nom",
+        "department": "Département",
+        "region": "Région",
+        "population": "Population"
+    },
+    "map": {
+        "title": "Carte des villes",
+        "search": "Rechercher",
+        "placeholder": "Carte en cours de chargement..."
+    }
+}

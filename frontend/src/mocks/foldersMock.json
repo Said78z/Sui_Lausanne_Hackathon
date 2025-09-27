@@ -1,0 +1,192 @@
+{
+    "dossiers": [
+        {
+            "id": 1,
+            "partnerId": 2,
+            "consultantId": 3,
+            "sdrId": 4,
+            "clientId": [5, 6],
+            "name": "Dossier Investissement Paris",
+            "createdAt": "2024-03-15T10:00:00Z",
+            "updatedAt": "2024-03-20T15:30:00Z",
+            "status": "En cours",
+            "minBudget": 250000,
+            "maxBudget": 350000,
+            "minBuyerRentalYield": 0.05,
+            "minOccupancy": 80,
+            "maxOccupancy": 100,
+            "minRework": 0,
+            "maxRework": 50000,
+            "job": "Ingénieur",
+            "notes": "Client intéressé par les biens neufs",
+            "downpayment": 50000,
+            "goal": "Investissement locatif",
+            "statusUpdatedAt": "2024-03-20T15:30:00Z",
+            "statusUpdatedBy": "CONS001",
+            "netAnnualSalaryBeforeTaxes": 65000,
+            "netAnnualBonusBeforeTaxes": 10000,
+            "annualExpenses": 25000,
+            "annualMortgageReimbursement": 18000,
+            "availableSavings": 80000,
+            "duration": 20,
+            "delay": 0,
+            "currentAnnualRentalRevenues": 0,
+            "activeSearch": true,
+            "address": "Paris, France",
+            "notification": true,
+            "minCityInhabitantsCount": 100000,
+            "typeOfSearch": {
+                "residential": true,
+                "commercial": false
+            },
+            "tenantType": {
+                "student": true,
+                "professional": true
+            },
+            "perimeterOfSearch": 20,
+            "commercialLotsAreFullyRented": true,
+            "minAnnualRentalCashFlow": 12000,
+            "hasNoSingleBedRooms": false,
+            "onlyInterestedInVirtualVisits": false,
+            "maxDistanceKm": 20,
+            "discountRate": 0.03,
+            "hasNoVacationLots": true,
+            "languageRegister": "fr",
+            "availabilitiesNote": "Disponible en semaine",
+            "mandateSignedAt": "2024-03-18T14:00:00Z",
+            "mandateSentAt": "2024-03-17T10:00:00Z",
+            "salesAgreementSignedAt": null,
+            "salesAgreementSentAt": null,
+            "distanceFromMainCityInKm": 0,
+            "cityDemography": "Grande ville",
+            "typeOfLot": {
+                "apartment": true,
+                "house": false
+            },
+            "customersAvaibilities": "Disponible en semaine",
+            "missingDocumentRequest": 0,
+            "missingRequestSentAt": null,
+            "onboardingUnfinishedRequest": 0,
+            "onboardingRequestSentAt": null,
+            "pipedriveDealId": 12345,
+            "budgetCriteria": "250000-350000",
+            "initialCriteriaFilledAt": "2024-03-15T10:00:00Z",
+            "regions_criteria": "Île-de-France",
+            "rework_criteria": "0-50000",
+            "cityDemographyCriteria": "Grande ville",
+            "perimeterOfSearchCriteria": "20km",
+            "OccupancyCriteria": "80-100%",
+            "typeOfLotCriteria": "Appartement",
+            "typeOfSearchCriteria": "Résidentiel",
+            "minBuyerRentalYieldCriteria": "5%",
+            "mandateVersion": 5,
+            "onlyFurnished": false,
+            "allStatus": {
+                "history": [
+                    {
+                        "status": "Nouveau",
+                        "date": "2024-03-15T10:00:00Z"
+                    },
+                    {
+                        "status": "En cours",
+                        "date": "2024-03-20T15:30:00Z"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "partnerId": 2,
+            "consultantId": 3,
+            "sdrId": 4,
+            "clientId": [5, 6],
+            "name": "Dossier Investissement Lyon",
+            "createdAt": "2024-03-10T09:00:00Z",
+            "updatedAt": "2024-03-19T11:20:00Z",
+            "status": "En attente",
+            "minBudget": 180000,
+            "maxBudget": 250000,
+            "minBuyerRentalYield": 0.06,
+            "minOccupancy": 90,
+            "maxOccupancy": 100,
+            "minRework": 0,
+            "maxRework": 30000,
+            "job": "Médecin",
+            "notes": "Client priorité centre-ville",
+            "downpayment": 40000,
+            "goal": "Investissement locatif",
+            "statusUpdatedAt": "2024-03-19T11:20:00Z",
+            "statusUpdatedBy": "CONS002",
+            "netAnnualSalaryBeforeTaxes": 85000,
+            "netAnnualBonusBeforeTaxes": 15000,
+            "annualExpenses": 30000,
+            "annualMortgageReimbursement": 15000,
+            "availableSavings": 60000,
+            "duration": 25,
+            "delay": 0,
+            "currentAnnualRentalRevenues": 0,
+            "activeSearch": true,
+            "address": "Lyon, France",
+            "notification": true,
+            "minCityInhabitantsCount": 500000,
+            "typeOfSearch": {
+                "residential": true,
+                "commercial": false
+            },
+            "tenantType": {
+                "student": false,
+                "professional": true
+            },
+            "perimeterOfSearch": 15,
+            "commercialLotsAreFullyRented": true,
+            "minAnnualRentalCashFlow": 10000,
+            "hasNoSingleBedRooms": true,
+            "onlyInterestedInVirtualVisits": true,
+            "maxDistanceKm": 15,
+            "discountRate": 0.035,
+            "hasNoVacationLots": true,
+            "languageRegister": "fr",
+            "availabilitiesNote": "Disponible le weekend",
+            "mandateSignedAt": "2024-03-12T16:00:00Z",
+            "mandateSentAt": "2024-03-11T14:00:00Z",
+            "salesAgreementSignedAt": null,
+            "salesAgreementSentAt": null,
+            "distanceFromMainCityInKm": 0,
+            "cityDemography": "Grande ville",
+            "typeOfLot": {
+                "apartment": true,
+                "house": false
+            },
+            "customersAvaibilities": "Disponible le weekend",
+            "missingDocumentRequest": 0,
+            "missingRequestSentAt": null,
+            "onboardingUnfinishedRequest": 0,
+            "onboardingRequestSentAt": null,
+            "pipedriveDealId": 12346,
+            "budgetCriteria": "180000-250000",
+            "initialCriteriaFilledAt": "2024-03-10T09:00:00Z",
+            "regions_criteria": "Auvergne-Rhône-Alpes",
+            "rework_criteria": "0-30000",
+            "cityDemographyCriteria": "Grande ville",
+            "perimeterOfSearchCriteria": "15km",
+            "OccupancyCriteria": "90-100%",
+            "typeOfLotCriteria": "Appartement",
+            "typeOfSearchCriteria": "Résidentiel",
+            "minBuyerRentalYieldCriteria": "6%",
+            "mandateVersion": 5,
+            "onlyFurnished": true,
+            "allStatus": {
+                "history": [
+                    {
+                        "status": "Nouveau",
+                        "date": "2024-03-10T09:00:00Z"
+                    },
+                    {
+                        "status": "En attente",
+                        "date": "2024-03-19T11:20:00Z"
+                    }
+                ]
+            }
+        }
+    ]
+}

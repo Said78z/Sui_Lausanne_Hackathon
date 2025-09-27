@@ -1,0 +1,56 @@
+{
+    "title": "Address Book",
+    "search": {
+        "placeholder": "Search for a user..."
+    },
+    "invite": "Invite",
+    "roles": {
+        "agents": "Agents",
+        "clients": "Clients",
+        "leads": "Leads",
+        "cgp": "CGP"
+    },
+    "table": {
+        "noUsers": "No users found",
+        "actions": "Actions",
+        "agent": {
+            "name": "Name",
+            "proposedProperties": "Proposed Properties",
+            "acceptedProperties": "Accepted Properties",
+            "registrationDate": "Registration Date",
+            "region": "Region"
+        },
+        "client": {
+            "name": "Name",
+            "consultant": "Associated Consultant",
+            "investmentCapacity": "Investment Capacity",
+            "status": "Status",
+            "registrationDate": "Registration Date",
+            "lastProposedProperty": "Last Proposed Property"
+        },
+        "lead": {
+            "name": "Name",
+            "type": "Type",
+            "source": "Source",
+            "lastCall": "Last Call",
+            "calledBy": "Called By",
+            "doNotCallBefore": "Do Not Call Before",
+            "registrationDate": "Registration Date"
+        },
+        "cgp": {
+            "name": "Name",
+            "broughtClients": "Brought Clients",
+            "investedClients": "Invested Clients",
+            "lastClientBrought": "Last Client Brought",
+            "totalEarnings": "Total Earnings",
+            "registrationDate": "Registration Date"
+        }
+    },
+    "common": {
+        "none": "None",
+        "noRestriction": "No restriction",
+        "unspecified": "Unspecified",
+        "unassigned": "Unassigned",
+        "unknown": "Unknown"
+    }
+}

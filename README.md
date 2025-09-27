@@ -1,129 +1,59 @@
-<p align="center">
-  <img src="./assets/logo.png" alt="Hack’n’Sui Logo" width="400"/>
-</p>
+# React + Fastify Skeleton
 
-# ⚡ Hack’n’Sui  
+## Prérequis
 
-## 🌍 Vision  
-**Hack’n’Sui** est une plateforme Web3 pour **hackathons et événements** qui permet de distribuer automatiquement des **micro-grants** aux participants, de façon **transparente, fluide et sans frais** pour eux.  
+- Docker
+- Node.js
+- PNPM (npm install -g pnpm)
 
-- Authentification simple via **zkLogin** (Google/Apple).  
-- Un **Passeport Soulbound NFT** sert d’identité digitale (non-transférable).  
-- Chaque action (check-in, stand visité, vote) est prouvée par **attestations on-chain via QR codes**.  
-- Un **pool de rewards** déposé par les sponsors est redistribué automatiquement selon des règles transparentes.  
-- Les transactions sont **gasless** : le backend prend en charge les frais.  
+## Structure du projet
 
----
+- `backend`: Dossier pour le serveur Fastify
+- `frontend`: Dossier pour le serveur React
+- `shared`: Dossier pour les fichiers partagés entre le backend et le frontend, il contient les types, les interfaces, les fonctions utiles, etc.
 
-## 🏗️ Architecture  
+## Installation
 
-Frontend (Next.js + Tailwind + Framer Motion)
+1. Cloner le repository
 
-zkLogin (Google/Apple)
+2. Créer un fichier `.env` dans le dossier `backend` et `frontend` avec les variables d'environnement nécessaires.
 
-Profile (Passeport NFT + QR)
+3. Lancer les conteneurs Docker avec la commande suivante. Ils permettent de lancer:
 
-Admin dashboard (scanner, participants, distribution)
-
-Backend (Fastify/TypeScript + Postgres)
-
-/qr/issue : génère QR signé
-
-/checkin : vérifie + inscrit participant
-
-/mint_passport : mint soulbound NFT
-
-Sponsoring des transactions (Gas Station)
-
-Blockchain (Sui + Move contracts)
-
-Passport (soulbound NFT)
-
-Mission (meta + période + poids)
-
-Attestation (preuve unique)
-
-GrantPool (fonds déposés + distribution)
-
-markdown
-Copier le code
-
----
-
-## 🚀 Installation & Lancement  
-
-### 1. Pré-requis  
-- [Node.js](https://nodejs.org) (>=18)  
-- [pnpm](https://pnpm.io/)  
-- [Sui CLI](https://docs.sui.io/)  
-- Postgres (local ou Docker)  
-
-### 2. Cloner le repo  
+- Un serveur MySQL: http://localhost:8080: Gérer la base de données
+- Un serveur PHPMyAdmin: http://localhost:8080: Gérer la base de données
+- Un serveur Mailhog: http://localhost:8025 / smtp://mailhog:1025: Envoyer des emails
+- Un serveur Minio: http://localhost:9000: Stockage de fichiers
+- Un serveur Loki: http://localhost:3100: Logger
+- Un serveur Grafana: http://localhost:3001: Consulter les logs
 
 ```bash
-git clone https://github.com/<votre-org>/hacknsui.git
-cd hacknsui
-3. Contrats Move
-bash
-Copier le code
-cd contracts
-sui move build
-sui move test
-sui client publish --gas-budget 100000000
-Notez le PACKAGE_ID et CONFIG_ID pour les utiliser dans .env.
+docker-compose up -d
+```
 
-4. Backend
-bash
-Copier le code
-cd server
-cp .env.example .env   # remplir avec vos clés
+4. Installer les dépendances avec la commande suivante.
+
+```bash
 pnpm install
+```
+
+5. Créez la base de données avec la commande suivante:
+
+```bash
+cd backend
+pnpm run prisma:generate
+pnpm run prisma:migrate # Si des changements sont apportés à la base de données
+pnpm run prisma:seed
+```
+
+6. Lancer le serveur Fastify avec la commande suivante.
+
+```bash
 pnpm dev
-5. Frontend
-bash
-Copier le code
-cd app
-cp .env.example .env.local   # remplir avec PACKAGE_ID, BACKEND_URL
-pnpm install
+```
+
+6. Lancer le serveur React avec la commande suivante.
+
+```bash
 pnpm dev
-Accédez à l’app : http://localhost:3000
-
-📲 Démo du flow utilisateur
-Login avec zkLogin → un Passeport NFT est minté.
-
-Affiche ton QR code perso dans ton profil.
-
-L’organisateur scanne ton QR à l’entrée.
-
-Le backend vérifie ownership on-chain et enregistre le check-in.
-
-Tu accumules des attestations en visitant les stands.
-
-À la fin, l’organisateur déclenche la distribution des grants (si activée).
-
-🔐 Sécurité
-Passeport = soulbound (non transférable).
-
-QR codes = signés par le backend avec expiration pour éviter le replay.
-
-Transactions = sponsorisées (gasless UX).
-
-Capabilities Move : seul l’organisateur peut créer missions / distribuer.
-
-🛣️ Roadmap
-V1 (Hackathon PoC) : Check-in + QR + passeport soulbound.
-
-V2 : Pool de grants + distribution auto.
-
-V3 : Badges rares, gamification.
-
-V4 : Sponsors multiples + votes on-chain + analytics.
-
-👥 Équipe
-Saïd Kaci — Coordination, DevOps, QA
-
-Riad — Frontend & UX
-
-Gobi — Backend & Infra
-
-Mehdi — Smart Contracts Move
+```

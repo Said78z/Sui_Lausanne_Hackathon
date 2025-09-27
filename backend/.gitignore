@@ -1,0 +1,8 @@
+node_modules
+# Keep environment variables out of version control
+.env.local
+.vscode
+src/config/client
+.env
+
+package-lock.json

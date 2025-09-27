@@ -1,0 +1,39 @@
+
+
+  
+  // GET /api/contacts
+// Récupérer la liste des contacts
+interface GetContactsResponse {
+    contacts: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      roles: string;
+      status: 'online' | 'offline';
+    }[];
+  }
+interface SearchContactsRequest {
+    query: string;
+    userType?: 'ALL' | 'CLIENT' | 'AGENT' | 'LEAD' | 'CGP' ;
+  }
+
+  
+
+  // PUT /api/messages/:messageId/read
+  // Marquer un message comme lu
+
+
+
+
+
+  // WebSocket endpoints
+ws://api/conversations
+// Pour recevoir les nouveaux messages en temps réel
+
+ws://api/typing
+// Pour gérer l'indicateur "en train d'écrire"
+
+
+
+Command qui check les messages non lu afin de créer des notifications

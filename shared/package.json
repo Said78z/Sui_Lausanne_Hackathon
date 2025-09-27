@@ -1,0 +1,23 @@
+{
+    "name": "shared",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "types": "index.ts",
+    "scripts": {
+        "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\""
+    },
+    "dependencies": {
+        "zod": "^3.24.2"
+    },
+    "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+        "@types/node": "^22.13.10",
+        "prettier": "^3.5.3"
+    },
+    "workspaces": [
+        "shared",
+        "app-consultant",
+        "frontend",
+        "backend"
+    ]
+}
