@@ -1,18 +1,18 @@
 model User {
   id                   String                      @id @default(uuid())
   email                String                      @unique
-  password             String
   firstName            String                      @map("first_name")
   lastName             String                      @map("last_name")
-  phone                String
-  civility             String
-  birthDate            String                      @map("birth_date")
-  acceptNewsletter     Boolean                     @default(false) @map("accept_newsletter")
-  roles                Json
+  roles                Json                        @default("[\"user\"]")
   createdAt            DateTime                    @default(now()) @map("created_at")
   updatedAt            DateTime                    @updatedAt @map("updated_at")
   tokens               Token[]
-  isVerified           Boolean?                    @default(false)
-
+  isVerified           Boolean                     @default(true) // Google users are pre-verified
+  
+  // Google OAuth fields (required since we only use Google)
+  googleId             String                      @unique @map("google_id")
+  avatar               String?                     // Profile picture URL
+  provider             String                      @default("google")
+  
   @@map("users")
 }
