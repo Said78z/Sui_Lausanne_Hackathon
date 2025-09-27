@@ -1,21 +1,58 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useConnectWallet, useCurrentAccount, useWallets } from '@mysten/dapp-kit';
+import { isEnokiWallet } from '@mysten/enoki';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+
+import { Button } from '@/components/ui/button';
 
 const LoginPage = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const currentAccount = useCurrentAccount();
+    const { mutate: connect } = useConnectWallet();
+
+    // Get available Enoki wallets
+    const wallets = useWallets();
+    const enokiWallets = wallets.filter(isEnokiWallet);
+    // Find Google wallet by checking the wallet name/features
+    const googleWallet = enokiWallets.find(
+        (wallet) =>
+            wallet.name?.toLowerCase().includes('google') ||
+            wallet.name?.toLowerCase().includes('enoki')
+    );
+
+    // Handle successful connection - redirect to dashboard
+    useEffect(() => {
+        if (currentAccount) {
+            navigate('/dashboard');
+        }
+    }, [currentAccount, navigate]);
 
     const handleGoogleLogin = async () => {
+        if (!googleWallet) {
+            console.error('Google wallet not available');
+            return;
+        }
+
         setIsLoading(true);
         try {
-            // TODO: Implement zkLogin with Google
-            console.log('Google zkLogin authentication');
-            // navigate('/dashboard');
+            connect(
+                { wallet: googleWallet },
+                {
+                    onSuccess: () => {
+                        console.log('Google zkLogin authentication successful');
+                        // Navigation will be handled by useEffect when currentAccount updates
+                    },
+                    onError: (error) => {
+                        console.error('Google login failed:', error);
+                        setIsLoading(false);
+                    },
+                }
+            );
         } catch (error) {
             console.error('Google login failed:', error);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -23,9 +60,9 @@ const LoginPage = () => {
     const handleAppleLogin = async () => {
         setIsLoading(true);
         try {
-            // TODO: Implement zkLogin with Apple
-            console.log('Apple zkLogin authentication');
-            // navigate('/dashboard');
+            // Apple zkLogin not implemented yet - keeping original placeholder
+            console.log('Apple zkLogin authentication - Not implemented yet');
+            // You can implement Apple login here when available
         } catch (error) {
             console.error('Apple login failed:', error);
         } finally {
@@ -60,17 +97,21 @@ const LoginPage = () => {
             {/* Login Form */}
             <div className="flex min-h-[calc(100vh-80px)] items-center justify-center px-6">
                 <div className="w-full max-w-md">
-                    <div className="rounded-2xl bg-white/5 p-8 backdrop-blur-sm ring-1 ring-white/10">
+                    <div className="rounded-2xl bg-white/5 p-8 ring-1 ring-white/10 backdrop-blur-sm">
                         <div className="mb-8 text-center">
-                            <h1 className="mb-2 text-3xl font-bold text-white">Welcome to Hack'n'sui</h1>
-                            <p className="text-gray-300">Sign in with zkLogin - secure, private, and decentralized</p>
+                            <h1 className="mb-2 text-3xl font-bold text-white">
+                                Welcome to Hack'n'sui
+                            </h1>
+                            <p className="text-gray-300">
+                                Sign in with zkLogin - secure, private, and decentralized
+                            </p>
                         </div>
 
                         <div className="space-y-4">
                             <Button
                                 onClick={handleGoogleLogin}
-                                disabled={isLoading}
-                                className="w-full bg-white text-gray-900 hover:bg-gray-100 h-12"
+                                disabled={isLoading || !googleWallet}
+                                className="h-12 w-full bg-white text-gray-900 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
                                     <path
@@ -90,18 +131,26 @@ const LoginPage = () => {
                                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                                     />
                                 </svg>
-                                {isLoading ? 'Connecting...' : 'Continue with Google'}
+                                {isLoading
+                                    ? 'Connecting...'
+                                    : !googleWallet
+                                      ? 'Google Wallet Loading...'
+                                      : 'Continue with Google'}
                             </Button>
-                            
+
                             <Button
                                 onClick={handleAppleLogin}
-                                disabled={isLoading}
-                                className="w-full bg-black text-white hover:bg-gray-900 h-12"
+                                disabled={true}
+                                className="h-12 w-full bg-black text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                <svg
+                                    className="mr-3 h-5 w-5"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                >
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                                 </svg>
-                                {isLoading ? 'Connecting...' : 'Continue with Apple'}
+                                Coming Soon - Apple zkLogin
                             </Button>
                         </div>
 
@@ -113,10 +162,7 @@ const LoginPage = () => {
                             </div>
                             <p className="text-gray-400">
                                 New to Hack'n'sui?{' '}
-                                <Link
-                                    to="/about"
-                                    className="text-blue-400 hover:text-blue-300"
-                                >
+                                <Link to="/about" className="text-blue-400 hover:text-blue-300">
                                     Learn more
                                 </Link>
                             </p>
@@ -127,7 +173,7 @@ const LoginPage = () => {
 
             {/* Floating Elements */}
             <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-blue-500/20 blur-3xl"></div>
-            <div className="absolute right-1/4 bottom-1/4 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl"></div>
         </div>
     );
 };
