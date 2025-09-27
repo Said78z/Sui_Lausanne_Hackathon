@@ -1,447 +1,381 @@
-import { useState } from 'react';
-import { 
-    LayoutDashboard, 
-    Calendar, 
-    Users, 
-    Trophy, 
-    FolderOpen, 
-    Settings, 
-    Bell, 
-    Search,
-    Plus,
-    BarChart3,
-    Zap,
-    Shield,
-    QrCode,
-    Award,
-    Coins,
-    ChevronRight,
-    Activity,
-    TrendingUp,
-    Clock,
-    Star,
-    Menu,
-    X,
-    Sun,
-    Moon
-} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useThemeStore } from '@/stores/themeStore';
+import { useNavigate } from 'react-router-dom';
+import { 
+    Search, 
+    Bell, 
+    Users, 
+    BarChart3, 
+    QrCode, 
+    Plus, 
+    ArrowUpRight,
+    Calendar,
+    MapPin,
+    Sun,
+    Moon,
+    Sparkles
+} from 'lucide-react';
 
-const Dashboard = () => {
-  const [activeSection, setActiveSection] = useState('overview');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { theme, toggleTheme } = useThemeStore();
+export default function Dashboard() {
+    const { theme, toggleTheme } = useThemeStore();
+    const navigate = useNavigate();
 
-    const navigationItems = [
-        { id: 'overview', label: 'Overview', icon: LayoutDashboard, color: 'text-blue-400' },
-        { id: 'events', label: 'Events', icon: Calendar, color: 'text-green-400' },
-        { id: 'teams', label: 'Teams', icon: Users, color: 'text-purple-400' },
-        { id: 'projects', label: 'Projects', icon: FolderOpen, color: 'text-orange-400' },
-        { id: 'competitions', label: 'Competitions', icon: Trophy, color: 'text-yellow-400' },
-        { id: 'rewards', label: 'Rewards', icon: Coins, color: 'text-emerald-400' },
-        { id: 'analytics', label: 'Analytics', icon: BarChart3, color: 'text-cyan-400' },
-        { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-400' },
-    ];
-
+    // Sample data with Luma-style structure
     const quickStats = [
-        { label: 'Active Events', value: '12', change: '+3', icon: Calendar, color: 'bg-blue-500' },
-        { label: 'Total Teams', value: '248', change: '+15', icon: Users, color: 'bg-green-500' },
-        { label: 'Projects Submitted', value: '89', change: '+7', icon: FolderOpen, color: 'bg-purple-500' },
-        { label: 'Rewards Distributed', value: '1.2M SUI', change: '+120K', icon: Coins, color: 'bg-yellow-500' },
-    ];
-
-    const recentActivities = [
-        { type: 'event', message: 'New hackathon "DeFi Innovation" started', time: '2 hours ago', icon: Calendar },
-        { type: 'team', message: 'Team "Blockchain Builders" joined event', time: '4 hours ago', icon: Users },
-        { type: 'project', message: 'Project "SuiSwap V2" submitted', time: '6 hours ago', icon: FolderOpen },
-        { type: 'reward', message: '50,000 SUI distributed to winners', time: '1 day ago', icon: Coins },
+        { 
+            title: 'Total Events', 
+            value: '24', 
+            change: '+12%', 
+            trend: 'up',
+            color: 'purple'
+        },
+        { 
+            title: 'Active Users', 
+            value: '1,234', 
+            change: '+8%', 
+            trend: 'up',
+            color: 'green'
+        },
+        { 
+            title: 'This Month', 
+            value: '89', 
+            change: '+23%', 
+            trend: 'up',
+            color: 'orange'
+        },
+        { 
+            title: 'Revenue', 
+            value: '$12.4k', 
+            change: '+15%', 
+            trend: 'up',
+            color: 'blue'
+        }
     ];
 
     const upcomingEvents = [
-        { name: 'DeFi Innovation Challenge', date: 'Dec 15, 2024', participants: 45, prize: '100K SUI' },
-        { name: 'NFT Marketplace Hackathon', date: 'Dec 20, 2024', participants: 32, prize: '75K SUI' },
-        { name: 'Gaming on Sui', date: 'Jan 5, 2025', participants: 28, prize: '150K SUI' },
+        {
+            id: 1,
+            title: 'SUI <> BSA Hackathon 3rd Edition',
+            description: 'BC Building (building of the IC faculty)',
+            time: 'Today, 9:00',
+            status: 'LIVE',
+            attendees: '248',
+            priority: 'high',
+            category: 'Tech',
+            image: '/api/placeholder/80/60'
+        },
+        {
+            id: 2,
+            title: 'Hack Seasons Conference Singapore',
+            description: 'The Westin Singapore',
+            time: '2 Oct, 4:00 - 10:00 GMT+8',
+            status: 'Invited',
+            attendees: '1.4k',
+            priority: 'medium',
+            category: 'Conference',
+            image: '/api/placeholder/80/60'
+        },
+        {
+            id: 3,
+            title: 'EASYCON SINGAPORE',
+            description: 'Maxwell Food Centre',
+            time: '2 Oct, 12:00 - 18:00 GMT+8',
+            status: 'Invited',
+            attendees: '1.1k',
+            priority: 'medium',
+            category: 'Networking',
+            image: '/api/placeholder/80/60'
+        },
+        {
+            id: 4,
+            title: 'NASA Space Apps Challenge - Paris 2025',
+            description: 'École Supérieure d\'Informatique',
+            time: '4 Oct, 9:00',
+            status: 'Going',
+            attendees: '892',
+            priority: 'high',
+            category: 'Competition',
+            image: '/api/placeholder/80/60'
+        }
     ];
 
-    const renderOverview = () => (
-        <div className="space-y-8">
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                {quickStats.map((stat, index) => (
-                    <div 
-                        key={index} 
-                        className={`p-6 rounded-lg border transition-all duration-300 hover:scale-105 ${
-                            theme === 'dark' 
-                                ? 'border-slate-600 hover:border-slate-500' 
-                                : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        style={{
-                            background: theme === 'dark' 
-                                ? 'rgba(30, 41, 59, 0.8)' 
-                                : 'rgba(255, 255, 255, 0.9)',
-                            backdropFilter: 'blur(10px)',
-                            WebkitBackdropFilter: 'blur(10px)'
-                        }}
-                    >
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className={`text-sm font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-gray-600'}`}>{stat.label}</p>
-                                <p className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{stat.value}</p>
-                                <p className="text-xs text-green-400 mt-2">{stat.change} this week</p>
-                            </div>
-                            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${stat.color.replace('bg-', 'text-').replace('-500', '-400')}`}>
-                                <stat.icon className="h-8 w-8" />
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+    const categories = [
+        { name: 'Tech', count: '3K Events', icon: '💻', color: 'purple' },
+        { name: 'Food & Drink', count: '134 Events', icon: '🍽️', color: 'orange' },
+        { name: 'AI', count: '2K Events', icon: '🤖', color: 'blue' },
+        { name: 'Arts & Culture', count: '1K Events', icon: '🎨', color: 'green' },
+        { name: 'Climate', count: '822 Events', icon: '🌱', color: 'emerald' },
+        { name: 'Fitness', count: '947 Events', icon: '💪', color: 'red' }
+    ];
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          {/* Recent Activities */}
-          <div 
-            className={`p-6 rounded-lg border ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}
-            style={{
-              background: theme === 'dark' 
-                ? 'rgba(30, 41, 59, 0.8)' 
-                : 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)'
-            }}
-          >
-            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Activities</h3>
-            <div className="space-y-4">
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <Activity className="h-5 w-5 text-blue-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New team registered</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>2 minutes ago</p>
-                </div>
-              </div>
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <FolderOpen className="h-5 w-5 text-green-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Project submitted</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>15 minutes ago</p>
-                </div>
-              </div>
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <Award className="h-5 w-5 text-purple-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Reward distributed</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>1 hour ago</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Upcoming Events */}
-          <div 
-            className={`p-6 rounded-lg border ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}
-            style={{
-              background: theme === 'dark' 
-                ? 'rgba(30, 41, 59, 0.8)' 
-                : 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)'
-            }}
-          >
-            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upcoming Events</h3>
-            <div className="space-y-4">
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <Clock className="h-5 w-5 text-orange-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Hackathon Finals</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>Tomorrow at 9:00 AM</p>
-                </div>
-              </div>
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <Calendar className="h-5 w-5 text-blue-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Team Building Workshop</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>Friday at 2:00 PM</p>
-                </div>
-              </div>
-              <div className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${
-                theme === 'dark' ? 'hover:bg-slate-700/50' : 'hover:bg-gray-100/50'
-              }`}>
-                <Trophy className="h-5 w-5 text-yellow-400" />
-                <div>
-                  <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Awards Ceremony</p>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>Next Monday at 6:00 PM</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-            {/* Performance Metrics */}
-            <div 
-              className={`rounded-2xl p-6 border ${theme === 'dark' ? 'border-slate-600' : 'border-gray-200'}`}
-              style={{
-                background: theme === 'dark' 
-                  ? 'rgba(30, 41, 59, 0.8)' 
-                  : 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)'
-              }}
-            >
-                <h3 className={`text-xl font-semibold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Platform Performance</h3>
-                <div className="grid gap-6 lg:grid-cols-3">
-                    <div className="text-center">
-                        <div className="mb-4 flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-400">
-                            <Activity className="h-8 w-8 text-white" />
-                        </div>
-                        <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Platform Uptime</h4>
-                        <p className="text-2xl font-bold text-blue-400">99.9%</p>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>Last 30 days</p>
-                    </div>
-                    
-                    <div className="text-center">
-                        <div className="mb-4 flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-emerald-400">
-                            <TrendingUp className="h-8 w-8 text-white" />
-                        </div>
-                        <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>User Growth</h4>
-                        <p className="text-2xl font-bold text-green-400">+24%</p>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>This month</p>
-                    </div>
-                    
-                    <div className="text-center">
-                        <div className="mb-4 flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-400">
-                            <Star className="h-8 w-8 text-white" />
-                        </div>
-                        <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Satisfaction</h4>
-                        <p className="text-2xl font-bold text-purple-400">4.8/5</p>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-gray-500'}`}>User rating</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
-    const renderPlaceholder = (title: string, description: string, icon: any) => (
-        <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-                <div className="mb-6 flex h-20 w-20 mx-auto items-center justify-center rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20">
-                    {icon && <icon className="h-10 w-10 text-blue-400" />}
-                </div>
-                <h3 className={`text-2xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h3>
-                <p className={`mb-6 max-w-md ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{description}</p>
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Coming Soon
-                </Button>
-            </div>
-        </div>
-    );
-
-    const renderContent = () => {
-        switch (activeSection) {
-            case 'overview':
-                return renderOverview();
-            case 'events':
-                return renderPlaceholder('Event Management', 'Create, manage, and track hackathon events with ease. Set up registration, manage participants, and monitor progress.', Calendar);
-            case 'teams':
-                return renderPlaceholder('Team Management', 'Facilitate team formation, manage team members, and track team progress throughout events.', Users);
-            case 'projects':
-                return renderPlaceholder('Project Hub', 'Centralized space for project submissions, reviews, and collaboration tools.', FolderOpen);
-            case 'competitions':
-                return renderPlaceholder('Competition Center', 'Manage competitions, judging criteria, and leaderboards for fair and transparent evaluation.', Trophy);
-            case 'rewards':
-                return renderPlaceholder('Reward System', 'Distribute rewards, manage prize pools, and track token distributions on the Sui blockchain.', Coins);
-            case 'analytics':
-                return renderPlaceholder('Analytics Dashboard', 'Comprehensive analytics and insights about platform usage, event performance, and user engagement.', BarChart3);
-            case 'settings':
-                return renderPlaceholder('Platform Settings', 'Configure platform settings, manage user permissions, and customize your hackathon experience.', Settings);
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'LIVE':
+                return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+            case 'Going':
+                return 'bg-green-500/20 text-green-400 border-green-500/30';
+            case 'Invited':
+                return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
             default:
-                return renderOverview();
+                return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
         }
     };
 
+    const getCategoryColor = (color: string) => {
+        const colors = {
+            purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+            orange: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+            blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+            cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+            green: 'bg-green-500/10 text-green-400 border-green-500/20',
+            emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+            red: 'bg-red-500/10 text-red-400 border-red-500/20'
+        };
+        return colors[color as keyof typeof colors] || colors.blue;
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 from-gray-50 via-white to-gray-100" style={{
-            background: theme === 'dark' 
-                ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)'
-                : 'linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%)'
-        }}>
-            <div className="flex">
-
-
-                {/* Sidebar */}
-                <div 
-                    className={`
-                        fixed lg:static inset-y-0 left-0 z-50 w-64 min-h-screen border-r 
-                        ${theme === 'dark' ? 'border-slate-700' : 'border-gray-200'}
-                        transform transition-transform duration-300 ease-in-out
-                        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-                    `}
-                    style={{
-                        background: theme === 'dark' 
-                            ? 'rgba(15, 23, 42, 0.95)' 
-                            : 'rgba(255, 255, 255, 0.95)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)'
-                    }}
-                >
-                    <div className="p-6">
-                        <div className="flex items-center space-x-3 mb-8">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-500">
-                                <Zap className="h-6 w-6 text-white" />
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+            {/* Background pattern and glow effects */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+            <div className="absolute inset-x-0 top-0 h-96 bg-gradient-to-b from-blue-900/30 via-cyan-900/20 to-transparent pointer-events-none" />
+            
+            {/* Top Navigation - Hack'n'Sui Style */}
+            <nav className="relative z-50 border-b border-white/10 bg-white/5 backdrop-blur-sm">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex items-center justify-between h-16">
+                        {/* Left side - Navigation */}
+                        <div className="flex items-center space-x-8">
+                            <div className="flex items-center space-x-2 animate-fade-in">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-110 transition-transform duration-300 hover:rotate-12">
+                                    <Sparkles className="h-6 w-6 text-white animate-pulse" />
+                                </div>
+                                <span className="text-2xl font-bold text-white bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                                    Hack'n'Sui
+                                </span>
                             </div>
-                            <div>
-                                <h1 className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Hack'n'sui</h1>
-                                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Dashboard V1</p>
-                            </div>
-                        </div>
-
-                        {/* Search */}
-                        <div className="relative mb-6">
-                            <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                className={`w-full rounded-lg py-2 pl-10 pr-4 ring-1 focus:ring-2 focus:ring-blue-500 focus:outline-none ${
-                                    theme === 'dark' 
-                                        ? 'bg-white/5 text-white placeholder-gray-400 ring-white/10' 
-                                        : 'bg-gray-50 text-gray-900 placeholder-gray-500 ring-gray-200'
-                                }`}
-                            />
-                        </div>
-
-                        {/* Navigation */}
-                        <nav className="space-y-2">
-                            {navigationItems.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => {
-                                        setActiveSection(item.id);
-                                        setSidebarOpen(false); // Close sidebar on mobile when item is selected
-                                    }}
-                                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-all duration-200 ${
-                                        activeSection === item.id
-                                            ? 'bg-blue-500/20 text-blue-400 ring-1 ring-blue-500/30'
-                                            : theme === 'dark' 
-                                                ? 'text-gray-400 hover:text-white hover:bg-white/5'
-                                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    <item.icon className={`h-5 w-5 ${activeSection === item.id ? item.color : ''}`} />
-                                    <span className="font-medium">{item.label}</span>
+                            
+                            <div className="hidden md:flex items-center space-x-6">
+                                <button className="flex items-center space-x-2 text-white hover:text-blue-300 transition-colors">
+                                    <Calendar className="h-4 w-4" />
+                                    <span className="font-medium">Events</span>
                                 </button>
-                            ))}
-                        </nav>
+                                <button 
+                                    onClick={() => navigate('/dashboard/calendar')}
+                                    className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+                                >
+                                    <BarChart3 className="h-4 w-4" />
+                                    <span className="font-medium">Calendars</span>
+                                </button>
+                                <button className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors">
+                                    <Search className="h-4 w-4" />
+                                    <span className="font-medium">Discover</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Right side - Actions */}
+                        <div className="flex items-center space-x-4">
+                            <span className="text-gray-400 text-sm hidden sm:block">17:43 CEST</span>
+                            
+                            <Button 
+                                onClick={() => navigate('/dashboard/create-event')}
+                                className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white hover:from-blue-600 hover:to-cyan-500 font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25"
+                            >
+                                <Plus className="h-4 w-4 mr-2" />
+                                Create Event
+                            </Button>
+                            
+                            <button className="p-2 text-gray-300 hover:text-white transition-colors">
+                                <Search className="h-5 w-5" />
+                            </button>
+                            
+                            <button className="p-2 text-gray-300 hover:text-white transition-colors relative">
+                                <Bell className="h-5 w-5" />
+                                <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></div>
+                            </button>
+                            
+                            <button 
+                                onClick={toggleTheme}
+                                className="p-2 text-gray-300 hover:text-white transition-colors"
+                            >
+                                {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                            </button>
+                            
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Main Content */}
+            <div className="relative z-10 max-w-7xl mx-auto px-6 py-12">
+                {/* Page Header */}
+                <div className="mb-12">
+                    <h1 className="text-4xl font-light text-white mb-3 tracking-tight">
+                        Events
+                    </h1>
+                    <p className="text-gray-400 text-lg font-light">
+                        Manage and discover amazing events in your area
+                    </p>
+                    
+                    {/* Toggle */}
+                    <div className="flex items-center space-x-1 mt-6">
+                        <button className="px-4 py-2 bg-gray-800 text-white rounded-lg font-medium">
+                            Upcoming
+                        </button>
+                        <button className="px-4 py-2 text-gray-400 hover:text-white transition-colors">
+                            Past
+                        </button>
                     </div>
                 </div>
 
-                {/* Mobile overlay */}
-                {sidebarOpen && (
-                    <div 
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-                        onClick={() => setSidebarOpen(false)}
-                    />
-                )}
+                {/* Quick Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    {quickStats.map((stat, index) => (
+                        <div 
+                            key={index}
+                            className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group hover:scale-105"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-gray-300 font-medium text-sm">{stat.title}</h3>
+                                <div className={`w-2 h-2 rounded-full ${
+                                    stat.color === 'purple' ? 'bg-purple-400' :
+                                    stat.color === 'green' ? 'bg-green-400' :
+                                    stat.color === 'orange' ? 'bg-orange-400' :
+                                    'bg-blue-400'
+                                }`} />
+                            </div>
+                            <div className="flex items-end justify-between">
+                                <span className="text-3xl font-light text-white">{stat.value}</span>
+                                <span className="text-cyan-400 text-sm font-medium">{stat.change}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-                {/* Main Content */}
-                <div className="flex-1">
-                    {/* Header */}
-                    <header 
-                        className={`border-b sticky top-0 z-30 ${theme === 'dark' ? 'border-slate-700' : 'border-gray-200'}`}
-                        style={{
-                            background: theme === 'dark' 
-                                ? 'rgba(15, 23, 42, 0.95)' 
-                                : 'rgba(255, 255, 255, 0.95)',
-                            backdropFilter: 'blur(20px)',
-                            WebkitBackdropFilter: 'blur(20px)'
-                        }}
-                    >
-                        <div className="flex items-center justify-between px-4 lg:px-8 py-3 lg:py-4">
-                            {/* Left side - Mobile menu + Title */}
-                            <div className="flex items-center space-x-3">
-                                {/* Mobile menu button - integrated into header */}
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                                    className={`lg:hidden p-2 rounded-lg ${
-                                        theme === 'dark' 
-                                            ? 'text-slate-400 hover:text-white hover:bg-slate-700/50' 
-                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                                </Button>
-                                
-                                {/* Title section - more compact on mobile */}
-                                <div className="min-w-0 flex-1">
-                                    <h2 className={`text-lg lg:text-2xl font-bold truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                                        {navigationItems.find(item => item.id === activeSection)?.label || 'Dashboard'}
-                                    </h2>
-                                    <p className={`text-xs lg:text-sm hidden sm:block ${theme === 'dark' ? 'text-slate-400' : 'text-gray-600'}`}>
-                                        {activeSection === 'overview' 
-                                            ? 'Welcome to your hackathon management hub' 
-                                            : `Manage your ${activeSection} efficiently`
-                                        }
-                                    </p>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    {/* Timeline - Events List */}
+                    <div className="lg:col-span-2">
+                        <div className="mb-8">
+                            <h2 className="text-2xl font-light text-white mb-2">Upcoming Events</h2>
+                            <p className="text-gray-400">Don't miss these important dates</p>
+                        </div>
+                        
+                        <div className="space-y-8">
+                            {upcomingEvents.map((event, index) => (
+                                <div key={event.id} className="flex">
+                                    {/* Timeline Date */}
+                                    <div className="flex-shrink-0 w-24 mr-8">
+                                        <div className="text-right">
+                                            <div className="text-white font-medium text-sm">
+                                                {event.time.split(',')[0]}
+                                            </div>
+                                            <div className="text-gray-500 text-xs">
+                                                {event.time.split(',')[1]?.trim() || ''}
+                                            </div>
+                                        </div>
+                                        {index < upcomingEvents.length - 1 && (
+                                            <div className="w-px h-16 bg-gray-700 ml-auto mt-4"></div>
+                                        )}
+                                    </div>
+                                    
+                                    {/* Event Card */}
+                                    <div className="flex-1 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group hover:scale-[1.02]">
+                                        <div className="flex items-start space-x-4">
+                                            {/* Event Image */}
+                                            <div className="w-20 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl flex-shrink-0 flex items-center justify-center">
+                                                <span className="text-2xl">{event.category === 'Tech' ? '💻' : event.category === 'Conference' ? '🎤' : event.category === 'Networking' ? '🤝' : '🚀'}</span>
+                                            </div>
+                                            
+                                            {/* Event Details */}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-start justify-between mb-3">
+                                                    <h3 className="text-white font-semibold text-lg leading-tight group-hover:text-blue-300 transition-colors">
+                                                        {event.title}
+                                                    </h3>
+                                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(event.status)}`}>
+                                                        {event.status}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="flex items-center space-x-4 text-gray-300 text-sm mb-3">
+                                                    <div className="flex items-center space-x-1">
+                                                        <MapPin className="h-4 w-4" />
+                                                        <span>{event.description}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center space-x-2">
+                                                        <Users className="h-4 w-4 text-gray-400" />
+                                                        <span className="text-gray-300 text-sm">{event.attendees}</span>
+                                                        <span className="text-gray-500">•</span>
+                                                        <span className={`text-xs px-2 py-1 rounded-full ${getCategoryColor(event.category === 'Tech' ? 'blue' : event.category === 'Conference' ? 'purple' : 'cyan')}`}>
+                                                            {event.category}
+                                                        </span>
+                                                    </div>
+                                                    <ArrowUpRight className="h-4 w-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            {/* Right side - Actions */}
-                            <div className="flex items-center space-x-2 lg:space-x-4">
-                                <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    onClick={toggleTheme}
-                                    className={`p-2 rounded-lg transition-colors ${
-                                        theme === 'dark' 
-                                            ? 'text-slate-400 hover:text-white hover:bg-slate-700/50' 
-                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                                    }`}
-                                    title={`Basculer vers le mode ${theme === 'dark' ? 'clair' : 'sombre'}`}
-                                >
-                                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                                </Button>
-                                <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className={`p-2 rounded-lg ${
-                                        theme === 'dark' 
-                                            ? 'text-slate-400 hover:text-white hover:bg-slate-700/50' 
-                                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    <Bell className="h-5 w-5" />
-                                </Button>
-                                <Button 
-                                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-sm lg:text-base px-3 lg:px-4 py-2 rounded-lg"
-                                >
-                                    <Plus className="h-4 w-4 lg:mr-2" />
-                                    <span className="hidden lg:inline">Quick Action</span>
-                                </Button>
-                            </div>
+                            ))}
                         </div>
-                    </header>
+                    </div>
 
-                    {/* Content */}
-                    <main className="p-3 sm:p-4 lg:p-8">
-                        <div className="animate-in fade-in-50 duration-500">
-                            {renderContent()}
+                    {/* Sidebar - Categories & Quick Actions */}
+                    <div className="space-y-8">
+                        {/* Browse by Category */}
+                        <div>
+                            <h3 className="text-xl font-light text-white mb-6">Browse by Category</h3>
+                            <div className="grid grid-cols-2 gap-3">
+                                {categories.map((category) => (
+                                    <div 
+                                        key={category.name}
+                                        className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all duration-300 cursor-pointer group hover:scale-105"
+                                    >
+                                        <div className="flex items-center space-x-3 mb-2">
+                                            <span className="text-lg">{category.icon}</span>
+                                            <span className="text-white font-medium text-sm">{category.name}</span>
+                                        </div>
+                                        <p className="text-gray-300 text-xs">{category.count}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </main>
+
+                        {/* Quick Actions */}
+                        <div>
+                            <h3 className="text-xl font-light text-white mb-6">Quick Actions</h3>
+                            <div className="space-y-3">
+                                <Button 
+                                    onClick={() => navigate('/dashboard/create-event')}
+                                    className="w-full justify-start bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white border-0 rounded-xl h-14 font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg hover:shadow-blue-500/25 text-lg"
+                                >
+                                    <Plus className="h-6 w-6 mr-3" />
+                                    Create Event
+                                </Button>
+                                <Button 
+                                    variant="outline" 
+                                    className="w-full justify-start h-12 font-medium rounded-xl transition-all duration-300 hover:scale-[1.01] border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/30"
+                                >
+                                    <QrCode className="h-5 w-5 mr-3" />
+                                    Scan QR Code
+                                </Button>
+                                <Button 
+                                    variant="outline" 
+                                    className="w-full justify-start h-12 font-medium rounded-xl transition-all duration-300 hover:scale-[1.01] border-white/20 text-gray-300 hover:bg-white/10 hover:border-white/30"
+                                >
+                                    <BarChart3 className="h-5 w-5 mr-3" />
+                                    View Analytics
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
-};
-
-export default Dashboard;
+}
