@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Error from '@/features/Error';
+import LandingPage from '@/features/LandingPage';
+import LoginPage from '@/features/LoginPage';
+import RegisterPage from '@/features/RegisterPage';
 
 import { useAuthStore } from '@/stores/authStore';
 import { useSettingsStore } from '@/stores/settingsStore';
@@ -57,23 +60,25 @@ const AppRoutes = () => {
             >
                 <Routes>
                     {/* Routes publiques */}
-                    <Route element={<PublicRoutes />}></Route>
+                    <Route element={<PublicRoutes />}>
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                    </Route>
 
                     {/* Routes privées */}
-                    <Route element={<PrivateRoutes />}></Route>
+                    <Route path="/dashboard/*" element={<PrivateRoutes />} />
 
                     {/* Route par défaut */}
                     {isAuthenticated && (
                         <>
-                            <Route path="/" element={<Navigate to="/folders" replace />} />
-                            <Route path="*" element={<Navigate to="/folders" replace />} />
+                            <Route path="*" element={<Navigate to="/dashboard" replace />} />
                             <Route path="/error" element={<Error />} />
                         </>
                     )}
                     {!isAuthenticated && (
                         <>
-                            <Route path="/" element={<Navigate to="/login" replace />} />
-                            <Route path="*" element={<Navigate to="/login" replace />} />
+                            <Route path="*" element={<Navigate to="/" replace />} />
                             <Route path="/error" element={<Error />} />
                         </>
                     )}
