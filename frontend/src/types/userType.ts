@@ -3,10 +3,12 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    phone: string;
-    createdAt: Date;
-    updatedAt: Date;
-    linkedinProfile: string;
-    onboardingCompleted: boolean;
+    phone?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    linkedinProfile?: string;
+    onboardingCompleted?: boolean;
     isVerified?: boolean;
+    avatar?: string;
+    walletAddress?: string;
 }

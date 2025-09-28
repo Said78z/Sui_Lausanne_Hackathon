@@ -12,12 +12,5 @@
         "file": "./cleanTokensCommand.ts",
         "cronExpression": "0 0 * * *",
         "isEnabled": true
-    },
-    {
-        "name": "notificationsChecker",
-        "description": "Commande permettant de vérifier les notifications non lues depuis plus de 30 minutes et envoyer des rappels",
-        "file": "./notificationsCheckerCommand.ts",
-        "cronExpression": "*/30 * * * *",
-        "isEnabled": true
     }
 ]

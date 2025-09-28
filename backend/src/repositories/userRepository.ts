@@ -1,7 +1,7 @@
 import { Prisma, User } from '@/config/client';
 import prisma from '@/config/prisma';
 import { userService } from '@/services/userService';
-import { QueryUsersDto } from '@shared/dto/userDto';
+import { CreateUserData, QueryUsersDto, UpdateUserData } from '@shared/dto/userDto';
 
 const MAX_RECORDS_LIMIT = 100;
 
@@ -10,7 +10,9 @@ export const basicUserSelect = Prisma.validator<Prisma.UserSelect>()({
     firstName: true,
     lastName: true,
     email: true,
-    civility: true,
+    googleId: true,
+    avatar: true,
+    provider: true,
 });
 
 class UserRepository {
@@ -103,6 +105,58 @@ class UserRepository {
             where: { id },
         });
         return deleted;
+    }
+
+    /**
+     * Find user by Google ID
+     * @param googleId - Google ID
+     * @returns User or null
+     */
+    async findByGoogleId(googleId: string): Promise<User | null> {
+        const user = await prisma.user.findFirst({
+            where: { googleId },
+        });
+        return user ? userService.deserializeRoles(user) : null;
+    }
+
+    /**
+     * Create a new user with Google OAuth data
+     * @param data - Google user data
+     * @returns Created user
+     */
+    async createGoogleUser(data: CreateUserData): Promise<User> {
+        const user = await prisma.user.create({
+            data: {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                googleId: data.googleId,
+                avatar: data.avatar,
+                provider: data.provider || 'enoki-google',
+                roles: JSON.stringify(data.roles || ['ROLE_USER']),
+                isVerified: data.isVerified ?? true,
+            },
+        });
+        return userService.deserializeRoles(user);
+    }
+
+    /**
+     * Update user's Google information
+     * @param userId - User ID
+     * @param data - Google user data to update
+     * @returns Updated user
+     */
+    async updateGoogleUser(userId: string, data: UpdateUserData): Promise<User> {
+        const updated = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                avatar: data.avatar,
+            },
+        });
+        return userService.deserializeRoles(updated);
     }
 
 }

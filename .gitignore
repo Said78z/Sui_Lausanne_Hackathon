@@ -55,3 +55,4 @@ backend/prisma/migrations/
 
 # Coverage files
 backend/coverage/
+frontend/.env

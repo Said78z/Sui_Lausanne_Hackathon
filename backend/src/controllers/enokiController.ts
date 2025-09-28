@@ -135,6 +135,9 @@ class EnokiController {
             }
         },
     });
+
+    // Note: User authentication with Enoki has been moved to userController.authenticateWithEnoki
+    // This endpoint is deprecated and should use /api/users/authenticate-enoki instead
 }
 
 export const enokiController = new EnokiController();
