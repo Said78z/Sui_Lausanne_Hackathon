@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useCurrentAccount } from '@mysten/dapp-kit';
@@ -32,17 +32,21 @@ import { useThemeStore } from '@/stores/themeStore';
 const ProfilePage = () => {
     const navigate = useNavigate();
     const currentAccount = useCurrentAccount();
-    const { user } = useAuthStore();
+    const { user, isAuthenticated, setUser, setIsAuthenticated } = useAuthStore();
     const { theme, toggleTheme } = useThemeStore();
+
+    console.log('ProfilePage: Current user:', user);
+    console.log('ProfilePage: Is authenticated:', isAuthenticated);
+    console.log('ProfilePage: Current account:', currentAccount);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedProfile, setEditedProfile] = useState({
-        firstName: user?.firstName || 'John',
-        lastName: user?.lastName || 'Doe',
-        email: user?.email || 'john.doe@example.com',
+        firstName: '',
+        lastName: '',
+        email: '',
         phone: '+1 (555) 123-4567',
         bio: 'Passionate about blockchain technology and decentralized applications. Love attending hackathons and building innovative solutions.',
-        location: 'Lausanne, Switzerland',
+        location: '',
         website: 'https://johndoe.dev',
         twitter: '@johndoe',
     });
@@ -89,12 +93,12 @@ const ProfilePage = () => {
     const handleCancel = () => {
         // Reset to original values
         setEditedProfile({
-            firstName: user?.firstName || 'John',
-            lastName: user?.lastName || 'Doe',
-            email: user?.email || 'john.doe@example.com',
+            firstName: user?.firstName || '',
+            lastName: user?.lastName || '',
+            email: user?.email || '',
             phone: '+1 (555) 123-4567',
             bio: 'Passionate about blockchain technology and decentralized applications. Love attending hackathons and building innovative solutions.',
-            location: 'Lausanne, Switzerland',
+            location: '',
             website: 'https://johndoe.dev',
             twitter: '@johndoe',
         });
@@ -107,6 +111,45 @@ const ProfilePage = () => {
             [field]: value,
         }));
     };
+
+    // Update profile when user data changes
+    useEffect(() => {
+        console.log('ProfilePage: User data changed:', user);
+        if (user) {
+            setEditedProfile((prev) => ({
+                ...prev,
+                firstName: user.firstName || '',
+                lastName: user.lastName || '',
+                email: user.email || '',
+            }));
+        }
+    }, [user]);
+
+    // Check if user should be loaded from cookies on mount
+    useEffect(() => {
+        const checkStoredAuth = async () => {
+            console.log('ProfilePage: Checking stored authentication...');
+            const { enokiAuthService } = await import('@/api/enokiAuthService');
+
+            if (enokiAuthService.isAuthenticated() && !user) {
+                console.log(
+                    'ProfilePage: Found stored auth but no user, trying to get current user...'
+                );
+                try {
+                    const currentUser = await enokiAuthService.getCurrentUser();
+                    if (currentUser) {
+                        console.log('ProfilePage: Loaded user from stored auth:', currentUser);
+                        setUser(currentUser);
+                        setIsAuthenticated(true);
+                    }
+                } catch (error) {
+                    console.error('ProfilePage: Failed to load user from stored auth:', error);
+                }
+            }
+        };
+
+        checkStoredAuth();
+    }, [user, setUser, setIsAuthenticated]);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -179,10 +222,18 @@ const ProfilePage = () => {
                         <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:bg-white/10">
                             {/* Profile Picture */}
                             <div className="relative mb-6">
-                                <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-4xl font-bold text-white">
-                                    {editedProfile.firstName.charAt(0)}
-                                    {editedProfile.lastName.charAt(0)}
-                                </div>
+                                {user?.avatar ? (
+                                    <img
+                                        src={user.avatar}
+                                        alt="Profile"
+                                        className="mx-auto h-32 w-32 rounded-full object-cover ring-4 ring-blue-500/20"
+                                    />
+                                ) : (
+                                    <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-4xl font-bold text-white">
+                                        {editedProfile.firstName.charAt(0)}
+                                        {editedProfile.lastName.charAt(0)}
+                                    </div>
+                                )}
                                 <button className="absolute bottom-2 right-1/2 translate-x-1/2 translate-y-1/2 transform rounded-full bg-blue-500 p-2 text-white transition-colors hover:bg-blue-600">
                                     <Camera className="h-4 w-4" />
                                 </button>
@@ -191,27 +242,74 @@ const ProfilePage = () => {
                             {/* Basic Info */}
                             <div className="mb-6 text-center">
                                 <h2 className="mb-1 text-2xl font-semibold text-white">
-                                    {editedProfile.firstName} {editedProfile.lastName}
+                                    {editedProfile.firstName && editedProfile.lastName
+                                        ? `${editedProfile.firstName} ${editedProfile.lastName}`
+                                        : user?.firstName && user?.lastName
+                                          ? `${user.firstName} ${user.lastName}`
+                                          : 'Loading...'}
                                 </h2>
-                                <p className="mb-2 text-gray-300">{editedProfile.email}</p>
-                                <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
-                                    <MapPin className="h-4 w-4" />
-                                    <span>{editedProfile.location}</span>
-                                </div>
+                                <p className="mb-2 text-gray-300">
+                                    {editedProfile.email || user?.email || 'Loading...'}
+                                </p>
+                                {editedProfile.location && (
+                                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
+                                        <MapPin className="h-4 w-4" />
+                                        <span>{editedProfile.location}</span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Wallet Info */}
-                            {currentAccount && (
-                                <div className="mb-6 rounded-xl bg-white/5 p-4">
-                                    <h3 className="mb-2 flex items-center font-medium text-white">
-                                        <Wallet className="mr-2 h-4 w-4" />
-                                        Connected Wallet
-                                    </h3>
-                                    <p className="break-all font-mono text-sm text-gray-300">
-                                        {currentAccount.address}
-                                    </p>
-                                </div>
-                            )}
+                            <div className="mb-6 rounded-xl bg-white/5 p-4">
+                                <h3 className="mb-2 flex items-center font-medium text-white">
+                                    <Wallet className="mr-2 h-4 w-4" />
+                                    Wallet Status
+                                </h3>
+                                {currentAccount ? (
+                                    <>
+                                        <p className="mb-1 text-sm text-green-400">
+                                            ✅ Wallet Connected
+                                        </p>
+                                        <p className="break-all font-mono text-sm text-gray-300">
+                                            {currentAccount.address}
+                                        </p>
+                                    </>
+                                ) : user?.walletAddress ? (
+                                    <>
+                                        <p className="mb-1 text-sm text-yellow-400">
+                                            ⚠️ Wallet Address Available
+                                        </p>
+                                        <p className="break-all font-mono text-sm text-gray-300">
+                                            {user.walletAddress}
+                                        </p>
+                                        <p className="mt-1 text-xs text-gray-400">
+                                            Wallet not actively connected - from authentication
+                                        </p>
+                                    </>
+                                ) : user?.id?.startsWith('0x') ? (
+                                    <>
+                                        <p className="mb-1 text-sm text-yellow-400">
+                                            ⚠️ Wallet Address Available
+                                        </p>
+                                        <p className="break-all font-mono text-sm text-gray-300">
+                                            {user.id}
+                                        </p>
+                                        <p className="mt-1 text-xs text-gray-400">
+                                            Wallet not actively connected - from authentication
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="mb-1 text-sm text-gray-400">
+                                            ❌ No Wallet Connected
+                                        </p>
+                                        <p className="text-xs text-gray-400">
+                                            Signed in with Google only - no blockchain wallet
+                                            available
+                                        </p>
+                                    </>
+                                )}
+                            </div>
 
                             {/* Action Buttons */}
                             <div className="space-y-3">
@@ -400,12 +498,13 @@ const ProfilePage = () => {
                                             onChange={(e) =>
                                                 handleInputChange('location', e.target.value)
                                             }
+                                            placeholder="Enter your location"
                                             className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                     ) : (
                                         <p className="flex items-center rounded-xl bg-white/5 px-4 py-3 text-white">
                                             <MapPin className="mr-2 h-4 w-4 text-gray-400" />
-                                            {editedProfile.location}
+                                            {editedProfile.location || 'No location set'}
                                         </p>
                                     )}
                                 </div>

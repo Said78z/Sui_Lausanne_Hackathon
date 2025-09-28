@@ -5,9 +5,10 @@ import CreateEvent from '@/features/CreateEvent';
 import Dashboard from '@/features/Dashboard';
 import ProfilePage from '@/features/ProfilePage';
 
+import { useAuthStore } from '@/stores/authStore';
+
 const PrivateRoutes = () => {
-    // const { isAuthenticated } = useAuthStore();
-    const isAuthenticated = true;
+    const { isAuthenticated } = useAuthStore();
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;

@@ -20,6 +20,8 @@ export const RegisterEnokiWallets: React.FC = () => {
             providers: {
                 google: {
                     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+                    // Add explicit scopes to ensure we get user profile data
+                    scope: 'openid profile email',
                 },
                 facebook: {
                     clientId: import.meta.env.VITE_FACEBOOK_CLIENT_ID,
