@@ -1,3 +1,5 @@
+import { useProfileStats } from '@/api/queries/profileQueries';
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,37 +53,91 @@ const ProfilePage = () => {
         twitter: '@johndoe',
     });
 
-    // Mock user stats
-    const userStats = [
-        {
-            title: 'Events Attended',
-            value: '24',
-            change: '+3 this month',
-            color: 'purple',
-            icon: Calendar,
-        },
-        {
-            title: 'Events Created',
-            value: '8',
-            change: '+2 this month',
-            color: 'blue',
-            icon: Award,
-        },
-        {
-            title: 'Network Size',
-            value: '156',
-            change: '+12 connections',
-            color: 'green',
-            icon: Activity,
-        },
-        {
-            title: 'SUI Balance',
-            value: '1,234.56',
-            change: 'SUI',
-            color: 'orange',
-            icon: Wallet,
-        },
-    ];
+    // Fetch profile stats from backend
+    const {
+        data: profileStatsData,
+        isLoading: isStatsLoading,
+        error: statsError,
+    } = useProfileStats({ enabled: isAuthenticated });
+
+    // Debug profile stats data
+    console.log('🔍 ProfilePage Stats Debug:');
+    console.log('🔍 profileStatsData:', profileStatsData);
+    console.log('🔍 isStatsLoading:', isStatsLoading);
+    console.log('🔍 statsError:', statsError);
+
+    // Process profile stats or use fallbacks
+    const userStats = profileStatsData?.data?.stats
+        ? [
+              {
+                  title: 'Events Attended',
+                  value: profileStatsData.data.stats.eventsAttended.toString(),
+                  change:
+                      profileStatsData.data.stats.eventsAttendedThisMonth > 0
+                          ? `+${profileStatsData.data.stats.eventsAttendedThisMonth} this month`
+                          : 'No new events this month',
+                  color: 'purple',
+                  icon: Calendar,
+              },
+              {
+                  title: 'Events Created',
+                  value: profileStatsData.data.stats.eventsCreated.toString(),
+                  change:
+                      profileStatsData.data.stats.eventsCreatedThisMonth > 0
+                          ? `+${profileStatsData.data.stats.eventsCreatedThisMonth} this month`
+                          : 'No new events this month',
+                  color: 'blue',
+                  icon: Award,
+              },
+              {
+                  title: 'Network Size',
+                  value: profileStatsData.data.stats.networkSize.toString(),
+                  change:
+                      profileStatsData.data.stats.networkGrowthThisMonth > 0
+                          ? `+${profileStatsData.data.stats.networkGrowthThisMonth} connections`
+                          : 'No new connections',
+                  color: 'green',
+                  icon: Activity,
+              },
+              {
+                  title: 'SUI Balance',
+                  value: profileStatsData.data.stats.suiBalance,
+                  change: 'SUI',
+                  color: 'orange',
+                  icon: Wallet,
+              },
+          ]
+        : [
+              // Fallback data while loading or on error
+              {
+                  title: 'Events Attended',
+                  value: isStatsLoading ? '...' : '0',
+                  change: isStatsLoading ? 'Loading...' : 'No events yet',
+                  color: 'purple',
+                  icon: Calendar,
+              },
+              {
+                  title: 'Events Created',
+                  value: isStatsLoading ? '...' : '0',
+                  change: isStatsLoading ? 'Loading...' : 'No events yet',
+                  color: 'blue',
+                  icon: Award,
+              },
+              {
+                  title: 'Network Size',
+                  value: isStatsLoading ? '...' : '0',
+                  change: isStatsLoading ? 'Loading...' : 'No connections yet',
+                  color: 'green',
+                  icon: Activity,
+              },
+              {
+                  title: 'SUI Balance',
+                  value: isStatsLoading ? '...' : '0.00',
+                  change: 'SUI',
+                  color: 'orange',
+                  icon: Wallet,
+              },
+          ];
 
     const handleSave = () => {
         // Here you would typically save to your backend
@@ -265,50 +321,62 @@ const ProfilePage = () => {
                                     <Wallet className="mr-2 h-4 w-4" />
                                     Wallet Status
                                 </h3>
-                                {currentAccount ? (
-                                    <>
-                                        <p className="mb-1 text-sm text-green-400">
-                                            ✅ Wallet Connected
-                                        </p>
-                                        <p className="break-all font-mono text-sm text-gray-300">
-                                            {currentAccount.address}
-                                        </p>
-                                    </>
-                                ) : user?.walletAddress ? (
-                                    <>
-                                        <p className="mb-1 text-sm text-yellow-400">
-                                            ⚠️ Wallet Address Available
-                                        </p>
-                                        <p className="break-all font-mono text-sm text-gray-300">
-                                            {user.walletAddress}
-                                        </p>
-                                        <p className="mt-1 text-xs text-gray-400">
-                                            Wallet not actively connected - from authentication
-                                        </p>
-                                    </>
-                                ) : user?.id?.startsWith('0x') ? (
-                                    <>
-                                        <p className="mb-1 text-sm text-yellow-400">
-                                            ⚠️ Wallet Address Available
-                                        </p>
-                                        <p className="break-all font-mono text-sm text-gray-300">
-                                            {user.id}
-                                        </p>
-                                        <p className="mt-1 text-xs text-gray-400">
-                                            Wallet not actively connected - from authentication
-                                        </p>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p className="mb-1 text-sm text-gray-400">
-                                            ❌ No Wallet Connected
-                                        </p>
-                                        <p className="text-xs text-gray-400">
-                                            Signed in with Google only - no blockchain wallet
-                                            available
-                                        </p>
-                                    </>
-                                )}
+                                {(() => {
+                                    if (currentAccount) {
+                                        return (
+                                            <>
+                                                <p className="mb-1 text-sm text-green-400">
+                                                    ✅ Wallet Connected
+                                                </p>
+                                                <p className="break-all font-mono text-sm text-gray-300">
+                                                    {currentAccount.address}
+                                                </p>
+                                            </>
+                                        );
+                                    } else if (user?.walletAddress || (user as any)?.suiAddress) {
+                                        const walletAddr =
+                                            user?.walletAddress || (user as any)?.suiAddress;
+                                        return (
+                                            <>
+                                                <p className="mb-1 text-sm text-green-400">
+                                                    ✅ Sui Wallet Address
+                                                </p>
+                                                <p className="break-all font-mono text-sm text-gray-300">
+                                                    {walletAddr}
+                                                </p>
+                                                <p className="mt-1 text-xs text-gray-400">
+                                                    Your blockchain address for Sui network
+                                                </p>
+                                            </>
+                                        );
+                                    } else if (user?.id?.startsWith('0x')) {
+                                        return (
+                                            <>
+                                                <p className="mb-1 text-sm text-green-400">
+                                                    ✅ Sui Wallet Address
+                                                </p>
+                                                <p className="break-all font-mono text-sm text-gray-300">
+                                                    {user.id}
+                                                </p>
+                                                <p className="mt-1 text-xs text-gray-400">
+                                                    Your blockchain address for Sui network
+                                                </p>
+                                            </>
+                                        );
+                                    } else {
+                                        return (
+                                            <>
+                                                <p className="mb-1 text-sm text-gray-400">
+                                                    ❌ No Wallet Connected
+                                                </p>
+                                                <p className="text-xs text-gray-400">
+                                                    Signed in with Google only - no blockchain
+                                                    wallet available
+                                                </p>
+                                            </>
+                                        );
+                                    }
+                                })()}
                             </div>
 
                             {/* Action Buttons */}

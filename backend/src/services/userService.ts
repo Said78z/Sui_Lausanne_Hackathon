@@ -184,6 +184,19 @@ class UserService {
         }
     }
 
+    /**
+     * Get user profile statistics
+     */
+    async getUserProfileStats(userId: string) {
+        try {
+            this.logger.info('Getting profile stats for user:', userId);
+            return await userRepository.getUserProfileStats(userId);
+        } catch (error) {
+            this.logger.error('Error getting user profile stats:', error);
+            throw error;
+        }
+    }
+
 }
 
 export const userService = new UserService();

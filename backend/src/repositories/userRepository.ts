@@ -159,6 +159,47 @@ class UserRepository {
         return userService.deserializeRoles(updated);
     }
 
+    /**
+     * Get user profile statistics
+     */
+    public async getUserProfileStats(userId: string) {
+        console.log('🔍 UserRepository: Getting profile stats for user:', userId);
+
+        // Get events created by user
+        const eventsCreated = await prisma.event.count({
+            where: { createdBy: userId }
+        });
+
+        // Get events created this month
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const eventsCreatedThisMonth = await prisma.event.count({
+            where: {
+                createdBy: userId,
+                createdAt: {
+                    gte: startOfMonth
+                }
+            }
+        });
+
+        // For now, we'll use placeholder values for attended events and network size
+        // These would require additional models/relationships in a full implementation
+        const stats = {
+            eventsCreated,
+            eventsCreatedThisMonth,
+            eventsAttended: 0, // Placeholder - would need EventAttendee model
+            eventsAttendedThisMonth: 0, // Placeholder
+            networkSize: 0, // Placeholder - would need UserConnection model
+            networkGrowthThisMonth: 0, // Placeholder
+            suiBalance: '0.00' // Placeholder - would need blockchain integration
+        };
+
+        console.log('✅ UserRepository: Profile stats retrieved:', stats);
+        return stats;
+    }
+
 }
 
 export const userRepository = new UserRepository();

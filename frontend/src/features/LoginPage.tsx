@@ -328,6 +328,8 @@ const LoginPage = () => {
     useEffect(() => {
         const checkForExistingAuth = async () => {
             console.log('Checking for existing authentication on page load...');
+            console.log('🔍 Current account on mount:', currentAccount);
+            console.log('🔍 Is authenticated on mount:', isAuthenticated);
 
             // Only run if not already authenticated
             if (isAuthenticated) {
@@ -432,6 +434,12 @@ const LoginPage = () => {
         }
 
         try {
+            console.log('🔍 Current account before Enoki connection:', currentAccount);
+            console.log(
+                '🔍 Available wallets:',
+                wallets.map((w) => w.name)
+            );
+
             connect(
                 { wallet: googleWallet },
                 {
@@ -664,10 +672,17 @@ const LoginPage = () => {
                                             const jwtToken =
                                                 googleUserInfo.jwtToken || googleUserInfo.idToken;
 
+                                            // Check if we have a current account (wallet might be connected despite popup failure)
+                                            const walletAddress = currentAccount?.address;
+                                            console.log(
+                                                '🔍 Fallback: Current wallet address:',
+                                                walletAddress
+                                            );
+
                                             const authResponse =
                                                 await enokiAuthService.authenticateWithGoogleJWT(
-                                                    jwtToken
-                                                    // No wallet address since Enoki failed
+                                                    jwtToken,
+                                                    walletAddress // Include wallet address if available
                                                 );
 
                                             console.log(
@@ -716,13 +731,21 @@ const LoginPage = () => {
                                         '⚠️ Fallback: Using frontend-only authentication (no backend tokens)'
                                     );
 
-                                    // Create user object without wallet connection
+                                    // Check if we have a current account (wallet might be connected despite popup failure)
+                                    const walletAddress = currentAccount?.address;
+                                    console.log(
+                                        '🔍 Fallback: Current wallet address for frontend-only auth:',
+                                        walletAddress
+                                    );
+
+                                    // Create user object with wallet connection if available
                                     const user = {
                                         id: `google-${googleUserInfo.sub}`,
                                         firstName: googleUserInfo.firstName,
                                         lastName: googleUserInfo.lastName,
                                         email: googleUserInfo.email,
                                         avatar: googleUserInfo.avatar,
+                                        walletAddress: walletAddress, // Include wallet address if available
                                     };
 
                                     setUser(user);

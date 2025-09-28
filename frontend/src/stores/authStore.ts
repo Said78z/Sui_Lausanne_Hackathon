@@ -111,6 +111,36 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         console.log('AuthStore: Initializing auth...');
         const authState = initializeAuthState();
         set(authState);
+
+        // If we have tokens but no user, try to decode user from access token
+        if (authState.isAuthenticated && authState.accessToken && !get().user) {
+            console.log('AuthStore: Found tokens but no user, attempting to decode from JWT...');
+            try {
+                // Decode JWT to get user info
+                const payload = authState.accessToken.split('.')[1];
+                const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+                const decodedPayload = atob(paddedPayload.replace(/-/g, '+').replace(/_/g, '/'));
+                const userData = JSON.parse(decodedPayload);
+
+                const user = {
+                    id: userData.id,
+                    email: userData.email,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    roles: userData.roles ? JSON.parse(userData.roles) : ['user'],
+                    isVerified: userData.isVerified,
+                    provider: userData.provider,
+                    avatar: userData.avatar,
+                    suiAddress: userData.suiAddress,
+                };
+
+                console.log('AuthStore: Restored user from JWT:', user);
+                set({ user });
+            } catch (error) {
+                console.error('AuthStore: Failed to decode user from JWT:', error);
+            }
+        }
+
         console.log('AuthStore: Auth initialized', authState);
     },
 
