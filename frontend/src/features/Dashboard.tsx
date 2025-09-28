@@ -1,6 +1,5 @@
 import { useCategories, useDashboardData, useUpcomingEvents } from '@/api/queries/dashboardQueries';
 
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -14,6 +13,7 @@ import {
     Moon,
     Plus,
     QrCode,
+    RefreshCw,
     Search,
     Sparkles,
     Sun,
@@ -30,25 +30,8 @@ export default function Dashboard() {
     const { user, isAuthenticated } = useAuthStore();
     const navigate = useNavigate();
 
-    // Redirect to login if not authenticated
-    useEffect(() => {
-        if (!isAuthenticated) {
-            console.log('Dashboard: User not authenticated, redirecting to login');
-            navigate('/login');
-        }
-    }, [isAuthenticated, navigate]);
-
-    // Show loading if not authenticated (while redirecting)
-    if (!isAuthenticated) {
-        return (
-            <div className="flex h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-                <div className="text-center">
-                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-indigo-600" />
-                    <p className="mt-2 text-sm text-gray-600">Redirecting to login...</p>
-                </div>
-            </div>
-        );
-    }
+    // Note: Authentication is optional for viewing events and categories
+    // Only redirect to login if trying to create events or access user-specific features
 
     // Fetch data from backend (only if authenticated)
     const {
@@ -61,13 +44,14 @@ export default function Dashboard() {
         data: upcomingEventsData,
         isLoading: isEventsLoading,
         error: eventsError,
-    } = useUpcomingEvents(4, { enabled: isAuthenticated });
+        refetch: refetchEvents,
+    } = useUpcomingEvents(4, { enabled: true });
 
     const {
         data: categoriesData,
         isLoading: isCategoriesLoading,
         error: categoriesError,
-    } = useCategories({ enabled: isAuthenticated });
+    } = useCategories({ enabled: true });
 
     // Process data or use fallbacks
     const quickStats = dashboardData?.data?.stats
@@ -138,11 +122,17 @@ export default function Dashboard() {
 
     // Debug logging to see what data we're getting
     console.log('🔍 Dashboard Data Debug:');
+    console.log('🔍 isAuthenticated:', isAuthenticated);
+    console.log('🔍 user:', user);
     console.log('🔍 upcomingEventsData:', upcomingEventsData);
     console.log('🔍 upcomingEvents:', upcomingEvents);
     console.log('🔍 categoriesData:', categoriesData);
     console.log('🔍 categories:', categories);
     console.log('🔍 dashboardData:', dashboardData);
+    console.log('🔍 isEventsLoading:', isEventsLoading);
+    console.log('🔍 eventsError:', eventsError);
+    console.log('🔍 isCategoriesLoading:', isCategoriesLoading);
+    console.log('🔍 categoriesError:', categoriesError);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -217,11 +207,17 @@ export default function Dashboard() {
                             </span>
 
                             <Button
-                                onClick={() => navigate('/dashboard/create-event')}
+                                onClick={() => {
+                                    if (!isAuthenticated) {
+                                        navigate('/login');
+                                    } else {
+                                        navigate('/dashboard/create-event');
+                                    }
+                                }}
                                 className="rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-2 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-blue-600 hover:to-cyan-500 hover:shadow-blue-500/25"
                             >
                                 <Plus className="mr-2 h-4 w-4" />
-                                Create Event
+                                {isAuthenticated ? 'Create Event' : 'Login to Create Event'}
                             </Button>
 
                             <button className="p-2 text-gray-300 transition-colors hover:text-white">
@@ -311,9 +307,26 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
                     {/* Timeline - Events List */}
                     <div className="lg:col-span-2">
-                        <div className="mb-8">
-                            <h2 className="mb-2 text-2xl font-light text-white">Upcoming Events</h2>
-                            <p className="text-gray-400">Don't miss these important dates</p>
+                        <div className="mb-8 flex items-center justify-between">
+                            <div>
+                                <h2 className="mb-2 text-2xl font-light text-white">
+                                    Upcoming Events
+                                </h2>
+                                <p className="text-gray-400">Don't miss these important dates</p>
+                            </div>
+                            <button
+                                onClick={() => {
+                                    console.log('🔄 Manual refresh triggered');
+                                    refetchEvents();
+                                }}
+                                className="flex items-center space-x-2 rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white transition-colors hover:bg-white/10"
+                                disabled={isEventsLoading}
+                            >
+                                <RefreshCw
+                                    className={`h-4 w-4 ${isEventsLoading ? 'animate-spin' : ''}`}
+                                />
+                                <span>Refresh</span>
+                            </button>
                         </div>
 
                         <div className="space-y-8">
@@ -500,11 +513,17 @@ export default function Dashboard() {
                             <h3 className="mb-6 text-xl font-light text-white">Quick Actions</h3>
                             <div className="space-y-3">
                                 <Button
-                                    onClick={() => navigate('/dashboard/create-event')}
+                                    onClick={() => {
+                                        if (!isAuthenticated) {
+                                            navigate('/login');
+                                        } else {
+                                            navigate('/dashboard/create-event');
+                                        }
+                                    }}
                                     className="h-14 w-full justify-start rounded-xl border-0 bg-gradient-to-r from-blue-500 to-cyan-400 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-blue-600 hover:to-cyan-500 hover:shadow-blue-500/25"
                                 >
                                     <Plus className="mr-3 h-6 w-6" />
-                                    Create Event
+                                    {isAuthenticated ? 'Create Event' : 'Login to Create Event'}
                                 </Button>
                                 <Button
                                     variant="outline"

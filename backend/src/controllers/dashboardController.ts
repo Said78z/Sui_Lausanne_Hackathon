@@ -43,18 +43,32 @@ class DashboardController {
         logger: this.logger,
         handler: async (request, reply) => {
             const limit = request.query.limit ? parseInt(request.query.limit) : 10;
+            console.log('🔍 DashboardController: Getting upcoming events with limit:', limit);
 
             const events = await dashboardService.getUpcomingEvents(limit);
+            console.log('🔍 DashboardController: Retrieved events from service:', events.length);
+
+            const response = {
+                events,
+                total: events.length,
+                page: 1,
+                limit
+            };
+
+            console.log('🔍 DashboardController: Sending response:', {
+                eventsCount: response.events.length,
+                total: response.total,
+                sampleEvent: response.events[0] ? {
+                    id: response.events[0].id,
+                    title: response.events[0].title,
+                    startTime: response.events[0].startTime
+                } : null
+            });
 
             return jsonResponse(
                 reply,
                 'Upcoming events retrieved successfully',
-                {
-                    events,
-                    total: events.length,
-                    page: 1,
-                    limit
-                },
+                response,
                 200
             );
         },

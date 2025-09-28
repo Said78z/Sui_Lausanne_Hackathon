@@ -23,21 +23,19 @@ export async function dashboardRoutes(fastify: FastifyInstance, options: Fastify
     });
 
     // Event Routes
-    // Get upcoming events (requires authentication)
+    // Get upcoming events (public access)
     fastify.get('/events/upcoming', {
         schema: createSwaggerSchema(
             'Get upcoming events',
             [
                 { message: 'Upcoming events retrieved successfully', data: [], status: 200 },
-                { message: 'User not authenticated', data: [], status: 401 },
                 { message: 'Failed to get upcoming events', data: [], status: 500 },
             ],
             null,
-            true,
+            false,
             null,
             ['Dashboard', 'Events']
         ),
-        preHandler: [isAuthenticated],
         handler: dashboardController.getUpcomingEvents,
     });
 
@@ -135,15 +133,13 @@ export async function dashboardRoutes(fastify: FastifyInstance, options: Fastify
             'Get all categories',
             [
                 { message: 'Categories retrieved successfully', data: [], status: 200 },
-                { message: 'User not authenticated', data: [], status: 401 },
                 { message: 'Failed to get categories', data: [], status: 500 },
             ],
             null,
-            true,
+            false,
             null,
             ['Dashboard', 'Categories']
         ),
-        preHandler: [isAuthenticated],
         handler: dashboardController.getCategories,
     });
 

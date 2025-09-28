@@ -29,8 +29,10 @@ export const useUpcomingEvents = (limit = 10, options = {}) => {
     return useQuery({
         queryKey: dashboardKeys.upcomingEvents(limit),
         queryFn: () => dashboardService.getUpcomingEvents(limit),
-        staleTime: 2 * 60 * 1000, // 2 minutes
-        gcTime: 5 * 60 * 1000, // 5 minutes
+        staleTime: 0, // Always fresh - no stale time
+        gcTime: 1 * 60 * 1000, // 1 minute
+        refetchOnWindowFocus: true,
+        refetchOnMount: true,
         ...options,
     });
 };
@@ -72,10 +74,20 @@ export const useCreateEvent = () => {
     return useMutation({
         mutationFn: (eventData: CreateEventDto) => dashboardService.createEvent(eventData),
         onSuccess: () => {
-            // Invalidate and refetch dashboard data and events
-            queryClient.invalidateQueries({ queryKey: dashboardKeys.data() });
-            queryClient.invalidateQueries({ queryKey: dashboardKeys.events() });
-            queryClient.invalidateQueries({ queryKey: dashboardKeys.categories() });
+            console.log('✅ Event created successfully, invalidating cache...');
+
+            // Invalidate all dashboard-related queries
+            queryClient.invalidateQueries({ queryKey: dashboardKeys.all });
+
+            // Force refetch upcoming events with specific limits that might be used
+            queryClient.refetchQueries({ queryKey: dashboardKeys.upcomingEvents(4) });
+            queryClient.refetchQueries({ queryKey: dashboardKeys.upcomingEvents(10) });
+            queryClient.refetchQueries({ queryKey: dashboardKeys.upcomingEvents() });
+
+            // Also invalidate categories in case event count changed
+            queryClient.refetchQueries({ queryKey: dashboardKeys.categories() });
+
+            console.log('✅ Cache invalidated and refetch triggered');
         },
         onError: (error) => {
             console.error('Failed to create event:', error);

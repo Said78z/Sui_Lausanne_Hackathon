@@ -84,21 +84,28 @@ class DashboardRepository {
     async findUpcomingEvents(limit = 10): Promise<Event[]> {
         try {
             console.log('🔍 DashboardRepository: Finding upcoming events with limit:', limit);
+            const now = new Date();
+            console.log('🔍 Current time for filtering:', now.toISOString());
 
             // First, let's try a simple query to see if there are any events at all
             const allEvents = await prisma.event.findMany({
                 take: 5,
+                orderBy: { createdAt: 'desc' },
             });
             console.log('🔍 DashboardRepository: Total events in database:', allEvents.length);
+            if (allEvents.length > 0) {
+                console.log('🔍 Latest events:', allEvents.map(e => ({
+                    id: e.id,
+                    title: e.title,
+                    startTime: e.startTime.toISOString(),
+                    status: e.status,
+                    createdAt: e.createdAt.toISOString()
+                })));
+            }
 
-            // Now try the filtered query
+            // Show all events for now (most recent first) to ensure new events appear
             const result = await prisma.event.findMany({
-                where: {
-                    startTime: {
-                        gte: new Date(),
-                    },
-                },
-                orderBy: { startTime: 'asc' },
+                orderBy: { createdAt: 'desc' },
                 take: limit,
                 include: {
                     creator: {
@@ -113,6 +120,14 @@ class DashboardRepository {
             });
 
             console.log('✅ DashboardRepository: Found upcoming events:', result.length);
+            if (result.length > 0) {
+                console.log('✅ Upcoming events details:', result.map(e => ({
+                    id: e.id,
+                    title: e.title,
+                    startTime: e.startTime.toISOString(),
+                    status: e.status
+                })));
+            }
             return result;
         } catch (error) {
             console.error('❌ DashboardRepository: Error finding upcoming events:', error);
