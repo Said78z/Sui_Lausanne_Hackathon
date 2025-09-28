@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Google OAuth Callback</title>
+    </head>
+    <body>
+        <script>
+            try {
+                console.log('OAuth callback page loaded');
+
+                // Extract token from URL hash
+                const hash = window.location.hash.substring(1);
+                const params = new URLSearchParams(hash);
+
+                const idToken = params.get('id_token');
+                const accessToken = params.get('access_token');
+
+                console.log('ID Token found:', !!idToken);
+                console.log('Access Token found:', !!accessToken);
+
+                if (idToken) {
+                    // Decode JWT to get user info
+                    const parts = idToken.split('.');
+                    if (parts.length === 3) {
+                        const payload = parts[1];
+                        const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+                        const decodedPayload = atob(
+                            paddedPayload.replace(/-/g, '+').replace(/_/g, '/')
+                        );
+                        const userInfo = JSON.parse(decodedPayload);
+
+                        console.log('Decoded user info:', userInfo);
+
+                        // Extract user information
+                        const userData = {
+                            firstName:
+                                userInfo.given_name || userInfo.name?.split(' ')[0] || 'User',
+                            lastName:
+                                userInfo.family_name ||
+                                userInfo.name?.split(' ').slice(1).join(' ') ||
+                                '',
+                            email: userInfo.email,
+                            avatar: userInfo.picture,
+                            sub: userInfo.sub,
+                            aud: userInfo.aud,
+                            jwtToken: idToken, // Include the JWT token for backend processing
+                            idToken: idToken, // Also keep as idToken for compatibility
+                        };
+
+                        // Send success message to parent window
+                        window.opener.postMessage(
+                            {
+                                type: 'GOOGLE_AUTH_SUCCESS',
+                                userInfo: userData,
+                            },
+                            window.location.origin
+                        );
+
+                        window.close();
+                    } else {
+                        throw new Error('Invalid JWT format');
+                    }
+                } else {
+                    throw new Error('No ID token found in callback');
+                }
+            } catch (error) {
+                console.error('OAuth callback error:', error);
+
+                // Send error message to parent window
+                window.opener.postMessage(
+                    {
+                        type: 'GOOGLE_AUTH_ERROR',
+                        error: error.message,
+                    },
+                    window.location.origin
+                );
+
+                window.close();
+            }
+        </script>
+    </body>
+</html>

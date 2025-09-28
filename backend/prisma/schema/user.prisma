@@ -3,16 +3,18 @@ model User {
   email                String                      @unique
   firstName            String                      @map("first_name")
   lastName             String                      @map("last_name")
-  roles                Json                        @default("[\"user\"]")
+  roles                Json                        @default("[\"ROLE_USER\"]")
   createdAt            DateTime                    @default(now()) @map("created_at")
   updatedAt            DateTime                    @updatedAt @map("updated_at")
-  tokens               Token[]
-  isVerified           Boolean                     @default(true) // Google users are pre-verified
+  isVerified           Boolean                     @default(true)
   
-  // Google OAuth fields (required since we only use Google)
+  // OAuth fields
   googleId             String                      @unique @map("google_id")
-  avatar               String?                     // Profile picture URL
-  provider             String                      @default("google")
+  avatar               String?
+  provider             String                      @default("enoki-google")
+  
+  // Relations
+  tokens               Token[]
   
   @@map("users")
 }

@@ -1,3 +1,4 @@
+// import { enokiAuthService } from '@/api/enokiAuthService';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -7,11 +8,302 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
+import { useAuthStore } from '@/stores/authStore';
+
+// Function to check for JWT token in URL (after OAuth redirect)
+function checkForJWTInURL(): string | null {
+    try {
+        // Check if we're on a redirect URL with JWT token
+        const urlParams = new URLSearchParams(window.location.search);
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+        // Check for id_token in URL parameters (common OAuth pattern)
+        const idToken = urlParams.get('id_token') || hashParams.get('id_token');
+        if (idToken) {
+            console.log('Found JWT token in URL parameters');
+            return idToken;
+        }
+
+        // Check for access_token
+        const accessToken = urlParams.get('access_token') || hashParams.get('access_token');
+        if (accessToken) {
+            console.log('Found access token in URL parameters');
+            return accessToken;
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error checking URL for JWT:', error);
+        return null;
+    }
+}
+
+// Function to decode JWT and extract user information
+function decodeJWT(token: string): any {
+    try {
+        // JWT has 3 parts separated by dots: header.payload.signature
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            console.error('Invalid JWT format');
+            return null;
+        }
+
+        // Decode the payload (second part)
+        const payload = parts[1];
+        // Add padding if needed for base64 decoding
+        const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+        const decodedPayload = atob(paddedPayload.replace(/-/g, '+').replace(/_/g, '/'));
+
+        const userInfo = JSON.parse(decodedPayload);
+        console.log('Decoded JWT payload:', userInfo);
+
+        return {
+            firstName: userInfo.given_name || userInfo.name?.split(' ')[0] || 'User',
+            lastName: userInfo.family_name || userInfo.name?.split(' ').slice(1).join(' ') || '',
+            email: userInfo.email,
+            avatar: userInfo.picture,
+            sub: userInfo.sub,
+            aud: userInfo.aud,
+        };
+    } catch (error) {
+        console.error('Error decoding JWT:', error);
+        return null;
+    }
+}
+
+// Function to get user information from various sources - UNUSED
+// async function getUserInfo(walletAddress: string): Promise<any> { ... }
+
+// Function to get fresh Google user info via direct OAuth popup
+async function getGoogleUserInfoDirect(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+        if (!clientId) {
+            reject(new Error('Google Client ID not configured'));
+            return;
+        }
+
+        console.log('🔄 Opening Google OAuth popup for fresh user info...');
+
+        // Create OAuth URL for popup with proper callback URL
+        const scope = 'openid profile email';
+        const responseType = 'token id_token';
+        const redirectUri = `${window.location.origin}/auth/callback.html`;
+        const nonce = Math.random().toString(36).substring(2, 15);
+        const state = Math.random().toString(36).substring(2, 15);
+
+        const authUrl =
+            `https://accounts.google.com/o/oauth2/v2/auth?` +
+            `client_id=${encodeURIComponent(clientId)}&` +
+            `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+            `scope=${encodeURIComponent(scope)}&` +
+            `response_type=${encodeURIComponent(responseType)}&` +
+            `nonce=${encodeURIComponent(nonce)}&` +
+            `state=${encodeURIComponent(state)}`;
+
+        const popup = window.open(
+            authUrl,
+            'googleAuthDirect',
+            'width=500,height=600,scrollbars=yes,resizable=yes'
+        );
+
+        if (!popup) {
+            reject(new Error('Popup blocked'));
+            return;
+        }
+
+        // Listen for messages from the callback page
+        const messageListener = (event: MessageEvent) => {
+            // Verify origin for security
+            if (event.origin !== window.location.origin) {
+                return;
+            }
+
+            if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+                console.log('✅ Received fresh Google auth success:', event.data.userInfo);
+                window.removeEventListener('message', messageListener);
+                resolve(event.data.userInfo);
+            } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+                console.error('❌ Received fresh Google auth error:', event.data.error);
+                window.removeEventListener('message', messageListener);
+                reject(new Error(event.data.error));
+            }
+        };
+
+        window.addEventListener('message', messageListener);
+
+        // Check if popup is closed manually
+        const checkPopup = setInterval(() => {
+            if (popup.closed) {
+                clearInterval(checkPopup);
+                window.removeEventListener('message', messageListener);
+                reject(new Error('Popup closed by user'));
+            }
+        }, 1000);
+
+        // Timeout after 30 seconds
+        setTimeout(() => {
+            if (!popup.closed) {
+                popup.close();
+            }
+            clearInterval(checkPopup);
+            window.removeEventListener('message', messageListener);
+            reject(new Error('Authentication timeout'));
+        }, 30000);
+    });
+}
+
+// Function to extract Google user info from Enoki zkLogin JWT token
+function extractGoogleUserFromEnokiJWT(walletAccount: any): any | null {
+    try {
+        console.log('🔍 Attempting to extract Google user info from Enoki wallet...');
+        console.log('🔍 Full wallet account structure:', walletAccount);
+        console.log('🔍 Wallet account keys:', Object.keys(walletAccount));
+
+        // Deep inspection of the wallet account structure
+        if (walletAccount.zkLoginAccount) {
+            console.log('🔍 zkLoginAccount found:', walletAccount.zkLoginAccount);
+            console.log('🔍 zkLoginAccount keys:', Object.keys(walletAccount.zkLoginAccount));
+        }
+
+        // Try different possible locations for the JWT token in Enoki
+        let jwtToken = null;
+
+        // Check various possible locations for the JWT
+        const possibleJWTLocations = [
+            'zkLoginAccount.jwt',
+            'zkLoginAccount.idToken',
+            'zkLoginAccount.credential',
+            'jwt',
+            'idToken',
+            'credential',
+            'token',
+            'authToken',
+            'googleJWT',
+            'zkLogin.jwt',
+            'zkLogin.idToken',
+            'account.jwt',
+            'account.idToken',
+        ];
+
+        for (const location of possibleJWTLocations) {
+            const pathParts = location.split('.');
+            let current = walletAccount;
+
+            for (const part of pathParts) {
+                if (current && typeof current === 'object' && part in current) {
+                    current = current[part];
+                } else {
+                    current = null;
+                    break;
+                }
+            }
+
+            if (current && typeof current === 'string' && current.includes('.')) {
+                jwtToken = current;
+                console.log(`✅ Found JWT token at: ${location}`);
+                break;
+            }
+        }
+
+        // Also try to find any string that looks like a JWT (has 3 parts separated by dots)
+        if (!jwtToken) {
+            console.log('🔍 Searching for JWT-like strings in the entire wallet object...');
+            const searchForJWT = (obj: any, path = ''): string | null => {
+                if (typeof obj === 'string' && obj.split('.').length === 3) {
+                    console.log(`🎯 Found potential JWT at path: ${path}`);
+                    return obj;
+                }
+
+                if (typeof obj === 'object' && obj !== null) {
+                    for (const [key, value] of Object.entries(obj)) {
+                        const result = searchForJWT(value, path ? `${path}.${key}` : key);
+                        if (result) return result;
+                    }
+                }
+
+                return null;
+            };
+
+            jwtToken = searchForJWT(walletAccount);
+        }
+
+        if (!jwtToken) {
+            console.log('❌ No JWT token found in wallet account');
+            console.log(
+                '🔍 Available data in wallet account:',
+                JSON.stringify(walletAccount, null, 2)
+            );
+            return null;
+        }
+
+        console.log('🎯 Found JWT token, attempting to decode...');
+        console.log('🎯 JWT token preview:', jwtToken.substring(0, 50) + '...');
+
+        // Decode the JWT token (it's base64 encoded)
+        const parts = jwtToken.split('.');
+        if (parts.length !== 3) {
+            console.log('❌ Invalid JWT format - expected 3 parts, got:', parts.length);
+            return null;
+        }
+
+        // Decode the payload (second part of JWT)
+        const payload = parts[1];
+        const paddedPayload = payload + '='.repeat((4 - (payload.length % 4)) % 4);
+        const decodedPayload = atob(paddedPayload.replace(/-/g, '+').replace(/_/g, '/'));
+        const jwtData = JSON.parse(decodedPayload);
+
+        console.log('🎉 Successfully decoded JWT payload:', jwtData);
+        console.log('🔍 Available JWT claims:', Object.keys(jwtData));
+        console.log('🔍 JWT payload details:', {
+            sub: jwtData.sub,
+            aud: jwtData.aud,
+            iss: jwtData.iss,
+            email: jwtData.email,
+            name: jwtData.name,
+            given_name: jwtData.given_name,
+            family_name: jwtData.family_name,
+            picture: jwtData.picture,
+            email_verified: jwtData.email_verified,
+        });
+
+        // Check if we have the minimum required user data
+        const hasUserData = jwtData.email || jwtData.name || jwtData.given_name;
+
+        if (!hasUserData) {
+            console.warn(
+                '⚠️ JWT contains minimal data - Enoki may be filtering user details for privacy'
+            );
+            console.log('🔍 This is common in zero-knowledge implementations');
+            console.log('🔍 Available claims in JWT:', Object.keys(jwtData));
+            return null; // Return null to indicate no user data available
+        }
+
+        // Extract Google user information from JWT
+        const googleUserInfo = {
+            firstName: jwtData.given_name || jwtData.name?.split(' ')[0] || 'User',
+            lastName: jwtData.family_name || jwtData.name?.split(' ').slice(1).join(' ') || '',
+            email: jwtData.email || `user@${walletAccount.address.slice(2, 8)}.sui`,
+            avatar: jwtData.picture || null,
+            name: jwtData.name || 'User',
+            sub: jwtData.sub,
+            aud: jwtData.aud,
+        };
+
+        console.log('✅ Extracted Google user info from Enoki JWT:', googleUserInfo);
+        return googleUserInfo;
+    } catch (error) {
+        console.error('❌ Failed to extract Google user info from JWT:', error);
+        return null;
+    }
+}
+
 const LoginPage = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const currentAccount = useCurrentAccount();
     const { mutate: connect } = useConnectWallet();
+    const { setUser, setIsAuthenticated, isAuthenticated } = useAuthStore();
 
     // Get available Enoki wallets
     const wallets = useWallets();
@@ -23,12 +315,68 @@ const LoginPage = () => {
             wallet.name?.toLowerCase().includes('enoki')
     );
 
-    // Handle successful connection - redirect to dashboard
+    // Handle successful connection - redirect to dashboard (only if authenticated)
     useEffect(() => {
-        if (currentAccount) {
+        if (currentAccount && isAuthenticated) {
             navigate('/dashboard');
         }
-    }, [currentAccount, navigate]);
+    }, [currentAccount, isAuthenticated, navigate]);
+
+    // Check for JWT token on component mount (in case user is returning from OAuth redirect)
+    useEffect(() => {
+        const checkForExistingAuth = async () => {
+            console.log('Checking for existing authentication on page load...');
+
+            // Only run if not already authenticated
+            if (isAuthenticated) {
+                console.log('User already authenticated, skipping JWT check');
+                return;
+            }
+
+            // Check if there's a JWT in the URL (OAuth redirect)
+            const urlJWT = checkForJWTInURL();
+            if (urlJWT) {
+                console.log('Found JWT in URL on page load, processing...');
+                const userInfo = decodeJWT(urlJWT);
+                if (userInfo) {
+                    console.log('Decoded user info from URL JWT:', userInfo);
+
+                    // Store the JWT for later use
+                    sessionStorage.setItem('enoki_jwt', urlJWT);
+
+                    // Create user object
+                    const user = {
+                        id: userInfo.sub || 'unknown',
+                        firstName: userInfo.firstName,
+                        lastName: userInfo.lastName,
+                        email: userInfo.email,
+                        avatar: userInfo.avatar,
+                    };
+
+                    setUser(user);
+                    setIsAuthenticated(true);
+                    console.log('User authenticated from URL JWT:', user);
+
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+        };
+
+        checkForExistingAuth();
+    }, []); // Empty dependency array - only run once on mount
+
+    // Function to clear stored Google user info (for testing/debugging)
+    const clearStoredGoogleInfo = () => {
+        localStorage.removeItem('real_google_user');
+        sessionStorage.removeItem('real_google_user');
+        console.log('🗑️ Cleared stored Google user info');
+    };
+
+    // Make clear function available in console for debugging
+    useEffect(() => {
+        (window as any).clearStoredGoogleInfo = clearStoredGoogleInfo;
+    }, []);
 
     const handleGoogleLogin = async () => {
         if (!googleWallet) {
@@ -37,17 +385,155 @@ const LoginPage = () => {
         }
 
         setIsLoading(true);
+
+        console.log('🚀 Starting REAL zkLogin authentication with user data capture...');
+
+        // REAL FIX: Get Google user info BEFORE Enoki processes it
+        try {
+            console.log('📋 Step 1: Getting fresh Google user info via direct OAuth...');
+            const googleUserInfo = await getGoogleUserInfoDirect();
+
+            if (googleUserInfo) {
+                console.log('✅ Step 1 SUCCESS: Got real Google user info:', googleUserInfo);
+
+                // Store the real user info for use after Enoki connection
+                sessionStorage.setItem('fresh_google_user', JSON.stringify(googleUserInfo));
+                localStorage.setItem('real_google_user', JSON.stringify(googleUserInfo));
+
+                console.log('📋 Step 2: Now connecting Enoki wallet with zkLogin...');
+
+                // Small delay to ensure popup is fully closed
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+            } else {
+                console.warn('⚠️ Could not get Google user info, proceeding with wallet-only auth');
+            }
+        } catch (oauthError) {
+            console.warn('⚠️ Direct Google OAuth failed, proceeding with Enoki-only:', oauthError);
+        }
+
         try {
             connect(
                 { wallet: googleWallet },
                 {
-                    onSuccess: () => {
-                        console.log('Google zkLogin authentication successful');
-                        // Navigation will be handled by useEffect when currentAccount updates
+                    onSuccess: async (result) => {
+                        console.log('Google zkLogin authentication successful', result);
+                        console.log('Connection result structure:', {
+                            accounts: result.accounts,
+                            accountsLength: result.accounts?.length,
+                            firstAccount: result.accounts?.[0],
+                            firstAccountKeys: result.accounts?.[0]
+                                ? Object.keys(result.accounts[0])
+                                : 'no first account',
+                        });
+
+                        try {
+                            const walletAccount = result.accounts?.[0];
+                            if (!walletAccount) {
+                                console.error('❌ No wallet account found in result');
+                                setIsLoading(false);
+                                return;
+                            }
+
+                            console.log('✅ Wallet connected:', walletAccount.address);
+
+                            console.log('📋 Step 3: Processing authentication result...');
+
+                            // REAL FIX: Prioritize fresh Google user info from Step 1
+                            let googleUserInfo = null;
+
+                            // First, check for fresh Google user info from our direct OAuth (Step 1)
+                            const freshGoogleUser = sessionStorage.getItem('fresh_google_user');
+                            if (freshGoogleUser) {
+                                try {
+                                    googleUserInfo = JSON.parse(freshGoogleUser);
+                                    console.log(
+                                        '✅ Step 3: Using FRESH Google user info from Step 1:',
+                                        googleUserInfo
+                                    );
+
+                                    // Clean up the temporary storage
+                                    sessionStorage.removeItem('fresh_google_user');
+                                } catch (error) {
+                                    console.error('Failed to parse fresh Google user info:', error);
+                                }
+                            }
+
+                            // Fallback 1: Try to extract from Enoki JWT (unlikely to work due to privacy filtering)
+                            if (!googleUserInfo) {
+                                console.log('📋 Fallback 1: Trying to extract from Enoki JWT...');
+                                googleUserInfo = extractGoogleUserFromEnokiJWT(walletAccount);
+                            }
+
+                            // Fallback 2: Check stored user info from previous sessions
+                            if (!googleUserInfo) {
+                                console.log('📋 Fallback 2: Checking stored user info...');
+                                const storedGoogleUser = localStorage.getItem('real_google_user');
+                                if (storedGoogleUser) {
+                                    try {
+                                        googleUserInfo = JSON.parse(storedGoogleUser);
+                                        console.log(
+                                            '✅ Using stored Google user info:',
+                                            googleUserInfo
+                                        );
+                                    } catch (error) {
+                                        console.error(
+                                            'Failed to parse stored Google user info:',
+                                            error
+                                        );
+                                    }
+                                }
+                            }
+
+                            let user;
+                            if (googleUserInfo) {
+                                // Create user with real Google information
+                                user = {
+                                    id: walletAccount.address,
+                                    firstName: googleUserInfo.firstName,
+                                    lastName: googleUserInfo.lastName,
+                                    email: googleUserInfo.email,
+                                    avatar: googleUserInfo.avatar,
+                                };
+                                console.log('🎉 Created user with REAL Google info:', user);
+                            } else {
+                                // Fallback to enhanced wallet-based profile
+                                const addressShort = walletAccount.address.slice(2, 8);
+                                user = {
+                                    id: walletAccount.address,
+                                    firstName: 'Wallet',
+                                    lastName: `User #${addressShort}`,
+                                    email: `wallet.${addressShort}@sui.network`,
+                                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${walletAccount.address}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`,
+                                };
+                                console.warn(
+                                    '⚠️ Using wallet-based profile - Enoki may be filtering user data for privacy'
+                                );
+                                console.log('💡 This is common in zero-knowledge implementations');
+                            }
+
+                            // Add wallet address as a separate property for our internal use
+                            (user as any).walletAddress = walletAccount.address;
+
+                            // Set user and authenticate
+                            setUser(user);
+                            setIsAuthenticated(true);
+                            setIsLoading(false);
+
+                            console.log('✅ Authentication completed successfully!');
+
+                            // Navigate to dashboard
+                            navigate('/dashboard');
+                        } catch (error) {
+                            console.error('❌ Error processing authentication result:', error);
+                            setIsLoading(false);
+                        }
                     },
                     onError: (error) => {
-                        console.error('Google login failed:', error);
+                        console.error('❌ Enoki zkLogin authentication failed:', error);
                         setIsLoading(false);
+
+                        // Show error message to user
+                        alert('Authentication failed. Please try again.');
                     },
                 }
             );

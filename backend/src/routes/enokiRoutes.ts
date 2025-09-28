@@ -52,4 +52,7 @@ export async function enokiRoutes(fastify: FastifyInstance, options: FastifyPlug
         ),
         handler: enokiController.executeTransaction,
     });
+
+    // Note: User authentication with Enoki has been moved to /api/users/authenticate-enoki
+    // This route is deprecated
 }
