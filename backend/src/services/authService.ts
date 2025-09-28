@@ -184,14 +184,19 @@ class AuthService {
     async authenticateGoogleUser(profile: GoogleProfile): Promise<User> {
         try {
             this.logger.info('Authenticating Google user', { googleId: profile.id });
+            console.log('🔍 AuthenticateGoogleUser called with profile:', profile);
 
             const email = profile.emails[0]?.value;
             if (!email) {
+                console.error('❌ No email found in Google profile');
                 throw new Error('No email found in Google profile');
             }
+            console.log('✅ Email extracted:', email);
 
             // Check if user exists by Google ID
+            console.log('🔍 Looking for existing user with Google ID:', profile.id);
             let user = await authRepository.findByGoogleId(profile.id);
+            console.log('🔍 Existing user found:', user ? 'YES' : 'NO');
 
             if (user) {
                 // Update user info in case it changed
@@ -208,6 +213,14 @@ class AuthService {
 
 
             // Create new user with Google OAuth
+            console.log('🔍 Creating new Google user with data:', {
+                googleId: profile.id,
+                email,
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                avatar: profile.photos[0]?.value,
+            });
+
             user = await authRepository.createGoogleUser({
                 googleId: profile.id,
                 email,
@@ -216,6 +229,7 @@ class AuthService {
                 avatar: profile.photos[0]?.value,
             });
 
+            console.log('✅ New Google user created:', user);
             this.logger.info('New Google user created', { userId: user.id });
             return user;
         } catch (error) {
@@ -284,6 +298,7 @@ class AuthService {
             return profile;
         } catch (error) {
             this.logger.error('Error processing Google JWT:', error);
+            console.error('❌ JWT Processing Error:', error.message);
             return null;
         }
     }
@@ -300,21 +315,29 @@ class AuthService {
     ): Promise<{ user: User; accessToken: string; refreshToken: string } | null> {
         try {
             this.logger.info('Authenticating with Google JWT', { hasWallet: !!walletAddress });
+            console.log('🔍 JWT Token received:', jwtToken.substring(0, 50) + '...');
 
             // Process the JWT token
             const profile = await this.processGoogleJWT(jwtToken);
+            console.log('🔍 Processed profile:', profile);
             if (!profile) {
+                console.error('❌ Failed to process Google JWT token');
                 throw new Error('Failed to process Google JWT token');
             }
 
             // Authenticate or create user
+            console.log('🔍 About to authenticate Google user with profile:', profile);
             let user = await this.authenticateGoogleUser(profile);
+            console.log('✅ User authenticated/created:', user);
 
             // If wallet address is provided, update user with wallet info
             if (walletAddress && user.id) {
+                console.log('🔍 Updating user with wallet address:', walletAddress);
                 user = await authRepository.updateUser(user.id, {
-                    // Add wallet address if needed in the future
+                    suiAddress: walletAddress,
                 });
+                console.log('✅ User updated with wallet address:', user);
+                this.logger.info('Updated user with wallet address', { userId: user.id, walletAddress });
             }
 
             this.logger.info('Google JWT authentication successful', { userId: user.id });
