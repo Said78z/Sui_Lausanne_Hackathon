@@ -92,6 +92,40 @@ class UserController {
             }
         },
     });
+
+    /**
+     * Get user profile statistics
+     */
+    public getUserProfileStats = asyncHandler(async (request: FastifyRequest, reply: FastifyReply) => {
+        try {
+            const userId = (request as any).user?.id;
+
+            if (!userId) {
+                return jsonResponse(reply, 'User not authenticated', null, 401);
+            }
+
+            this.logger.info('Getting profile stats for user:', userId);
+            const stats = await userService.getUserProfileStats(userId);
+
+            return jsonResponse(
+                reply,
+                'Profile statistics retrieved successfully',
+                { stats },
+                200
+            );
+        } catch (error) {
+            this.logger.error('Error getting profile stats:', error);
+            return jsonResponse(
+                reply,
+                'Failed to get profile statistics',
+                {
+                    error: 'Failed to get profile statistics',
+                    details: error instanceof Error ? error.message : 'Unknown error',
+                },
+                500
+            );
+        }
+    });
 }
 
 export const userController = new UserController();

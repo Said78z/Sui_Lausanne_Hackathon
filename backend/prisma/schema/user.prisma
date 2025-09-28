@@ -9,12 +9,16 @@ model User {
   isVerified           Boolean                     @default(true)
   
   // OAuth fields
-  googleId             String                      @unique @map("google_id")
+  googleId             String?                     @unique @map("google_id")
   avatar               String?
   provider             String                      @default("enoki-google")
   
+  // Blockchain fields
+  suiAddress           String?                     @map("sui_address")
+  
   // Relations
   tokens               Token[]
+  events               Event[]
   
   @@map("users")
 }

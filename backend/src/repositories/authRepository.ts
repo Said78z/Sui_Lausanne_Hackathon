@@ -60,11 +60,6 @@ class AuthRepository {
                 provider: 'google',
                 roles: JSON.stringify(['user']), // Default role
                 isVerified: true, // Google users are pre-verified
-                // Optional fields are null for OAuth users
-                password: null,
-                phone: null,
-                civility: null,
-                birthDate: null,
             },
         });
     }
@@ -112,6 +107,30 @@ class AuthRepository {
                 updatedAt: new Date(),
             },
         });
+    }
+
+    /**
+     * Update user data
+     * @param userId - User ID
+     * @param data - Data to update
+     * @returns Updated user
+     */
+    async updateUser(userId: string, data: Partial<User>): Promise<User> {
+        console.log('🔍 AuthRepository.updateUser called with:', { userId, data });
+        try {
+            const result = await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    ...data,
+                    updatedAt: new Date(),
+                },
+            });
+            console.log('✅ AuthRepository.updateUser successful:', result);
+            return result;
+        } catch (error) {
+            console.error('❌ AuthRepository.updateUser failed:', error);
+            throw error;
+        }
     }
 
 }

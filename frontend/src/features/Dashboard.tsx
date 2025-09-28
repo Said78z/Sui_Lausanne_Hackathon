@@ -1,10 +1,15 @@
+import { useCategories, useDashboardData, useUpcomingEvents } from '@/api/queries/dashboardQueries';
+
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
+    AlertCircle,
     ArrowUpRight,
     BarChart3,
     Bell,
     Calendar,
+    Loader2,
     MapPin,
     Moon,
     Plus,
@@ -17,99 +22,127 @@ import {
 
 import { Button } from '@/components/ui/button';
 
+import { useAuthStore } from '@/stores/authStore';
 import { useThemeStore } from '@/stores/themeStore';
 
 export default function Dashboard() {
     const { theme, toggleTheme } = useThemeStore();
+    const { user, isAuthenticated } = useAuthStore();
     const navigate = useNavigate();
 
-    // Sample data with Luma-style structure
-    const quickStats = [
-        {
-            title: 'Total Events',
-            value: '24',
-            change: '+12%',
-            trend: 'up',
-            color: 'purple',
-        },
-        {
-            title: 'Active Users',
-            value: '1,234',
-            change: '+8%',
-            trend: 'up',
-            color: 'green',
-        },
-        {
-            title: 'This Month',
-            value: '89',
-            change: '+23%',
-            trend: 'up',
-            color: 'orange',
-        },
-        {
-            title: 'Revenue',
-            value: '$12.4k',
-            change: '+15%',
-            trend: 'up',
-            color: 'blue',
-        },
-    ];
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!isAuthenticated) {
+            console.log('Dashboard: User not authenticated, redirecting to login');
+            navigate('/login');
+        }
+    }, [isAuthenticated, navigate]);
 
-    const upcomingEvents = [
-        {
-            id: 1,
-            title: 'SUI <> BSA Hackathon 3rd Edition',
-            description: 'BC Building (building of the IC faculty)',
-            time: 'Today, 9:00',
-            status: 'LIVE',
-            attendees: '248',
-            priority: 'high',
-            category: 'Tech',
-            image: '/api/placeholder/80/60',
-        },
-        {
-            id: 2,
-            title: 'Hack Seasons Conference Singapore',
-            description: 'The Westin Singapore',
-            time: '2 Oct, 4:00 - 10:00 GMT+8',
-            status: 'Invited',
-            attendees: '1.4k',
-            priority: 'medium',
-            category: 'Conference',
-            image: '/api/placeholder/80/60',
-        },
-        {
-            id: 3,
-            title: 'EASYCON SINGAPORE',
-            description: 'Maxwell Food Centre',
-            time: '2 Oct, 12:00 - 18:00 GMT+8',
-            status: 'Invited',
-            attendees: '1.1k',
-            priority: 'medium',
-            category: 'Networking',
-            image: '/api/placeholder/80/60',
-        },
-        {
-            id: 4,
-            title: 'NASA Space Apps Challenge - Paris 2025',
-            description: "École Supérieure d'Informatique",
-            time: '4 Oct, 9:00',
-            status: 'Going',
-            attendees: '892',
-            priority: 'high',
-            category: 'Competition',
-            image: '/api/placeholder/80/60',
-        },
-    ];
+    // Show loading if not authenticated (while redirecting)
+    if (!isAuthenticated) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+                <div className="text-center">
+                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-indigo-600" />
+                    <p className="mt-2 text-sm text-gray-600">Redirecting to login...</p>
+                </div>
+            </div>
+        );
+    }
 
-    const categories = [
-        { name: 'Tech', count: '3K Events', icon: '💻', color: 'purple' },
-        { name: 'Food & Drink', count: '134 Events', icon: '🍽️', color: 'orange' },
-        { name: 'AI', count: '2K Events', icon: '🤖', color: 'blue' },
-        { name: 'Arts & Culture', count: '1K Events', icon: '🎨', color: 'green' },
-        { name: 'Climate', count: '822 Events', icon: '🌱', color: 'emerald' },
-        { name: 'Fitness', count: '947 Events', icon: '💪', color: 'red' },
-    ];
+    // Fetch data from backend (only if authenticated)
+    const {
+        data: dashboardData,
+        isLoading: isDashboardLoading,
+        error: dashboardError,
+    } = useDashboardData({ enabled: isAuthenticated });
+
+    const {
+        data: upcomingEventsData,
+        isLoading: isEventsLoading,
+        error: eventsError,
+    } = useUpcomingEvents(4, { enabled: isAuthenticated });
+
+    const {
+        data: categoriesData,
+        isLoading: isCategoriesLoading,
+        error: categoriesError,
+    } = useCategories({ enabled: isAuthenticated });
+
+    // Process data or use fallbacks
+    const quickStats = dashboardData?.data?.stats
+        ? [
+              {
+                  title: 'Total Events',
+                  value: dashboardData.data.stats.totalEvents.value.toString(),
+                  change: dashboardData.data.stats.totalEvents.change,
+                  trend: dashboardData.data.stats.totalEvents.trend,
+                  color: 'purple',
+              },
+              {
+                  title: 'Active Users',
+                  value: dashboardData.data.stats.activeUsers.value.toString(),
+                  change: dashboardData.data.stats.activeUsers.change,
+                  trend: dashboardData.data.stats.activeUsers.trend,
+                  color: 'green',
+              },
+              {
+                  title: 'This Month',
+                  value: dashboardData.data.stats.thisMonth.value.toString(),
+                  change: dashboardData.data.stats.thisMonth.change,
+                  trend: dashboardData.data.stats.thisMonth.trend,
+                  color: 'orange',
+              },
+              {
+                  title: 'Revenue',
+                  value: dashboardData.data.stats.revenue.value,
+                  change: dashboardData.data.stats.revenue.change,
+                  trend: dashboardData.data.stats.revenue.trend,
+                  color: 'blue',
+              },
+          ]
+        : [
+              // Fallback data while loading
+              {
+                  title: 'Total Events',
+                  value: '0',
+                  change: '+0%',
+                  trend: 'stable' as const,
+                  color: 'purple',
+              },
+              {
+                  title: 'Active Users',
+                  value: '0',
+                  change: '+0%',
+                  trend: 'stable' as const,
+                  color: 'green',
+              },
+              {
+                  title: 'This Month',
+                  value: '0',
+                  change: '+0%',
+                  trend: 'stable' as const,
+                  color: 'orange',
+              },
+              {
+                  title: 'Revenue',
+                  value: '$0',
+                  change: '+0%',
+                  trend: 'stable' as const,
+                  color: 'blue',
+              },
+          ];
+
+    const upcomingEvents = upcomingEventsData?.data?.events || [];
+    const categories = categoriesData?.data?.categories || [];
+
+    // Debug logging to see what data we're getting
+    console.log('🔍 Dashboard Data Debug:');
+    console.log('🔍 upcomingEventsData:', upcomingEventsData);
+    console.log('🔍 upcomingEvents:', upcomingEvents);
+    console.log('🔍 categoriesData:', categoriesData);
+    console.log('🔍 categories:', categories);
+    console.log('🔍 dashboardData:', dashboardData);
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -216,7 +249,8 @@ export default function Dashboard() {
                                 className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 text-sm font-semibold text-white transition-transform duration-300 hover:scale-110"
                                 title="View Profile"
                             >
-                                JD
+                                {user?.firstName?.[0]?.toUpperCase() || 'U'}
+                                {user?.lastName?.[0]?.toUpperCase() || ''}
                             </button>
                         </div>
                     </div>
@@ -283,79 +317,125 @@ export default function Dashboard() {
                         </div>
 
                         <div className="space-y-8">
-                            {upcomingEvents.map((event, index) => (
-                                <div key={event.id} className="flex">
-                                    {/* Timeline Date */}
-                                    <div className="mr-8 w-24 flex-shrink-0">
-                                        <div className="text-right">
-                                            <div className="text-sm font-medium text-white">
-                                                {event.time.split(',')[0]}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                {event.time.split(',')[1]?.trim() || ''}
-                                            </div>
-                                        </div>
-                                        {index < upcomingEvents.length - 1 && (
-                                            <div className="ml-auto mt-4 h-16 w-px bg-gray-700"></div>
-                                        )}
-                                    </div>
-
-                                    {/* Event Card */}
-                                    <div className="group flex-1 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:bg-white/10">
-                                        <div className="flex items-start space-x-4">
-                                            {/* Event Image */}
-                                            <div className="flex h-16 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                                                <span className="text-2xl">
-                                                    {event.category === 'Tech'
-                                                        ? '💻'
-                                                        : event.category === 'Conference'
-                                                          ? '🎤'
-                                                          : event.category === 'Networking'
-                                                            ? '🤝'
-                                                            : '🚀'}
-                                                </span>
-                                            </div>
-
-                                            {/* Event Details */}
-                                            <div className="min-w-0 flex-1">
-                                                <div className="mb-3 flex items-start justify-between">
-                                                    <h3 className="text-lg font-semibold leading-tight text-white transition-colors group-hover:text-blue-300">
-                                                        {event.title}
-                                                    </h3>
-                                                    <span
-                                                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(event.status)}`}
-                                                    >
-                                                        {event.status}
-                                                    </span>
-                                                </div>
-
-                                                <div className="mb-3 flex items-center space-x-4 text-sm text-gray-300">
-                                                    <div className="flex items-center space-x-1">
-                                                        <MapPin className="h-4 w-4" />
-                                                        <span>{event.description}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center space-x-2">
-                                                        <Users className="h-4 w-4 text-gray-400" />
-                                                        <span className="text-sm text-gray-300">
-                                                            {event.attendees}
-                                                        </span>
-                                                        <span className="text-gray-500">•</span>
-                                                        <span
-                                                            className={`rounded-full px-2 py-1 text-xs ${getCategoryColor(event.category === 'Tech' ? 'blue' : event.category === 'Conference' ? 'purple' : 'cyan')}`}
-                                                        >
-                                                            {event.category}
-                                                        </span>
-                                                    </div>
-                                                    <ArrowUpRight className="h-4 w-4 text-gray-400 transition-colors group-hover:text-blue-400" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            {isEventsLoading ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <Loader2 className="h-8 w-8 animate-spin text-blue-400" />
+                                    <span className="ml-2 text-gray-400">Loading events...</span>
                                 </div>
-                            ))}
+                            ) : eventsError ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <AlertCircle className="h-8 w-8 text-red-400" />
+                                    <span className="ml-2 text-red-400">Failed to load events</span>
+                                </div>
+                            ) : upcomingEvents.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center py-12">
+                                    <Calendar className="mb-4 h-12 w-12 text-gray-400" />
+                                    <span className="text-lg text-gray-400">
+                                        No upcoming events
+                                    </span>
+                                    <p className="mt-2 text-sm text-gray-500">
+                                        Create your first event to get started!
+                                    </p>
+                                </div>
+                            ) : (
+                                upcomingEvents.map((event, index) => {
+                                    const startDate = new Date(event.startTime);
+                                    const formattedDate = startDate.toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                    });
+                                    const formattedTime = startDate.toLocaleTimeString('en-US', {
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                    });
+
+                                    return (
+                                        <div key={event.id} className="flex">
+                                            {/* Timeline Date */}
+                                            <div className="mr-8 w-24 flex-shrink-0">
+                                                <div className="text-right">
+                                                    <div className="text-sm font-medium text-white">
+                                                        {formattedDate}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500">
+                                                        {formattedTime}
+                                                    </div>
+                                                </div>
+                                                {index < upcomingEvents.length - 1 && (
+                                                    <div className="ml-auto mt-4 h-16 w-px bg-gray-700"></div>
+                                                )}
+                                            </div>
+
+                                            {/* Event Card */}
+                                            <div className="group flex-1 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:bg-white/10">
+                                                <div className="flex items-start space-x-4">
+                                                    {/* Event Image */}
+                                                    <div className="flex h-16 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+                                                        <span className="text-2xl">
+                                                            {event.category === 'Tech' ||
+                                                            event.category === 'tech'
+                                                                ? '💻'
+                                                                : event.category === 'Conference' ||
+                                                                    event.category === 'conference'
+                                                                  ? '🎤'
+                                                                  : event.category ===
+                                                                          'Networking' ||
+                                                                      event.category ===
+                                                                          'networking'
+                                                                    ? '🤝'
+                                                                    : event.category === 'AI' ||
+                                                                        event.category === 'ai'
+                                                                      ? '🤖'
+                                                                      : '🚀'}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Event Details */}
+                                                    <div className="min-w-0 flex-1">
+                                                        <div className="mb-3 flex items-start justify-between">
+                                                            <h3 className="text-lg font-semibold leading-tight text-white transition-colors group-hover:text-blue-300">
+                                                                {event.title}
+                                                            </h3>
+                                                            <span
+                                                                className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${getStatusColor(event.status)}`}
+                                                            >
+                                                                {event.status}
+                                                            </span>
+                                                        </div>
+
+                                                        {event.location && (
+                                                            <div className="mb-3 flex items-center space-x-4 text-sm text-gray-300">
+                                                                <div className="flex items-center space-x-1">
+                                                                    <MapPin className="h-4 w-4" />
+                                                                    <span>{event.location}</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center space-x-2">
+                                                                <Users className="h-4 w-4 text-gray-400" />
+                                                                <span className="text-sm text-gray-300">
+                                                                    {event.attendees}
+                                                                </span>
+                                                                <span className="text-gray-500">
+                                                                    •
+                                                                </span>
+                                                                <span
+                                                                    className={`rounded-full px-2 py-1 text-xs ${getCategoryColor(event.category === 'Tech' || event.category === 'tech' ? 'blue' : event.category === 'Conference' || event.category === 'conference' ? 'purple' : 'cyan')}`}
+                                                                >
+                                                                    {event.category}
+                                                                </span>
+                                                            </div>
+                                                            <ArrowUpRight className="h-4 w-4 text-gray-400 transition-colors group-hover:text-blue-400" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     </div>
 
@@ -367,20 +447,51 @@ export default function Dashboard() {
                                 Browse by Category
                             </h3>
                             <div className="grid grid-cols-2 gap-3">
-                                {categories.map((category) => (
-                                    <div
-                                        key={category.name}
-                                        className="group cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-white/10"
-                                    >
-                                        <div className="mb-2 flex items-center space-x-3">
-                                            <span className="text-lg">{category.icon}</span>
-                                            <span className="text-sm font-medium text-white">
-                                                {category.name}
-                                            </span>
+                                {isCategoriesLoading ? (
+                                    Array.from({ length: 6 }).map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="animate-pulse rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+                                        >
+                                            <div className="mb-2 flex items-center space-x-3">
+                                                <div className="h-4 w-4 rounded bg-gray-600"></div>
+                                                <div className="h-4 w-16 rounded bg-gray-600"></div>
+                                            </div>
+                                            <div className="h-3 w-20 rounded bg-gray-600"></div>
                                         </div>
-                                        <p className="text-xs text-gray-300">{category.count}</p>
+                                    ))
+                                ) : categoriesError ? (
+                                    <div className="col-span-2 flex items-center justify-center py-8">
+                                        <AlertCircle className="h-6 w-6 text-red-400" />
+                                        <span className="ml-2 text-sm text-red-400">
+                                            Failed to load categories
+                                        </span>
                                     </div>
-                                ))}
+                                ) : categories.length === 0 ? (
+                                    <div className="col-span-2 flex flex-col items-center justify-center py-8">
+                                        <span className="text-sm text-gray-400">
+                                            No categories available
+                                        </span>
+                                    </div>
+                                ) : (
+                                    categories.map((category) => (
+                                        <div
+                                            key={category.id}
+                                            className="group cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-white/10"
+                                        >
+                                            <div className="mb-2 flex items-center space-x-3">
+                                                <span className="text-lg">{category.icon}</span>
+                                                <span className="text-sm font-medium text-white">
+                                                    {category.name}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs text-gray-300">
+                                                {category.eventCount} Event
+                                                {category.eventCount !== 1 ? 's' : ''}
+                                            </p>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
 

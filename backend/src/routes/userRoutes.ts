@@ -46,4 +46,22 @@ export async function userRoutes(fastify: FastifyInstance, options: FastifyPlugi
         handler: userController.authenticateWithEnoki,
     });
 
+    // Get user profile statistics
+    fastify.get('/profile/stats', {
+        schema: createSwaggerSchema(
+            'Get user profile statistics including events created, attended, network size, etc.',
+            [
+                { message: 'Profile statistics retrieved successfully', data: [], status: 200 },
+                { message: 'User not authenticated', data: [], status: 401 },
+                { message: 'Failed to get profile statistics', data: [], status: 500 },
+            ],
+            null,
+            true,
+            null,
+            ['Users', 'Profile']
+        ),
+        preHandler: [isAuthenticated],
+        handler: userController.getUserProfileStats,
+    });
+
 }
