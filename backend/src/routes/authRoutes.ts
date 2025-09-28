@@ -36,6 +36,31 @@ export async function authRoutes(fastify: FastifyInstance, options: FastifyPlugi
         handler: authController.googleCallback,
     });
 
+    // JWT Authentication Route (for frontend OAuth)
+    fastify.post('/jwt', {
+        schema: createSwaggerSchema(
+            'Authenticate with Google JWT token from frontend',
+            [
+                { message: 'Authentication successful', data: [], status: 200 },
+                { message: 'JWT token is required', data: [], status: 400 },
+                { message: 'Authentication failed', data: [], status: 401 },
+                { message: 'Authentication error', data: [], status: 500 },
+            ],
+            {
+                type: 'object',
+                required: ['jwtToken'],
+                properties: {
+                    jwtToken: { type: 'string', description: 'Google JWT token from OAuth' },
+                    walletAddress: { type: 'string', description: 'Optional wallet address from Enoki' },
+                },
+            },
+            false,
+            null,
+            ['Authentication', 'JWT']
+        ),
+        handler: authController.authenticateWithJWT,
+    });
+
     // Protected Routes
     fastify.get('/profile', {
         schema: createSwaggerSchema(
