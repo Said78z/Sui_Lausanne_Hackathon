@@ -73,10 +73,14 @@ const CreateEvent = () => {
             }
 
             const result = await createEventMutation.mutateAsync(eventData);
-            console.log('Event creation result:', result);
+            console.log('✅ Event creation result:', result);
 
-            console.log('Event created successfully!');
-            navigate('/dashboard');
+            console.log('✅ Event created successfully! Navigating to dashboard...');
+
+            // Small delay to ensure cache invalidation completes
+            setTimeout(() => {
+                navigate('/dashboard');
+            }, 500);
         } catch (error) {
             console.error('Failed to create event:', error);
             setErrorMessage(

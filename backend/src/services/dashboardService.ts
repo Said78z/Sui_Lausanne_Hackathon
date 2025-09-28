@@ -60,7 +60,15 @@ class DashboardService {
      */
     async getUpcomingEvents(limit = 10): Promise<Event[]> {
         try {
-            return await dashboardRepository.findUpcomingEvents(limit);
+            console.log('🔍 DashboardService: Fetching upcoming events with limit:', limit);
+            const events = await dashboardRepository.findUpcomingEvents(limit);
+            console.log('🔍 DashboardService: Retrieved events from repository:', events.length);
+
+            // Format events for API response
+            const formattedEvents = events.map(this.formatEvent);
+            console.log('🔍 DashboardService: Formatted events:', formattedEvents.length);
+
+            return formattedEvents;
         } catch (error) {
             this.logger.error('Error fetching upcoming events:', error);
             throw new Error('Failed to fetch upcoming events');

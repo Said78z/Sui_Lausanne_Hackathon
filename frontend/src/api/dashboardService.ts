@@ -32,19 +32,29 @@ class DashboardService {
      */
     public async getUpcomingEvents(limit = 10): Promise<EventsResponse> {
         try {
-            console.log('DashboardService: Fetching upcoming events...');
+            console.log('🔍 Frontend DashboardService: Fetching upcoming events with limit:', limit);
 
             const response = await api.fetchRequest(
                 `/api/dashboard/events/upcoming?limit=${limit}`,
                 'GET',
                 null,
-                true
+                false
             );
-            console.log('DashboardService: Upcoming events fetched successfully:', response);
+            console.log('🔍 Frontend DashboardService: Raw API response:', response);
+            console.log('🔍 Frontend DashboardService: Events in response:', response?.events?.length || 0);
+
+            if (response?.events?.length > 0) {
+                console.log('🔍 Frontend DashboardService: Sample event:', {
+                    id: response.events[0].id,
+                    title: response.events[0].title,
+                    startTime: response.events[0].startTime,
+                    status: response.events[0].status
+                });
+            }
 
             return response;
         } catch (error) {
-            console.error('DashboardService: Failed to fetch upcoming events:', error);
+            console.error('❌ Frontend DashboardService: Failed to fetch upcoming events:', error);
             throw error;
         }
     }
@@ -159,7 +169,7 @@ class DashboardService {
         try {
             console.log('DashboardService: Fetching categories...');
 
-            const response = await api.fetchRequest('/api/dashboard/categories', 'GET', null, true);
+            const response = await api.fetchRequest('/api/dashboard/categories', 'GET', null, false);
             console.log('DashboardService: Categories fetched successfully:', response);
 
             return response;
