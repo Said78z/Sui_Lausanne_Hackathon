@@ -194,51 +194,47 @@ class AuthController {
     public authenticateWithJWT = asyncHandler<unknown, unknown, { jwtToken: string; walletAddress?: string }, UserDto>({
         logger: this.logger,
         handler: async (request, reply) => {
-            try {
-                const { jwtToken, walletAddress } = request.body;
+            const { jwtToken, walletAddress } = request.body;
 
-                if (!jwtToken) {
-                    return jsonResponse(reply, 'JWT token is required', {}, 400);
-                }
-
-                this.logger.info('Processing Google JWT authentication', { hasWallet: !!walletAddress });
-
-                // Authenticate with Google JWT
-                const result = await authService.authenticateWithGoogleJWT(jwtToken, walletAddress);
-                if (!result) {
-                    return jsonResponse(reply, 'Authentication failed', {}, 401);
-                }
-
-                // Generate application tokens
-                const tokens = await authService.generateTokens(result.user, request);
-                if (!tokens) {
-                    return jsonResponse(reply, 'Failed to generate tokens', {}, 500);
-                }
-
-                return jsonResponse(
-                    reply,
-                    'Authentication successful',
-                    {
-                        user: {
-                            id: result.user.id,
-                            email: result.user.email,
-                            firstName: result.user.firstName,
-                            lastName: result.user.lastName,
-                            roles: JSON.parse(result.user.roles as string),
-                            isVerified: result.user.isVerified,
-                            provider: result.user.provider,
-                            avatar: result.user.avatar,
-                            walletAddress: walletAddress, // Include wallet address if provided
-                        },
-                        accessToken: tokens.accessToken.token,
-                        refreshToken: tokens.refreshToken.token,
-                    },
-                    200
-                );
-            } catch (error) {
-                this.logger.error('JWT authentication error:', error);
-                return jsonResponse(reply, 'Authentication failed', {}, 500);
+            if (!jwtToken) {
+                return jsonResponse(reply, 'JWT token is required', {}, 400);
             }
+
+            this.logger.info('Processing Google JWT authentication', { hasWallet: !!walletAddress });
+
+            // Authenticate with Google JWT
+            const result = await authService.authenticateWithGoogleJWT(jwtToken, walletAddress);
+            if (!result) {
+                return jsonResponse(reply, 'Authentication failed', {}, 401);
+            }
+
+            // Generate application tokens
+            const tokens = await authService.generateTokens(result.user, request);
+            if (!tokens) {
+                return jsonResponse(reply, 'Failed to generate tokens', {}, 500);
+            }
+
+            return jsonResponse(
+                reply,
+                'Authentication successful',
+                {
+                    user: {
+                        id: result.user.id,
+                        email: result.user.email,
+                        firstName: result.user.firstName,
+                        lastName: result.user.lastName,
+                        roles: JSON.parse(result.user.roles as string),
+                        isVerified: result.user.isVerified,
+                        provider: result.user.provider,
+                        avatar: result.user.avatar,
+                        suiAddress: result.user.suiAddress, // Include stored Sui address
+                        walletAddress: walletAddress, // Include current wallet address if provided
+                    },
+                    accessToken: tokens.accessToken.token,
+                    refreshToken: tokens.refreshToken.token,
+                },
+                200
+            );
         },
     });
 

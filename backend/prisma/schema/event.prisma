@@ -1,0 +1,53 @@
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  location    String?
+  startTime   DateTime
+  endTime     DateTime?
+  status      EventStatus @default(UPCOMING)
+  category    String
+  priority    EventPriority @default(MEDIUM)
+  attendees   Int      @default(0)
+  maxAttendees Int?
+  image       String?
+  
+  // Relations
+  createdBy   String
+  creator     User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@map("events")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  icon        String
+  color       String
+  eventCount  Int      @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  @@map("categories")
+}
+
+enum EventStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+  CANCELLED
+  INVITED
+  GOING
+}
+
+enum EventPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
