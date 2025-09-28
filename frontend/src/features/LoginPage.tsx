@@ -1,9 +1,11 @@
-// import { enokiAuthService } from '@/api/enokiAuthService';
+import { enokiAuthService } from '@/api/enokiAuthService';
+
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useConnectWallet, useCurrentAccount, useWallets } from '@mysten/dapp-kit';
 import { isEnokiWallet } from '@mysten/enoki';
+import Cookies from 'js-cookie';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -303,7 +305,7 @@ const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const currentAccount = useCurrentAccount();
     const { mutate: connect } = useConnectWallet();
-    const { setUser, setIsAuthenticated, isAuthenticated } = useAuthStore();
+    const { setUser, setIsAuthenticated, isAuthenticated, login } = useAuthStore();
 
     // Get available Enoki wallets
     const wallets = useWallets();
@@ -373,9 +375,23 @@ const LoginPage = () => {
         console.log('🗑️ Cleared stored Google user info');
     };
 
-    // Make clear function available in console for debugging
+    // Make debugging functions available in console
     useEffect(() => {
         (window as any).clearStoredGoogleInfo = clearStoredGoogleInfo;
+
+        // Add cookie debugging function
+        (window as any).checkCookies = () => {
+            console.log('🍪 Manual Cookie Check:');
+            console.log('🍪 document.cookie:', document.cookie);
+            console.log('🍪 Cookies.get("accessToken"):', Cookies.get('accessToken'));
+            console.log('🍪 Cookies.get("refreshToken"):', Cookies.get('refreshToken'));
+            console.log('🍪 localStorage:', localStorage);
+            console.log('🍪 sessionStorage:', sessionStorage);
+        };
+
+        console.log(
+            '🍪 Debug functions available: window.clearStoredGoogleInfo(), window.checkCookies()'
+        );
     }, []);
 
     const handleGoogleLogin = async () => {
@@ -402,8 +418,12 @@ const LoginPage = () => {
 
                 console.log('📋 Step 2: Now connecting Enoki wallet with zkLogin...');
 
-                // Small delay to ensure popup is fully closed
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                // Longer delay to ensure popup is fully closed and avoid browser popup blocking
+                console.log('⏳ Waiting 2 seconds to avoid popup conflicts...');
+
+                // Show user feedback during the delay
+                setIsLoading(true);
+                await new Promise((resolve) => setTimeout(resolve, 2000));
             } else {
                 console.warn('⚠️ Could not get Google user info, proceeding with wallet-only auth');
             }
@@ -450,8 +470,90 @@ const LoginPage = () => {
                                         '✅ Step 3: Using FRESH Google user info from Step 1:',
                                         googleUserInfo
                                     );
+                                    console.log('🔍 Available JWT fields:', {
+                                        hasJwtToken: !!googleUserInfo.jwtToken,
+                                        hasIdToken: !!googleUserInfo.idToken,
+                                        jwtTokenLength: googleUserInfo.jwtToken?.length,
+                                        idTokenLength: googleUserInfo.idToken?.length,
+                                    });
 
-                                    // Clean up the temporary storage
+                                    // NEW: Authenticate with backend using Google JWT and wallet address
+                                    if (googleUserInfo.jwtToken || googleUserInfo.idToken) {
+                                        try {
+                                            console.log(
+                                                '🚀 Step 3: Authenticating with BACKEND...'
+                                            );
+                                            const jwtToken =
+                                                googleUserInfo.jwtToken || googleUserInfo.idToken;
+                                            console.log(
+                                                '🔍 Selected JWT token length:',
+                                                jwtToken.length
+                                            );
+
+                                            const authResponse =
+                                                await enokiAuthService.authenticateWithGoogleJWT(
+                                                    jwtToken,
+                                                    walletAccount.address
+                                                );
+
+                                            console.log(
+                                                '✅ Step 3: BACKEND authentication successful:',
+                                                authResponse
+                                            );
+                                            console.log(
+                                                '🔍 Access Token:',
+                                                authResponse.accessToken
+                                            );
+                                            console.log(
+                                                '🔍 Refresh Token:',
+                                                authResponse.refreshToken
+                                            );
+
+                                            // Update auth store with tokens and user data
+                                            if (
+                                                authResponse.accessToken &&
+                                                authResponse.refreshToken
+                                            ) {
+                                                console.log('✅ Storing tokens in auth store...');
+                                                login(
+                                                    authResponse.accessToken,
+                                                    authResponse.refreshToken
+                                                );
+                                                setUser(authResponse.user);
+                                                setIsAuthenticated(true);
+                                                setIsLoading(false);
+
+                                                console.log('✅ Tokens stored successfully!');
+                                            } else {
+                                                console.error(
+                                                    '❌ No tokens received from backend!'
+                                                );
+                                                console.log(
+                                                    '🔍 AuthResponse structure:',
+                                                    Object.keys(authResponse)
+                                                );
+                                            }
+
+                                            // Clean up temporary storage
+                                            sessionStorage.removeItem('fresh_google_user');
+
+                                            console.log(
+                                                '🎉 BACKEND authentication completed successfully!'
+                                            );
+                                            navigate('/dashboard');
+                                            return; // Exit early - backend authentication successful
+                                        } catch (backendError) {
+                                            console.error(
+                                                '❌ Backend authentication failed:',
+                                                backendError
+                                            );
+                                            console.log(
+                                                '📋 Falling back to frontend-only authentication...'
+                                            );
+                                        }
+                                    }
+
+                                    // Clean up the temporary storage (if backend auth wasn't attempted)
                                     sessionStorage.removeItem('fresh_google_user');
                                 } catch (error) {
                                     console.error('Failed to parse fresh Google user info:', error);
@@ -528,12 +630,123 @@ const LoginPage = () => {
                             setIsLoading(false);
                         }
                     },
-                    onError: (error) => {
+                    onError: async (error) => {
                         console.error('❌ Enoki zkLogin authentication failed:', error);
                         setIsLoading(false);
 
+                        // Check if it's a popup blocking issue
+                        if (
+                            error.message?.includes('Failed to open popup') ||
+                            error.message?.includes('popup')
+                        ) {
+                            console.log('🔄 Popup blocked, trying alternative approach...');
+
+                            // Try to use the Google user info we already have
+                            const freshGoogleUser = sessionStorage.getItem('fresh_google_user');
+                            const realGoogleUser = localStorage.getItem('real_google_user');
+
+                            if (freshGoogleUser || realGoogleUser) {
+                                try {
+                                    const googleUserInfo = JSON.parse(
+                                        freshGoogleUser || realGoogleUser
+                                    );
+                                    console.log(
+                                        '✅ Using stored Google user info for authentication:',
+                                        googleUserInfo
+                                    );
+
+                                    // TRY TO AUTHENTICATE WITH BACKEND FIRST (if we have JWT)
+                                    if (googleUserInfo.jwtToken || googleUserInfo.idToken) {
+                                        try {
+                                            console.log(
+                                                '🚀 Fallback: Authenticating with BACKEND using stored JWT...'
+                                            );
+                                            const jwtToken =
+                                                googleUserInfo.jwtToken || googleUserInfo.idToken;
+
+                                            const authResponse =
+                                                await enokiAuthService.authenticateWithGoogleJWT(
+                                                    jwtToken
+                                                    // No wallet address since Enoki failed
+                                                );
+
+                                            console.log(
+                                                '✅ Fallback: BACKEND authentication successful:',
+                                                authResponse
+                                            );
+
+                                            // Update auth store with tokens and user data
+                                            if (
+                                                authResponse.accessToken &&
+                                                authResponse.refreshToken
+                                            ) {
+                                                console.log(
+                                                    '✅ Fallback: Storing tokens in auth store...'
+                                                );
+                                                login(
+                                                    authResponse.accessToken,
+                                                    authResponse.refreshToken
+                                                );
+                                                setUser(authResponse.user);
+                                                setIsAuthenticated(true);
+                                                setIsLoading(false);
+
+                                                console.log(
+                                                    '✅ Fallback: Tokens stored successfully!'
+                                                );
+                                                console.log(
+                                                    '🎉 Fallback: BACKEND authentication completed successfully!'
+                                                );
+                                                navigate('/dashboard');
+                                                return;
+                                            }
+                                        } catch (backendError) {
+                                            console.error(
+                                                '❌ Fallback: Backend authentication failed:',
+                                                backendError
+                                            );
+                                            console.log(
+                                                '📋 Fallback: Proceeding with frontend-only authentication...'
+                                            );
+                                        }
+                                    }
+
+                                    // FALLBACK TO FRONTEND-ONLY (no backend tokens)
+                                    console.log(
+                                        '⚠️ Fallback: Using frontend-only authentication (no backend tokens)'
+                                    );
+
+                                    // Create user object without wallet connection
+                                    const user = {
+                                        id: `google-${googleUserInfo.sub}`,
+                                        firstName: googleUserInfo.firstName,
+                                        lastName: googleUserInfo.lastName,
+                                        email: googleUserInfo.email,
+                                        avatar: googleUserInfo.avatar,
+                                    };
+
+                                    setUser(user);
+                                    setIsAuthenticated(true);
+                                    setIsLoading(false);
+
+                                    console.log(
+                                        '✅ Authentication completed with Google-only (no wallet, no backend tokens)'
+                                    );
+                                    navigate('/dashboard');
+                                    return;
+                                } catch (fallbackError) {
+                                    console.error(
+                                        '❌ Fallback authentication failed:',
+                                        fallbackError
+                                    );
+                                }
+                            }
+                        }
+
                         // Show error message to user
-                        alert('Authentication failed. Please try again.');
+                        alert(
+                            'Authentication failed due to popup blocking. Please disable popup blocker and try again.'
+                        );
                     },
                 }
             );

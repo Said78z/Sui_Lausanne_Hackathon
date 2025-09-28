@@ -46,6 +46,7 @@ class EnokiAuthService {
         try {
             console.log('🚀 NEW EnokiAuthService: Authenticating with Google JWT...');
             console.log('📋 JWT Token length:', jwtToken.length);
+            console.log('📋 JWT Token (first 50 chars):', jwtToken.substring(0, 50) + '...');
             console.log('📋 Wallet address:', walletAddress || 'None');
 
             const response = await api.fetchRequest('/api/auth/jwt', 'POST', {
@@ -54,16 +55,48 @@ class EnokiAuthService {
             });
             console.log('✅ NEW EnokiAuthService: API response:', response);
 
-            if (response.accessToken && response.refreshToken) {
-                // Store tokens in cookies
-                Cookies.set('accessToken', response.accessToken, { expires: 1 });
-                Cookies.set('refreshToken', response.refreshToken, { expires: 30 });
+            // Extract data from backend response structure
+            const { accessToken, refreshToken, user } = response.data || {};
 
-                console.log('✅ NEW EnokiAuthService: Authentication successful, user:', response.user);
-                return response;
+            if (accessToken && refreshToken) {
+                // Store tokens in cookies
+                console.log('🍪 Setting cookies with tokens...');
+                console.log('🍪 AccessToken length:', accessToken.length);
+                console.log('🍪 RefreshToken length:', refreshToken.length);
+
+                // Try different cookie settings to ensure they work
+                const cookieOptions = {
+                    expires: 1,
+                    path: '/',
+                    sameSite: 'lax'
+                };
+                const refreshCookieOptions = {
+                    expires: 30,
+                    path: '/',
+                    sameSite: 'lax'
+                };
+
+                Cookies.set('accessToken', accessToken, cookieOptions);
+                Cookies.set('refreshToken', refreshToken, refreshCookieOptions);
+
+                // Verify cookies were set
+                const storedAccessToken = Cookies.get('accessToken');
+                const storedRefreshToken = Cookies.get('refreshToken');
+
+                console.log('🍪 Cookie verification:');
+                console.log('🍪 AccessToken stored:', !!storedAccessToken, storedAccessToken ? `(${storedAccessToken.length} chars)` : '');
+                console.log('🍪 RefreshToken stored:', !!storedRefreshToken, storedRefreshToken ? `(${storedRefreshToken.length} chars)` : '');
+                console.log('🍪 All cookies:', document.cookie);
+
+                console.log('✅ NEW EnokiAuthService: Authentication successful, user:', user);
+                console.log('✅ NEW EnokiAuthService: Tokens stored successfully!');
+
+                return { accessToken, refreshToken, user };
             }
 
             console.error('❌ NEW EnokiAuthService: Invalid response structure:', response);
+            console.error('❌ Expected: response.data.{accessToken, refreshToken, user}');
+            console.error('❌ Received keys:', Object.keys(response.data || {}));
             throw new Error('Invalid authentication response');
         } catch (error) {
             console.error('❌ NEW EnokiAuthService: Authentication failed:', error);
