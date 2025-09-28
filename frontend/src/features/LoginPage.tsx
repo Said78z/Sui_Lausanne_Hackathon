@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useConnectWallet, useCurrentAccount, useWallets } from '@mysten/dapp-kit';
 import { isEnokiWallet } from '@mysten/enoki';
-import { ArrowLeft, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { Navbar } from '@/components';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -77,22 +77,7 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
             {/* Navigation */}
-            <nav className="relative z-10 flex items-center justify-between px-6 py-4 lg:px-8">
-                <Button
-                    variant="ghost"
-                    onClick={handleBackToHome}
-                    className="text-white hover:bg-white/10"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Home
-                </Button>
-                <div className="flex items-center space-x-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400">
-                        <Sparkles className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="text-lg font-semibold text-white">Hack'n'sui</span>
-                </div>
-            </nav>
+            <Navbar variant="auth" showBackButton={true} />
 
             {/* Login Form */}
             <div className="flex min-h-[calc(100vh-80px)] items-center justify-center px-6">

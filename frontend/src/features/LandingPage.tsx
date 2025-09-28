@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Zap, Shield, Users, Trophy, Sparkles, Globe, Star, Rocket, Code, Award, UserPlus, Calendar, Share2, QrCode, UserCheck, GitBranch, Upload, Crown, Coins, BarChart3 } from 'lucide-react';
+import { Navbar } from '@/components';
+import { ArrowRight, Zap, Shield, Users, Trophy, Globe, Star, Rocket, Code, Award, UserPlus, Calendar, Share2, QrCode, UserCheck, GitBranch, Upload, Crown, Coins, BarChart3, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
@@ -146,31 +147,7 @@ const LandingPage = () => {
             </div>
 
             {/* Navigation */}
-            <nav className="relative z-10 flex items-center justify-between px-6 py-4 lg:px-8 backdrop-blur-sm bg-white/5 border-b border-white/10">
-                <div className="flex items-center space-x-2 animate-fade-in">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-110 transition-transform duration-300 hover:rotate-12">
-                        <Sparkles className="h-6 w-6 text-white animate-pulse" />
-                    </div>
-                    <span className="text-2xl font-bold text-white bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                        Hack'n'sui
-                    </span>
-                </div>
-                <div className="flex items-center space-x-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                    <Button
-                        variant="ghost"
-                        onClick={handleLogin}
-                        className="text-white hover:bg-white/10 hover:text-white hover:scale-105 transition-all duration-300"
-                    >
-                        Login
-                    </Button>
-                    <Button
-                        onClick={handleGetStarted}
-                        className="hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
-                    >
-                        Get Started
-                    </Button>
-                </div>
-            </nav>
+            <Navbar variant="landing" />
 
             {/* Hero Section */}
             <section ref={heroRef} id="hero" className="relative px-6 py-20 lg:px-8 min-h-screen flex items-center">
